@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fewer cards, more clicks</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Fewer Cards, More Clicks: How Australians Use Their Public Libraries Now</h1>
+    <p class="intro">A deep dive into how Australians interact with their public libraries in the modern age.</p>
+  </header>
+
+  <section>
+    <h2>1. The long slide</h2>
+    <p>Two or three sentences of narrative go here.</p>
+    <div class="grid">
+      <div class="chart half" id="loans_visits_line">Line: loans and visits per person</div>
+      <div class="chart half" id="state_rank_bump">Bump: state ranking</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>3. A digital recovery</h2>
+    <p>Narrative text.</p>
+    <div class="grid">
+      <div class="chart full" id="format_area">Stacked area: physical vs digital loans</div>
+      <div class="chart half" id="digital_dumbbell">Dumbbell: digital share by state</div>
+      <div class="chart half" id="digital_tilemap">Tile grid map: digital share</div>
+    </div>
+  </section>
+
+  <!-- repeat the same pattern for sections 2, 4 and 5 -->
+
+  <footer>
+    <p>Your name · October 2026 · Sources: ALIA and NSLA, ABS · AI use acknowledgement</p>
+  </footer>
+</main>
+</body>
+</html>
