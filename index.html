@@ -9,6 +9,7 @@
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 </head>
+
 <body>
 <main>
   <header>
@@ -20,7 +21,7 @@
     <h2>1. The long slide</h2>
     <p>Two or three sentences of narrative go here.</p>
     <div class="grid">
-      <div class="chart half" id="loans_visits_line">Line: loans and visits per person</div>
+      <div class="chart full" id="library_dot_map"></div>
       <div class="chart half" id="state_rank_bump">Bump: state ranking</div>
     </div>
   </section>
@@ -41,5 +42,9 @@
     <p>Your name · October 2026 · Sources: ALIA and NSLA, ABS · AI use acknowledgement</p>
   </footer>
 </main>
+<script>
+  vegaEmbed("#library_dot_map", "specs/library_dot_map.vg.json", {actions: false})
+    .catch(console.error);
+</script>
 </body>
 </html>
