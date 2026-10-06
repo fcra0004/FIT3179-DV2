@@ -1,0 +1,30 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Public library branches across Australia",
+  "width": "container",
+  "height": 500,
+  "projection": {"type": "mercator", "center": [134, -29], "scale": 720},
+  "layer": [
+    {
+      "data": {
+        "url": "data/aus_states.topojson",
+        "format": {"type": "topojson", "feature": "states"}
+      },
+      "mark": {"type": "geoshape", "fill": "#e8e4dc", "stroke": "white", "strokeWidth": 1}
+    },
+    {
+      "data": {"url": "data/australian_public_libraries.csv"},
+      "transform": [{"filter": "datum.level == 'branch'"}],
+      "mark": {"type": "circle", "size": 14, "opacity": 0.6, "color": "#b5532d"},
+      "encoding": {
+        "longitude": {"field": "longitude", "type": "quantitative"},
+        "latitude": {"field": "latitude", "type": "quantitative"},
+        "tooltip": [
+          {"field": "name", "type": "nominal", "title": "Library"},
+          {"field": "suburb", "type": "nominal", "title": "Suburb"},
+          {"field": "state", "type": "nominal", "title": "State"}
+        ]
+      }
+    }
+  ]
+}
