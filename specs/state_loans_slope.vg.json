@@ -1,0 +1,128 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "A decade on, most states borrow less per person",
+    "subtitle": "Items borrowed per person, 2014-15 vs 2024-25"
+  },
+  "width": 260,
+  "height": 320,
+  "data": {
+    "url": "data/state_loans_slope.csv"
+  },
+  "encoding": {
+    "x": {
+      "field": "year",
+      "type": "ordinal",
+      "title": null,
+      "axis": {
+        "labelAngle": 0,
+        "orient": "top",
+        "domain": false,
+        "ticks": false
+      },
+      "scale": {
+        "padding": 0.3
+      }
+    },
+    "y": {
+      "field": "loans_per_person",
+      "type": "quantitative",
+      "title": "Items per person",
+      "scale": {
+        "zero": false
+      }
+    },
+    "color": {
+      "field": "state",
+      "type": "nominal",
+      "scale": {
+        "domain": [
+          "ACT",
+          "NSW",
+          "NT",
+          "QLD",
+          "SA",
+          "TAS",
+          "VIC",
+          "WA"
+        ],
+        "range": [
+          "#4e79a7",
+          "#e15759",
+          "#76b7b2",
+          "#f28e2b",
+          "#59a14f",
+          "#b07aa1",
+          "#edc948",
+          "#9c755f"
+        ]
+      },
+      "legend": null
+    },
+    "detail": {
+      "field": "state"
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "line",
+        "strokeWidth": 2.5
+      }
+    },
+    {
+      "mark": {
+        "type": "circle",
+        "size": 60
+      },
+      "encoding": {
+        "tooltip": [
+          {
+            "field": "state"
+          },
+          {
+            "field": "year"
+          },
+          {
+            "field": "loans_per_person",
+            "title": "Items per person"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.year=='2024-25'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 8
+      },
+      "encoding": {
+        "text": {
+          "field": "state"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.year=='2014-15'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "dx": -8
+      },
+      "encoding": {
+        "text": {
+          "field": "state"
+        }
+      }
+    }
+  ]
+}

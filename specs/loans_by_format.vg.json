@@ -1,0 +1,145 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Digital loans nearly tripled",
+    "subtitle": "Items borrowed per year, millions — click the legend to highlight a format"
+  },
+  "width": "container",
+  "height": 320,
+  "data": {
+    "url": "data/loans_by_format.csv"
+  },
+  "layer": [
+    {
+      "params": [
+        {
+          "name": "fmt",
+          "select": {
+            "type": "point",
+            "fields": [
+              "format"
+            ]
+          },
+          "bind": "legend"
+        }
+      ],
+      "mark": {
+        "type": "area"
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "ordinal",
+          "title": null,
+          "scale": {
+            "padding": 0
+          },
+          "axis": {
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "loans_millions",
+          "type": "quantitative",
+          "stack": true,
+          "title": "Items borrowed (millions)"
+        },
+        "color": {
+          "field": "format",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Physical items",
+              "Digital"
+            ],
+            "range": [
+              "#b5532d",
+              "#2a7f8e"
+            ]
+          },
+          "legend": {
+            "orient": "top",
+            "title": null
+          }
+        },
+        "order": {
+          "field": "format",
+          "sort": "descending"
+        },
+        "opacity": {
+          "condition": {
+            "param": "fmt",
+            "value": 0.9
+          },
+          "value": 0.2
+        },
+        "tooltip": [
+          {
+            "field": "year"
+          },
+          {
+            "field": "format"
+          },
+          {
+            "field": "loans_millions",
+            "title": "Millions"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "year": "2018-19",
+            "y": 158.6
+          }
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "strokeDash": [
+          4,
+          3
+        ],
+        "color": "#3b3a36"
+      },
+      "encoding": {
+        "y": {
+          "field": "y",
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "year": "2018-19",
+            "y": 158.6,
+            "t": "Pre-COVID total"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dy": -8,
+        "color": "#3b3a36"
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "ordinal"
+        },
+        "y": {
+          "field": "y",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    }
+  ]
+}

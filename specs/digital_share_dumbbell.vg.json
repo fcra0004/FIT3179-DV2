@@ -1,0 +1,113 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Every state is borrowing more digitally",
+    "subtitle": "Digital share of all items borrowed, 2022-23 to 2024-25"
+  },
+  "width": "container",
+  "height": 260,
+  "data": {
+    "url": "data/digital_share.csv"
+  },
+  "encoding": {
+    "y": {
+      "field": "abbr",
+      "type": "nominal",
+      "title": null,
+      "sort": {
+        "field": "share_2024_25",
+        "order": "descending"
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "rule",
+        "color": "#c9c2b6",
+        "strokeWidth": 3
+      },
+      "encoding": {
+        "x": {
+          "field": "share_2022_23",
+          "type": "quantitative",
+          "title": "Digital share of loans (%)",
+          "scale": {
+            "domain": [
+              20,
+              50
+            ]
+          }
+        },
+        "x2": {
+          "field": "share_2024_25"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "circle",
+        "size": 120,
+        "color": "#c9c2b6",
+        "opacity": 1
+      },
+      "encoding": {
+        "x": {
+          "field": "share_2022_23",
+          "type": "quantitative"
+        },
+        "tooltip": [
+          {
+            "field": "state"
+          },
+          {
+            "field": "share_2022_23",
+            "title": "2022-23 (%)"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "circle",
+        "size": 120,
+        "color": "#2a7f8e",
+        "opacity": 1
+      },
+      "encoding": {
+        "x": {
+          "field": "share_2024_25",
+          "type": "quantitative"
+        },
+        "tooltip": [
+          {
+            "field": "state"
+          },
+          {
+            "field": "share_2024_25",
+            "title": "2024-25 (%)"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 9,
+        "color": "#2a7f8e",
+        "fontSize": 11
+      },
+      "encoding": {
+        "x": {
+          "field": "share_2024_25",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "share_2024_25",
+          "format": ".0f"
+        }
+      }
+    }
+  ]
+}

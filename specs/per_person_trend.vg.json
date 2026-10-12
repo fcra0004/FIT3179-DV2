@@ -1,0 +1,166 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Australians borrow and visit less than a decade ago",
+    "subtitle": "Items borrowed and library visits per person, per year"
+  },
+  "width": "container",
+  "height": 300,
+  "data": {
+    "url": "data/national_per_person.csv"
+  },
+  "encoding": {
+    "x": {
+      "field": "year",
+      "type": "ordinal",
+      "title": null,
+      "axis": {
+        "labelAngle": -40
+      }
+    },
+    "y": {
+      "field": "value",
+      "type": "quantitative",
+      "title": "Per person",
+      "scale": {
+        "domain": [
+          0,
+          9
+        ]
+      }
+    },
+    "color": {
+      "field": "measure",
+      "type": "nominal",
+      "scale": {
+        "range": [
+          "#b5532d",
+          "#3b3a36"
+        ]
+      },
+      "legend": {
+        "orient": "top",
+        "title": null
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "line",
+        "strokeWidth": 2.5
+      }
+    },
+    {
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 40
+      },
+      "encoding": {
+        "tooltip": [
+          {
+            "field": "year"
+          },
+          {
+            "field": "measure"
+          },
+          {
+            "field": "value",
+            "title": "Per person"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "year": "2020-21",
+            "label": "COVID-19 closures"
+          }
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "strokeDash": [
+          4,
+          3
+        ],
+        "color": "#9a948a"
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "ordinal"
+        },
+        "y": null,
+        "color": null
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "year": "2020-21",
+            "label": "COVID-19 closures",
+            "v": 8.6
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 4,
+        "color": "#9a948a",
+        "fontStyle": "italic"
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "ordinal"
+        },
+        "y": {
+          "field": "v",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "label"
+        },
+        "color": null
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "year": "2015-16",
+            "label": "No report for 2016-17",
+            "v": 1.0
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 6,
+        "color": "#9a948a",
+        "fontStyle": "italic"
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "ordinal"
+        },
+        "y": {
+          "field": "v",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "label"
+        },
+        "color": null
+      }
+    }
+  ]
+}

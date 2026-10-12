@@ -1,0 +1,75 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Libraries are now community hubs",
+    "subtitle": "Program attendances by purpose, millions"
+  },
+  "width": "container",
+  "height": 280,
+  "data": {
+    "url": "data/programs_by_outcome.csv"
+  },
+  "params": [
+    {
+      "name": "oc",
+      "select": {
+        "type": "point",
+        "fields": [
+          "outcome"
+        ]
+      },
+      "bind": "legend"
+    }
+  ],
+  "mark": {
+    "type": "bar"
+  },
+  "encoding": {
+    "x": {
+      "field": "year",
+      "type": "ordinal",
+      "title": null,
+      "axis": {
+        "labelAngle": 0
+      }
+    },
+    "y": {
+      "field": "participants",
+      "type": "quantitative",
+      "title": "Attendances",
+      "axis": {
+        "format": "~s"
+      }
+    },
+    "color": {
+      "field": "outcome",
+      "type": "nominal",
+      "scale": {
+        "scheme": "tableau10"
+      },
+      "legend": {
+        "title": null,
+        "orient": "right"
+      }
+    },
+    "opacity": {
+      "condition": {
+        "param": "oc",
+        "value": 1
+      },
+      "value": 0.25
+    },
+    "tooltip": [
+      {
+        "field": "year"
+      },
+      {
+        "field": "outcome"
+      },
+      {
+        "field": "participants",
+        "format": ","
+      }
+    ]
+  }
+}

@@ -1,0 +1,49 @@
+year,state,abbr,format,loans_millions
+2022-23,Australian Capital Territory,ACT,Physical,1.48
+2022-23,Australian Capital Territory,ACT,Digital,0.86
+2022-23,New South Wales,NSW,Physical,33.25
+2022-23,New South Wales,NSW,Digital,11.22
+2022-23,Northern Territory,NT,Physical,0.56
+2022-23,Northern Territory,NT,Digital,0.25
+2022-23,Queensland,QLD,Physical,25.64
+2022-23,Queensland,QLD,Digital,12.69
+2022-23,South Australia,SA,Physical,7.66
+2022-23,South Australia,SA,Digital,4.27
+2022-23,Tasmania,TAS,Physical,2.3
+2022-23,Tasmania,TAS,Digital,0.88
+2022-23,Victoria,VIC,Physical,31.54
+2022-23,Victoria,VIC,Digital,11.09
+2022-23,Western Australia,WA,Physical,10.96
+2022-23,Western Australia,WA,Digital,4.4
+2023-24,Australian Capital Territory,ACT,Physical,1.53
+2023-24,Australian Capital Territory,ACT,Digital,1.05
+2023-24,New South Wales,NSW,Physical,36.99
+2023-24,New South Wales,NSW,Digital,13.84
+2023-24,Northern Territory,NT,Physical,0.65
+2023-24,Northern Territory,NT,Digital,0.3
+2023-24,Queensland,QLD,Physical,25.64
+2023-24,Queensland,QLD,Digital,15.76
+2023-24,South Australia,SA,Physical,7.5
+2023-24,South Australia,SA,Digital,3.21
+2023-24,Tasmania,TAS,Physical,2.22
+2023-24,Tasmania,TAS,Digital,1.12
+2023-24,Victoria,VIC,Physical,33.51
+2023-24,Victoria,VIC,Digital,11.92
+2023-24,Western Australia,WA,Physical,10.73
+2023-24,Western Australia,WA,Digital,5.49
+2024-25,Australian Capital Territory,ACT,Physical,1.48
+2024-25,Australian Capital Territory,ACT,Digital,1.15
+2024-25,New South Wales,NSW,Physical,33.79
+2024-25,New South Wales,NSW,Digital,16.62
+2024-25,Northern Territory,NT,Physical,0.46
+2024-25,Northern Territory,NT,Digital,0.26
+2024-25,Queensland,QLD,Physical,25.15
+2024-25,Queensland,QLD,Digital,16.48
+2024-25,South Australia,SA,Physical,11.32
+2024-25,South Australia,SA,Digital,5.7
+2024-25,Tasmania,TAS,Physical,2.1
+2024-25,Tasmania,TAS,Digital,1.12
+2024-25,Victoria,VIC,Physical,33.7
+2024-25,Victoria,VIC,Digital,13.74
+2024-25,Western Australia,WA,Physical,10.95
+2024-25,Western Australia,WA,Digital,5.92

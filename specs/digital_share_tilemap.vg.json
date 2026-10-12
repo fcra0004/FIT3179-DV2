@@ -1,0 +1,94 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Digital share by state, 2024-25",
+    "subtitle": [
+      "Equal-sized tiles, so small territories",
+      "are as visible as large states"
+    ]
+  },
+  "width": 240,
+  "height": 240,
+  "data": {
+    "url": "data/state_2024_25.csv"
+  },
+  "encoding": {
+    "x": {
+      "field": "col",
+      "type": "ordinal",
+      "axis": null
+    },
+    "y": {
+      "field": "row",
+      "type": "ordinal",
+      "axis": null
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "square",
+        "size": 3000
+      },
+      "encoding": {
+        "color": {
+          "field": "digital_share",
+          "type": "quantitative",
+          "title": "Digital share (%)",
+          "scale": {
+            "scheme": "tealblues",
+            "domain": [
+              25,
+              45
+            ]
+          },
+          "legend": {
+            "orient": "bottom",
+            "direction": "horizontal",
+            "gradientLength": 200
+          }
+        },
+        "tooltip": [
+          {
+            "field": "state"
+          },
+          {
+            "field": "digital_share",
+            "title": "Digital share (%)"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "dy": -8,
+        "fontWeight": "bold",
+        "color": "white"
+      },
+      "encoding": {
+        "text": {
+          "field": "abbr"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "dy": 9,
+        "color": "white"
+      },
+      "encoding": {
+        "text": {
+          "field": "digital_share",
+          "format": ".0f"
+        }
+      }
+    }
+  ],
+  "config": {
+    "view": {
+      "stroke": null
+    }
+  }
+}

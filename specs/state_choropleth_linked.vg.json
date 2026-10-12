@@ -1,0 +1,217 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "How each state uses its libraries, 2024-25",
+    "subtitle": "Choose a measure, then click a state to see its borrowing over three years"
+  },
+  "params": [
+    {
+      "name": "measure",
+      "value": "loans_per_person",
+      "bind": {
+        "input": "select",
+        "name": "Measure: ",
+        "options": [
+          "loans_per_person",
+          "digital_share",
+          "visits_per_person",
+          "branches_per_100k"
+        ],
+        "labels": [
+          "Items borrowed per person",
+          "Digital share of loans (%)",
+          "Visits per person",
+          "Branches per 100,000 people"
+        ]
+      }
+    }
+  ],
+  "hconcat": [
+    {
+      "width": 420,
+      "height": 380,
+      "projection": {
+        "type": "mercator"
+      },
+      "data": {
+        "url": "data/aus_states.topojson",
+        "format": {
+          "type": "topojson",
+          "feature": "states"
+        }
+      },
+      "transform": [
+        {
+          "calculate": "datum.properties.STATE_NAME",
+          "as": "state"
+        },
+        {
+          "lookup": "state",
+          "from": {
+            "data": {
+              "url": "data/state_2024_25.csv"
+            },
+            "key": "state",
+            "fields": [
+              "abbr",
+              "loans_per_person",
+              "digital_share",
+              "visits_per_person",
+              "branches_per_100k"
+            ]
+          }
+        },
+        {
+          "calculate": "datum[measure]",
+          "as": "value"
+        }
+      ],
+      "params": [
+        {
+          "name": "pick",
+          "select": {
+            "type": "point",
+            "fields": [
+              "state"
+            ]
+          },
+          "value": [
+            {
+              "state": "Victoria"
+            }
+          ]
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "stroke": "white",
+        "strokeWidth": 1,
+        "cursor": "pointer"
+      },
+      "encoding": {
+        "color": {
+          "field": "value",
+          "type": "quantitative",
+          "title": "Selected measure",
+          "scale": {
+            "scheme": "oranges"
+          }
+        },
+        "strokeWidth": {
+          "condition": {
+            "param": "pick",
+            "empty": false,
+            "value": 3
+          },
+          "value": 0.8
+        },
+        "stroke": {
+          "condition": {
+            "param": "pick",
+            "empty": false,
+            "value": "#3b3a36"
+          },
+          "value": "white"
+        },
+        "tooltip": [
+          {
+            "field": "state",
+            "title": "State"
+          },
+          {
+            "field": "loans_per_person",
+            "title": "Items per person"
+          },
+          {
+            "field": "digital_share",
+            "title": "Digital share (%)"
+          },
+          {
+            "field": "visits_per_person",
+            "title": "Visits per person"
+          },
+          {
+            "field": "branches_per_100k",
+            "title": "Branches per 100,000"
+          }
+        ]
+      }
+    },
+    {
+      "width": 240,
+      "height": 300,
+      "data": {
+        "url": "data/state_loans_by_format.csv"
+      },
+      "transform": [
+        {
+          "filter": {
+            "param": "pick"
+          }
+        }
+      ],
+      "title": {
+        "text": "Borrowing in the selected state",
+        "fontSize": 13
+      },
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "ordinal",
+          "title": null,
+          "axis": {
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "aggregate": "sum",
+          "field": "loans_millions",
+          "type": "quantitative",
+          "title": "Items borrowed (millions)"
+        },
+        "color": {
+          "field": "format",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Physical",
+              "Digital"
+            ],
+            "range": [
+              "#b5532d",
+              "#2a7f8e"
+            ]
+          },
+          "legend": {
+            "orient": "bottom",
+            "title": null
+          }
+        },
+        "tooltip": [
+          {
+            "field": "state"
+          },
+          {
+            "field": "year"
+          },
+          {
+            "field": "format"
+          },
+          {
+            "aggregate": "sum",
+            "field": "loans_millions",
+            "title": "Millions"
+          }
+        ]
+      }
+    }
+  ],
+  "resolve": {
+    "scale": {
+      "color": "independent"
+    }
+  }
+}

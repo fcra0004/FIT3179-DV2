@@ -3,48 +3,98 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Fewer cards, more clicks</title>
+  <title>Fewer Cards, More Clicks: Australia's Public Libraries</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 </head>
-
 <body>
-<main>
-  <header>
-    <h1>Fewer Cards, More Clicks: How Australians Use Their Public Libraries Now</h1>
-    <p class="intro">A deep dive into how Australians interact with their public libraries in the modern age.</p>
-  </header>
 
-  <section>
-    <h2>1. The long slide</h2>
-    <p>Two or three sentences of narrative go here.</p>
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">Australian public libraries · 2010–2025</p>
+    <h1>Fewer cards, more clicks</h1>
+    <p class="deck">Australians hold fewer library cards and walk through library doors less often than a decade ago. Yet libraries are busier than ever, because borrowing has moved online and the buildings now do far more than lend books.</p>
+    <div class="stats">
+      <div class="stat"><span class="num">6.6</span><span class="label">items borrowed per person in 2024–25, down from 8.1 in 2010–11</span></div>
+      <div class="stat"><span class="num digital">34%</span><span class="label">of all loans are now ebooks, audiobooks or streaming, up from 14% in 2018–19</span></div>
+      <div class="stat"><span class="num">28.8%</span><span class="label">of Australians are registered members, down from 45% in 2010–11</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section id="slide">
+    <h2><span class="num">1</span> The long slide</h2>
+    <p class="lede">Through the 2010s, Australians borrowed a little less from their libraries every year. By 2019 the average person was borrowing two fewer items a year than in 2011, and visiting less often too.</p>
     <div class="grid">
-      <div class="chart full" id="library_dot_map"></div>
-      <div class="chart half" id="state_rank_bump">Bump: state ranking</div>
+      <figure class="chart full" id="per_person_trend"></figure>
+      <figure class="chart wide" id="state_rank_bump"></figure>
+      <figure class="chart narrow" id="state_loans_slope"></figure>
+    </div>
+    <p class="note">The rankings barely moved: South Australia and Tasmania borrowed the most per person every year, and the Northern Territory the least. Over the decade, Tasmania and the ACT fell furthest.</p>
+  </section>
+
+  <section id="crash">
+    <h2><span class="num">2</span> The crash</h2>
+    <p class="lede">COVID-19 lockdowns closed library doors across the country. In-person visits fell from 111 million in 2018–19 to 56 million in 2021–22, while visits to library websites held steady.</p>
+    <div class="grid">
+      <figure class="chart wide" id="visits_area"></figure>
+      <figure class="chart narrow" id="membership_waffle"></figure>
+    </div>
+    <p class="note">Membership kept falling after the lockdowns ended. Libraries say part of this is housekeeping: inactive cards expired during closures, and some services moved to family cards.</p>
+  </section>
+
+  <section id="digital">
+    <h2><span class="num">3</span> A digital recovery</h2>
+    <p class="lede">Total borrowing has now passed its pre-COVID level, but not because people returned to the shelves. Physical loans are still 13% below 2018–19. All of the growth is digital: ebook, audiobook and streaming loans nearly tripled in six years.</p>
+    <div class="grid">
+      <figure class="chart full" id="loans_by_format"></figure>
+      <figure class="chart wide" id="digital_share_dumbbell"></figure>
+      <figure class="chart narrow" id="digital_share_tilemap"></figure>
+    </div>
+    <p class="note">The shift is fastest in the ACT and Queensland, where around two in every five loans are now digital. South Australia is the only state where the digital share fell.</p>
+  </section>
+
+  <section id="where">
+    <h2><span class="num">4</span> Where libraries are used most</h2>
+    <p class="lede">Library use varies widely across the country. South Australians borrow three times as many items per person as Territorians, and the Northern Territory has the most branches per person because its towns are small and far apart.</p>
+    <div class="grid">
+      <figure class="chart full" id="state_choropleth_linked"></figure>
+      <figure class="chart wide" id="library_dot_map"></figure>
+      <figure class="chart narrow" id="visits_symbol_map"></figure>
     </div>
   </section>
 
-  <section>
-    <h2>3. A digital recovery</h2>
-    <p>Narrative text.</p>
+  <section id="more">
+    <h2><span class="num">5</span> More than books, on less money</h2>
+    <p class="lede">Libraries now run more than 430,000 programs a year, from baby rhyme time to tech help for seniors, and attendance has doubled since 2021–22. Meanwhile, funding per person has fallen 13% in real terms over five years.</p>
     <div class="grid">
-      <div class="chart full" id="format_area">Stacked area: physical vs digital loans</div>
-      <div class="chart half" id="digital_dumbbell">Dumbbell: digital share by state</div>
-      <div class="chart half" id="digital_tilemap">Tile grid map: digital share</div>
+      <figure class="chart full" id="programs_heatmap"></figure>
+      <figure class="chart half" id="programs_by_outcome"></figure>
+      <figure class="chart half" id="spending_per_person"></figure>
     </div>
   </section>
 
-  <!-- repeat the same pattern for sections 2, 4 and 5 -->
+  <section id="close" class="closing">
+    <h2>What it means</h2>
+    <p>The library card is no longer the best measure of who uses a library. Australians are borrowing on their phones, studying, meeting and bringing their children to story time, often without ever scanning a card. The open question is whether funding will keep pace with that broader role.</p>
+  </section>
 
-  <footer>
-    <p>Your name · October 2026 · Sources: ALIA and NSLA, ABS · AI use acknowledgement</p>
-  </footer>
 </main>
-<script>
-  vegaEmbed("#library_dot_map", "specs/library_dot_map.vg.json", {actions: false})
-    .catch(console.error);
-</script>
+
+<footer>
+  <div class="wrap">
+    <p><strong>Author:</strong> [Your name] · <strong>Date:</strong> October 2026 · FIT3179 Data Visualisation 2 (draft)</p>
+    <p><strong>Data:</strong> ALIA and NSLA, <em>Australian Public Libraries Statistical Report</em>, editions 2014–15, 2015–16 and 2021–22 to 2024–25. Library locations: NSW public library directory (nswnet.net); Directory of Public Library Services in Victoria 2026; state library directories for Qld, WA, SA, Tas, NT and ACT. State boundaries: rowanhogan/australian-states (GitHub). Suburb coordinates: matthewproctor/australianpostcodes (GitHub).</p>
+  </div>
+</footer>
+
+<script src="js/embed.js"></script>
 </body>
 </html>

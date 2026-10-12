@@ -1,0 +1,149 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "South Australia led the country in borrowing",
+    "subtitle": "State ranking by items borrowed per person (1 = highest)"
+  },
+  "width": "container",
+  "height": 300,
+  "data": {
+    "url": "data/state_loans_per_person_2010_2016.csv",
+    "format": {
+      "parse": {
+        "loans_per_person": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "window": [
+        {
+          "op": "rank",
+          "as": "rank"
+        }
+      ],
+      "groupby": [
+        "year"
+      ],
+      "sort": [
+        {
+          "field": "loans_per_person",
+          "order": "descending"
+        }
+      ]
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "year",
+      "type": "ordinal",
+      "title": null,
+      "axis": {
+        "labelAngle": 0
+      }
+    },
+    "y": {
+      "field": "rank",
+      "type": "ordinal",
+      "title": "Rank"
+    },
+    "color": {
+      "field": "state",
+      "type": "nominal",
+      "scale": {
+        "domain": [
+          "ACT",
+          "NSW",
+          "NT",
+          "QLD",
+          "SA",
+          "TAS",
+          "VIC",
+          "WA"
+        ],
+        "range": [
+          "#4e79a7",
+          "#e15759",
+          "#76b7b2",
+          "#f28e2b",
+          "#59a14f",
+          "#b07aa1",
+          "#edc948",
+          "#9c755f"
+        ]
+      },
+      "legend": null
+    }
+  },
+  "layer": [
+    {
+      "params": [
+        {
+          "name": "hover",
+          "select": {
+            "type": "point",
+            "fields": [
+              "state"
+            ],
+            "on": "pointerover"
+          }
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "strokeWidth": 3
+      },
+      "encoding": {
+        "opacity": {
+          "condition": {
+            "param": "hover",
+            "empty": true,
+            "value": 1
+          },
+          "value": 0.2
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "circle",
+        "size": 110
+      },
+      "encoding": {
+        "tooltip": [
+          {
+            "field": "state"
+          },
+          {
+            "field": "year"
+          },
+          {
+            "field": "loans_per_person",
+            "title": "Items per person"
+          },
+          {
+            "field": "rank"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.year=='2015-16'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 10,
+        "fontWeight": "bold"
+      },
+      "encoding": {
+        "text": {
+          "field": "state"
+        }
+      }
+    }
+  ]
+}

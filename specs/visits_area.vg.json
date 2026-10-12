@@ -1,0 +1,115 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Lockdowns halved in-person visits",
+    "subtitle": "Library visits per year, millions"
+  },
+  "width": "container",
+  "height": 300,
+  "data": {
+    "url": "data/visits.csv"
+  },
+  "layer": [
+    {
+      "data": {
+        "values": [
+          {
+            "a": "2019-20",
+            "b": "2021-22"
+          }
+        ]
+      },
+      "mark": {
+        "type": "rect",
+        "color": "#f1ece4"
+      },
+      "encoding": {
+        "x": {
+          "field": "a",
+          "type": "ordinal"
+        },
+        "x2": {
+          "field": "b"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "area",
+        "opacity": 0.85,
+        "line": {
+          "strokeWidth": 1
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "ordinal",
+          "title": null,
+          "scale": {
+            "padding": 0
+          },
+          "axis": {
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "visits_millions",
+          "type": "quantitative",
+          "title": "Visits (millions)"
+        },
+        "color": {
+          "field": "type",
+          "type": "nominal",
+          "scale": {
+            "range": [
+              "#b5532d",
+              "#2a7f8e"
+            ]
+          },
+          "legend": {
+            "orient": "top",
+            "title": null
+          }
+        },
+        "tooltip": [
+          {
+            "field": "year"
+          },
+          {
+            "field": "type"
+          },
+          {
+            "field": "visits_millions",
+            "title": "Millions"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "x": "2020-21",
+            "t": "COVID-19 closures"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "dy": -120,
+        "color": "#9a948a",
+        "fontStyle": "italic"
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "ordinal"
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    }
+  ]
+}

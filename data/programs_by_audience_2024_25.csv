@@ -1,0 +1,49 @@
+state,abbr,audience,participants,population_millions
+Australian Capital Territory,ACT,Early childhood,57284,0.482
+Australian Capital Territory,ACT,Children,4591,0.482
+Australian Capital Territory,ACT,Young adult,140,0.482
+Australian Capital Territory,ACT,Adults,6012,0.482
+Australian Capital Territory,ACT,Seniors,4975,0.482
+Australian Capital Territory,ACT,All ages,225,0.482
+New South Wales,NSW,Early childhood,905239,8.544
+New South Wales,NSW,Children,297252,8.544
+New South Wales,NSW,Young adult,45978,8.544
+New South Wales,NSW,Adults,297212,8.544
+New South Wales,NSW,Seniors,77885,8.544
+New South Wales,NSW,All ages,196533,8.544
+Northern Territory,NT,Early childhood,30066,0.264
+Northern Territory,NT,Children,21673,0.264
+Northern Territory,NT,Young adult,3088,0.264
+Northern Territory,NT,Adults,4251,0.264
+Northern Territory,NT,Seniors,941,0.264
+Northern Territory,NT,All ages,8905,0.264
+Queensland,QLD,Early childhood,874932,5.435
+Queensland,QLD,Children,275446,5.435
+Queensland,QLD,Young adult,18526,5.435
+Queensland,QLD,Adults,158331,5.435
+Queensland,QLD,Seniors,22969,5.435
+Queensland,QLD,All ages,158203,5.435
+South Australia,SA,Early childhood,271546,1.891
+South Australia,SA,Children,130934,1.891
+South Australia,SA,Young adult,1348,1.891
+South Australia,SA,Adults,105366,1.891
+South Australia,SA,Seniors,16207,1.891
+South Australia,SA,All ages,133821,1.891
+Tasmania,TAS,Early childhood,48455,0.575
+Tasmania,TAS,Children,14166,0.575
+Tasmania,TAS,Young adult,4699,0.575
+Tasmania,TAS,Adults,11661,0.575
+Tasmania,TAS,Seniors,2209,0.575
+Tasmania,TAS,All ages,12233,0.575
+Victoria,VIC,Early childhood,1219268,7.007
+Victoria,VIC,Children,396038,7.007
+Victoria,VIC,Young adult,45501,7.007
+Victoria,VIC,Adults,304225,7.007
+Victoria,VIC,Seniors,64225,7.007
+Victoria,VIC,All ages,111894,7.007
+Western Australia,WA,Early childhood,433221,3.005
+Western Australia,WA,Children,145964,3.005
+Western Australia,WA,Young adult,15361,3.005
+Western Australia,WA,Adults,150404,3.005
+Western Australia,WA,Seniors,30585,3.005
+Western Australia,WA,All ages,90288,3.005
