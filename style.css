@@ -1,8 +1,10 @@
 :root {
   --ink: #3b3a36;
   --muted: #6f695f;
-  --paper: #fbf8f3;
-  --rule: #e3ddd2;
+  --paper: #f5efe4;
+  --card: #fffdf9;
+  --band: #ebe1cf;
+  --rule: #e2d8c6;
   --physical: #b5532d;
   --digital: #2a7f8e;
   --serif: "Fraunces", Georgia, serif;
@@ -28,8 +30,8 @@ body {
 
 /* ---------- Header ---------- */
 .hero {
-  background: #f1ebe1;
-  border-bottom: 1px solid var(--rule);
+  background: var(--band);
+  border-bottom: 1px solid #d9ccb5;
   padding: 64px 0 48px;
 }
 .kicker {
@@ -61,7 +63,8 @@ h1 { font-size: clamp(40px, 6vw, 64px); margin: 0 0 16px; }
 .stat .label { font-size: 15px; color: var(--muted); }
 
 /* ---------- Sections ---------- */
-section { padding: 56px 0 24px; border-bottom: 1px solid var(--rule); }
+section { padding: 64px 0 40px; border-bottom: 1px solid var(--rule); }
+.note { margin-top: 24px; }
 h2 { font-size: 34px; margin: 0 0 12px; }
 h2 .num {
   display: inline-block;
@@ -76,13 +79,20 @@ h2 .num {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: 32px 32px;
-  align-items: start;
+  align-items: stretch;
 }
-.chart {
+/* Each chart sits on a card: the border and equal padding give every
+   chart the same left edge, and cards in a row share the same height. */
+.card {
   margin: 0;
   min-width: 0;
-  padding: 0;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 20px 22px 16px;
+  box-shadow: 0 1px 2px rgba(59, 58, 54, 0.05);
 }
+.chart { width: 100%; min-width: 0; }
 .full   { grid-column: span 12; }
 .wide   { grid-column: span 7; }
 .narrow { grid-column: span 5; }

@@ -4,7 +4,7 @@
     "text": "A decade on, most states borrow less per person",
     "subtitle": "Items borrowed per person, 2014-15 vs 2024-25"
   },
-  "width": 260,
+  "width": 230,
   "height": 320,
   "data": {
     "url": "data/state_loans_slope.csv"
