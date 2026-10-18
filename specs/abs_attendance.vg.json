@@ -1,0 +1,177 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "CHART: 'Fewer than 1 in 5 young adults visit a library' (Section 2, top card). Bar chart of the share of each age group who visited a library in 2021-22 (ABS). The data is typed into this file under \"values\". The transform makes a true/false column 'young' for the 18-24 and 25-34 bars so they can be coloured amber.",
+  "title": {
+    "text": "Fewer than 1 in 5 young adults visit a library",
+    "subtitle": [
+      "Share of each age group who visited a library or archive in 2021–22 (ABS survey)"
+    ]
+  },
+  "width": 650,
+  "height": 230,
+  "data": {
+    "values": [
+      {
+        "age": "15–17",
+        "pct": 28.4
+      },
+      {
+        "age": "18–24",
+        "pct": 18.2
+      },
+      {
+        "age": "25–34",
+        "pct": 19.1
+      },
+      {
+        "age": "35–44",
+        "pct": 23.8
+      },
+      {
+        "age": "45–54",
+        "pct": 19.0
+      },
+      {
+        "age": "55–64",
+        "pct": 16.9
+      },
+      {
+        "age": "65–74",
+        "pct": 22.5
+      },
+      {
+        "age": "75+",
+        "pct": 20.0
+      }
+    ]
+  },
+  "transform": [
+    {
+      "calculate": "datum.age=='18–24' || datum.age=='25–34'",
+      "as": "young"
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "age",
+      "type": "ordinal",
+      "title": "Age",
+      "sort": null,
+      "axis": {
+        "labelAngle": 0,
+        "titleFontWeight": 400,
+        "titleColor": "#8a8378"
+      }
+    },
+    "y": {
+      "field": "pct",
+      "type": "quantitative",
+      "title": null,
+      "scale": {
+        "domain": [
+          0,
+          32
+        ]
+      },
+      "axis": {
+        "labelExpr": "datum.label+'%'",
+        "tickCount": 4
+      }
+    }
+  },
+  "layer": [
+    {
+      "description": "LAYER 1 - THE BARS. x = age group, y = % who visited (bar length). colour: amber when young = true, beige otherwise.",
+      "mark": {
+        "type": "bar",
+        "width": {
+          "band": 0.62
+        },
+        "cornerRadiusTopLeft": 3,
+        "cornerRadiusTopRight": 3
+      },
+      "encoding": {
+        "color": {
+          "field": "young",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              true,
+              false
+            ],
+            "range": [
+              "#d4901c",
+              "#e9dcc4"
+            ]
+          },
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "age",
+            "title": "Age"
+          },
+          {
+            "field": "pct",
+            "title": "Visited a library (%)"
+          }
+        ]
+      }
+    },
+    {
+      "description": "LAYER 2 - NUMBER ON TOP OF EACH BAR (e.g. '18'). dy:-8 lifts the label above the bar.",
+      "mark": {
+        "type": "text",
+        "dy": -8,
+        "fontSize": 13,
+        "fontWeight": "bold"
+      },
+      "encoding": {
+        "text": {
+          "field": "pct",
+          "format": ".0f"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.young",
+            "value": "#a86a08"
+          },
+          "value": "#8a8378"
+        }
+      }
+    },
+    {
+      "description": "LAYER 3 - ANNOTATION 'Under 35s: fewer than 1 in 5' placed above the 18-24 bar.",
+      "data": {
+        "values": [
+          {
+            "age": "18–24",
+            "pct": 27,
+            "t": "Under 35s: fewer than 1 in 5"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": -14,
+        "fontSize": 13,
+        "fontStyle": "italic",
+        "color": "#a86a08"
+      },
+      "encoding": {
+        "x": {
+          "field": "age",
+          "type": "ordinal"
+        },
+        "y": {
+          "field": "pct",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    }
+  ]
+}

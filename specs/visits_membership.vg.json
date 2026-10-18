@@ -1,0 +1,358 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "CHART PAIR: 'Fewer walk in, more log on' (visits line chart, left) + 'Card holders' (waffle, right). Section 2, second card. Hovering along the visits chart selects a year (param 'yr'); the waffle shows that year.",
+  "hconcat": [
+    {
+      "description": "LEFT CHART - VISITS PER YEAR: in person (amber) and library website (violet), millions.",
+      "name": "visits",
+      "width": 265,
+      "height": 260,
+      "title": {
+        "text": "Fewer walk in, more log on",
+        "subtitle": "Visits per year, millions"
+      },
+      "data": {
+        "url": "data/visits.csv"
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "ordinal",
+          "title": null,
+          "axis": {
+            "labelAngle": 0,
+            "labelExpr": "slice(datum.label,2,4)+'–'+slice(datum.label,5,7)"
+          }
+        },
+        "y": {
+          "field": "visits_millions",
+          "type": "quantitative",
+          "title": null,
+          "scale": {
+            "domain": [
+              0,
+              125
+            ]
+          },
+          "axis": {
+            "tickCount": 5
+          }
+        },
+        "color": {
+          "field": "type",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "In person",
+              "Library website"
+            ],
+            "range": [
+              "#d4901c",
+              "#7b5ea7"
+            ]
+          },
+          "legend": null
+        }
+      },
+      "layer": [
+        {
+          "description": "VISITS LAYER 1 - GREY 'LOCKDOWNS' SHADING BAND, 2019-20 to 2022-23.",
+          "data": {
+            "values": [
+              {
+                "a": "2019-20",
+                "b": "2022-23"
+              }
+            ]
+          },
+          "mark": {
+            "type": "rect",
+            "color": "#efe8db",
+            "opacity": 0.8
+          },
+          "encoding": {
+            "x": {
+              "field": "a",
+              "type": "ordinal",
+              "bandPosition": 0.5
+            },
+            "x2": {
+              "field": "b",
+              "bandPosition": 0.5
+            },
+            "y": null,
+            "color": null
+          }
+        },
+        {
+          "description": "VISITS LAYER 2 - LIGHT AMBER AREA under the in-person line.",
+          "transform": [
+            {
+              "filter": "datum.type=='In person'"
+            }
+          ],
+          "mark": {
+            "type": "area",
+            "opacity": 0.12
+          }
+        },
+        {
+          "description": "VISITS LAYER 3 - THE TWO LINES.",
+          "mark": {
+            "type": "line",
+            "strokeWidth": 3
+          }
+        },
+        {
+          "description": "VISITS LAYER 4 - DOTS + THE YEAR SELECTION. The 'yr' param picks the nearest year as the pointer moves (pointerover). The selected year's dots are solid, others faded.",
+          "params": [
+            {
+              "name": "yr",
+              "select": {
+                "type": "point",
+                "fields": [
+                  "year"
+                ],
+                "on": "pointerover",
+                "nearest": true,
+                "clear": false
+              },
+              "value": [
+                {
+                  "year": "2024-25"
+                }
+              ]
+            }
+          ],
+          "mark": {
+            "type": "circle",
+            "size": 60
+          },
+          "encoding": {
+            "opacity": {
+              "condition": {
+                "param": "yr",
+                "empty": false,
+                "value": 1
+              },
+              "value": 0.35
+            },
+            "tooltip": [
+              {
+                "field": "year",
+                "title": "Year"
+              },
+              {
+                "field": "type",
+                "title": "Visit type"
+              },
+              {
+                "field": "visits_millions",
+                "title": "Millions"
+              }
+            ]
+          }
+        },
+        {
+          "description": "VISITS LAYER 5 - DOTTED VERTICAL LINE at the selected year.",
+          "transform": [
+            {
+              "filter": {
+                "param": "yr",
+                "empty": false
+              }
+            }
+          ],
+          "mark": {
+            "type": "rule",
+            "color": "#2d2a26",
+            "strokeDash": [
+              2,
+              2
+            ]
+          },
+          "encoding": {
+            "y": null,
+            "color": null
+          }
+        },
+        {
+          "description": "VISITS LAYER 6 - LINE NAMES ('In person', 'Library website') at the left end.",
+          "transform": [
+            {
+              "filter": "datum.year=='2017-18'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "dy": -14,
+            "fontWeight": "bold",
+            "fontSize": 12
+          },
+          "encoding": {
+            "text": {
+              "field": "type"
+            }
+          }
+        },
+        {
+          "description": "VISITS LAYER 7 - THE WORD 'Lockdowns' at the top of the band.",
+          "data": {
+            "values": [
+              {
+                "a": "2020-21",
+                "t": "Lockdowns"
+              }
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "y": 6,
+            "dx": 16,
+            "color": "#8a8378",
+            "fontStyle": "italic",
+            "fontSize": 12
+          },
+          "encoding": {
+            "x": {
+              "field": "a",
+              "type": "ordinal"
+            },
+            "y": null,
+            "text": {
+              "field": "t"
+            },
+            "color": null
+          }
+        }
+      ]
+    },
+    {
+      "description": "RIGHT CHART - WAFFLE OF CARD HOLDERS: 100 squares, 1 square = 1% of Australians. Transforms: keep only the year chosen on the left chart, make 100 copies of that row (sequence + flatten), work out each square's column (cell % 10) and row (cell / 10), and mark the first N squares as members.",
+      "name": "waffle",
+      "width": 250,
+      "height": 250,
+      "title": {
+        "text": "Card holders",
+        "subtitle": "% of population"
+      },
+      "data": {
+        "url": "data/membership.csv",
+        "format": {
+          "parse": {
+            "members_pct": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": {
+            "param": "yr",
+            "empty": false
+          }
+        },
+        {
+          "calculate": "sequence(0,100)",
+          "as": "cell"
+        },
+        {
+          "flatten": [
+            "cell"
+          ]
+        },
+        {
+          "calculate": "datum.cell % 10",
+          "as": "col"
+        },
+        {
+          "calculate": "floor(datum.cell/10)",
+          "as": "row"
+        },
+        {
+          "calculate": "datum.cell < round(datum.members_pct)",
+          "as": "member"
+        }
+      ],
+      "layer": [
+        {
+          "description": "WAFFLE LAYER 1 - THE 100 SQUARES. Green = has a library card, beige = doesn't.",
+          "mark": {
+            "type": "square",
+            "size": 340
+          },
+          "encoding": {
+            "x": {
+              "field": "col",
+              "type": "ordinal",
+              "axis": null
+            },
+            "y": {
+              "field": "row",
+              "type": "ordinal",
+              "axis": null,
+              "sort": "descending"
+            },
+            "color": {
+              "field": "member",
+              "type": "nominal",
+              "scale": {
+                "domain": [
+                  true,
+                  false
+                ],
+                "range": [
+                  "#3f7d4e",
+                  "#e3dccf"
+                ]
+              },
+              "legend": null
+            },
+            "tooltip": [
+              {
+                "field": "year",
+                "title": "Year"
+              },
+              {
+                "field": "members_pct",
+                "title": "Members (% of population)"
+              }
+            ]
+          }
+        },
+        {
+          "description": "WAFFLE LAYER 2 - THE LABEL under the grid, e.g. '29% in 2024-25'.",
+          "transform": [
+            {
+              "filter": "datum.cell==0"
+            },
+            {
+              "calculate": "format(datum.members_pct,'.0f')+'% in '+datum.year",
+              "as": "lab"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "y": 272,
+            "x": 0,
+            "align": "left",
+            "fontSize": 16,
+            "fontWeight": "bold",
+            "color": "#3f7d4e"
+          },
+          "encoding": {
+            "text": {
+              "field": "lab"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "spacing": 56,
+  "resolve": {
+    "scale": {
+      "color": "independent"
+    }
+  }
+}

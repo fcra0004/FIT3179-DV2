@@ -1,0 +1,129 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "CHART: 'From 1 in 7 to 1 in 3' (Section 4, second card). Pictogram: 20 icons per year, each = 5% of loans. Transforms: make 20 copies of each year's row (sequence + flatten, numbered i = 0-19), then isdig = true for the first share/5 icons.",
+  "title": {
+    "text": "From 1 in 7 to 1 in 3",
+    "subtitle": [
+      "Each icon is 5% of everything borrowed that year: phone = digital, book = physical"
+    ]
+  },
+  "width": 560,
+  "height": 270,
+  "data": {
+    "url": "data/digital_share_national.csv",
+    "format": {
+      "parse": {
+        "share": "number",
+        "digital": "number",
+        "physical": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "calculate": "sequence(0,20)",
+      "as": "i"
+    },
+    {
+      "flatten": [
+        "i"
+      ]
+    },
+    {
+      "calculate": "datum.i < round(datum.share/5)",
+      "as": "isdig"
+    }
+  ],
+  "encoding": {
+    "y": {
+      "field": "year",
+      "type": "ordinal",
+      "title": null,
+      "axis": {
+        "domain": false,
+        "ticks": false,
+        "labelFontSize": 13,
+        "labelPadding": 10
+      }
+    }
+  },
+  "layer": [
+    {
+      "description": "LAYER 1 - THE ICONS. 'shape' uses a custom SVG path: phone when isdig is true, book otherwise. Colour: teal for phones, pale terracotta for books.",
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 330,
+        "opacity": 1
+      },
+      "encoding": {
+        "x": {
+          "field": "i",
+          "type": "ordinal",
+          "axis": null
+        },
+        "shape": {
+          "condition": {
+            "test": "datum.isdig",
+            "value": "M-0.5,-1 L0.5,-1 Q0.65,-1 0.65,-0.85 L0.65,0.85 Q0.65,1 0.5,1 L-0.5,1 Q-0.65,1 -0.65,0.85 L-0.65,-0.85 Q-0.65,-1 -0.5,-1 Z"
+          },
+          "value": "M0,-0.55 C-0.3,-0.85 -0.7,-0.85 -1,-0.75 L-1,0.85 C-0.7,0.75 -0.3,0.75 0,1 C0.3,0.75 0.7,0.75 1,0.85 L1,-0.75 C0.7,-0.85 0.3,-0.85 0,-0.55 Z"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.isdig",
+            "value": "#13827f"
+          },
+          "value": "#e6b8a4"
+        },
+        "tooltip": [
+          {
+            "field": "year",
+            "title": "Year"
+          },
+          {
+            "field": "share",
+            "title": "Digital share of loans (%)"
+          },
+          {
+            "field": "digital",
+            "title": "Digital loans (millions)"
+          },
+          {
+            "field": "physical",
+            "title": "Physical loans (millions)"
+          }
+        ]
+      }
+    },
+    {
+      "description": "LAYER 2 - THE % LABEL at the end of each row (e.g. '34%').",
+      "transform": [
+        {
+          "filter": "datum.i==19"
+        },
+        {
+          "calculate": "format(datum.share,'.0f')+'%'",
+          "as": "lab"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 16,
+        "fontSize": 14,
+        "fontWeight": "bold",
+        "color": "#13827f"
+      },
+      "encoding": {
+        "x": {
+          "field": "i",
+          "type": "ordinal"
+        },
+        "text": {
+          "field": "lab"
+        }
+      }
+    }
+  ]
+}

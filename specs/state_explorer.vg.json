@@ -1,0 +1,368 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "CHART GROUP: 'Find your state' explorer (Section 4, wide card). Three charts side by side, all driven by the PARAMS below: 'yi' = the year slider (0-10), 'yrLabel' = turns the slider number into a year like '2024-25' (also shown in big type above the maps by js/embed.js), 'pick' = the state clicked on either map (starts on Victoria).",
+  "params": [
+    {
+      "name": "yi",
+      "value": 10,
+      "bind": {
+        "input": "range",
+        "min": 0,
+        "max": 10,
+        "step": 1,
+        "name": "Year"
+      }
+    },
+    {
+      "name": "yrLabel",
+      "expr": "['2014-15','2015-16','2016-17','2017-18','2018-19','2019-20','2020-21','2021-22','2022-23','2023-24','2024-25'][yi]"
+    },
+    {
+      "name": "pick",
+      "select": {
+        "type": "point",
+        "fields": [
+          "state"
+        ],
+        "toggle": false
+      },
+      "value": [
+        {
+          "state": "Victoria"
+        }
+      ],
+      "views": [
+        "choro",
+        "symDots"
+      ]
+    }
+  ],
+  "hconcat": [
+    {
+      "description": "MAP 1 - CHOROPLETH 'Digital share of loans'. Transforms: keep only the slider's year (datum.idx == yi), then 'lookup' joins each state's row to its shape in aus_states.topojson. Colour: light to dark teal = low to high digital share (0-45%). Clicked state gets a dark outline.",
+      "name": "choro",
+      "width": 290,
+      "height": 290,
+      "projection": {
+        "type": "mercator"
+      },
+      "title": {
+        "text": "Digital share of loans",
+        "subtitle": "Darker = more borrowed on apps"
+      },
+      "data": {
+        "url": "data/state_year.csv"
+      },
+      "transform": [
+        {
+          "filter": "datum.idx == yi"
+        },
+        {
+          "lookup": "state",
+          "from": {
+            "data": {
+              "url": "data/aus_states.topojson",
+              "format": {
+                "type": "topojson",
+                "feature": "states"
+              }
+            },
+            "key": "properties.STATE_NAME"
+          },
+          "as": "geo"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "cursor": "pointer"
+      },
+      "encoding": {
+        "shape": {
+          "field": "geo",
+          "type": "geojson"
+        },
+        "color": {
+          "field": "digital_share",
+          "type": "quantitative",
+          "title": "Digital %",
+          "scale": {
+            "domain": [
+              0,
+              45
+            ],
+            "range": [
+              "#eef6f4",
+              "#13827f",
+              "#0b4f4d"
+            ]
+          },
+          "legend": {
+            "orient": "bottom",
+            "direction": "horizontal",
+            "gradientLength": 180,
+            "titleOrient": "left"
+          }
+        },
+        "stroke": {
+          "condition": {
+            "param": "pick",
+            "empty": false,
+            "value": "#2d2a26"
+          },
+          "value": "white"
+        },
+        "strokeWidth": {
+          "condition": {
+            "param": "pick",
+            "empty": false,
+            "value": 2.5
+          },
+          "value": 0.8
+        },
+        "tooltip": [
+          {
+            "field": "state",
+            "title": "State"
+          },
+          {
+            "field": "year",
+            "title": "Year"
+          },
+          {
+            "field": "digital_share",
+            "title": "Digital share (%)"
+          }
+        ]
+      }
+    },
+    {
+      "description": "MAP 2 - PROPORTIONAL SYMBOL MAP 'In-person visits'.",
+      "name": "symbols",
+      "width": 290,
+      "height": 290,
+      "projection": {
+        "type": "mercator"
+      },
+      "title": {
+        "text": "In-person visits",
+        "subtitle": "Circle area = visits that year"
+      },
+      "layer": [
+        {
+          "description": "SYMBOL MAP LAYER 1 - THE BEIGE STATE SHAPES underneath.",
+          "data": {
+            "url": "data/aus_states.topojson",
+            "format": {
+              "type": "topojson",
+              "feature": "states"
+            }
+          },
+          "mark": {
+            "type": "geoshape",
+            "fill": "#e9e2d4",
+            "stroke": "white"
+          }
+        },
+        {
+          "description": "SYMBOL MAP LAYER 2 - THE CIRCLES. Placed at each state's lon/lat, circle AREA = visits that year (millions). The clicked state is darker; others fade. Named 'symDots' so the 'pick' click works on it.",
+          "name": "symDots",
+          "data": {
+            "url": "data/state_year.csv"
+          },
+          "transform": [
+            {
+              "filter": "datum.idx == yi"
+            }
+          ],
+          "mark": {
+            "type": "circle",
+            "stroke": "white",
+            "strokeWidth": 1,
+            "cursor": "pointer"
+          },
+          "encoding": {
+            "longitude": {
+              "field": "lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "lat",
+              "type": "quantitative"
+            },
+            "size": {
+              "field": "onsite_visits",
+              "type": "quantitative",
+              "title": "Visits (millions)",
+              "scale": {
+                "domain": [
+                  0,
+                  36
+                ],
+                "range": [
+                  0,
+                  2200
+                ]
+              },
+              "legend": {
+                "orient": "bottom",
+                "direction": "horizontal",
+                "values": [
+                  1,
+                  10,
+                  25
+                ],
+                "titleOrient": "left",
+                "symbolFillColor": "#d4901c",
+                "symbolStrokeColor": "white"
+              }
+            },
+            "color": {
+              "condition": {
+                "param": "pick",
+                "empty": false,
+                "value": "#a86a08"
+              },
+              "value": "#d4901c"
+            },
+            "opacity": {
+              "condition": {
+                "param": "pick",
+                "empty": true,
+                "value": 0.95
+              },
+              "value": 0.45
+            },
+            "tooltip": [
+              {
+                "field": "state",
+                "title": "State"
+              },
+              {
+                "field": "year",
+                "title": "Year"
+              },
+              {
+                "field": "onsite_visits",
+                "title": "Visits (millions)"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "description": "CHART 3 - 'Borrowing: <state>' STACKED BARS. Shows the clicked state only (filter on 'pick'). 'fold' turns the physical and digital columns into rows so they can stack. The slider's year is solid, other years faded (opacity test on yrLabel).",
+      "name": "detail",
+      "width": 230,
+      "height": 250,
+      "title": {
+        "text": {
+          "expr": "'Borrowing: ' + (pick && pick.state ? pick.state[0] : 'all states')"
+        },
+        "subtitle": "Millions of items, by year",
+        "fontSize": 15
+      },
+      "data": {
+        "url": "data/state_year.csv"
+      },
+      "transform": [
+        {
+          "filter": {
+            "param": "pick"
+          }
+        },
+        {
+          "fold": [
+            "physical",
+            "digital"
+          ],
+          "as": [
+            "format",
+            "millions"
+          ]
+        },
+        {
+          "calculate": "datum.format=='physical' ? 'Physical' : 'Digital'",
+          "as": "format"
+        }
+      ],
+      "mark": {
+        "type": "bar",
+        "width": {
+          "band": 0.7
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "ordinal",
+          "title": null,
+          "axis": {
+            "labelAngle": -45,
+            "labelExpr": "slice(datum.label,2,4)+'–'+slice(datum.label,5,7)"
+          }
+        },
+        "y": {
+          "aggregate": "sum",
+          "field": "millions",
+          "type": "quantitative",
+          "title": null
+        },
+        "color": {
+          "field": "format",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Physical",
+              "Digital"
+            ],
+            "range": [
+              "#c0532b",
+              "#13827f"
+            ]
+          },
+          "legend": {
+            "orient": "bottom",
+            "title": null
+          }
+        },
+        "order": {
+          "field": "format",
+          "sort": "descending"
+        },
+        "opacity": {
+          "condition": {
+            "test": "datum.year == yrLabel",
+            "value": 1
+          },
+          "value": 0.35
+        },
+        "tooltip": [
+          {
+            "field": "year",
+            "title": "Year"
+          },
+          {
+            "field": "format",
+            "title": "Format"
+          },
+          {
+            "aggregate": "sum",
+            "field": "millions",
+            "title": "Millions"
+          }
+        ]
+      }
+    }
+  ],
+  "spacing": 28,
+  "resolve": {
+    "scale": {
+      "color": "independent",
+      "size": "independent"
+    },
+    "legend": {
+      "color": "independent"
+    }
+  }
+}

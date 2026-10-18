@@ -1,10 +1,13 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "CHART: 'Borrowing slid for a decade, then recovered' (Section 3, top card). Two lines: items borrowed per person (navy) and library visits per person (amber), 2010-11 to 2024-25. The shared encoding below (x = year, y = value, colour = measure) is used by every layer unless a layer sets its own.",
   "title": {
-    "text": "Australians borrow and visit less than a decade ago",
-    "subtitle": "Items borrowed and library visits per person, per year"
+    "text": "Borrowing slid for a decade, then recovered — visits have not",
+    "subtitle": [
+      "Items borrowed and library visits per Australian, per year"
+    ]
   },
-  "width": "container",
+  "width": 650,
   "height": 300,
   "data": {
     "url": "data/national_per_person.csv"
@@ -15,55 +18,123 @@
       "type": "ordinal",
       "title": null,
       "axis": {
-        "labelAngle": -40
+        "labelAngle": -40,
+        "labelPadding": 4
       }
     },
     "y": {
       "field": "value",
       "type": "quantitative",
-      "title": "Per person",
+      "title": null,
       "scale": {
         "domain": [
           0,
           9
         ]
+      },
+      "axis": {
+        "tickCount": 5
       }
     },
     "color": {
       "field": "measure",
       "type": "nominal",
       "scale": {
+        "domain": [
+          "Items borrowed per person",
+          "Library visits per person"
+        ],
         "range": [
-          "#b5532d",
-          "#3b3a36"
+          "#24426b",
+          "#d4901c"
         ]
       },
-      "legend": {
-        "orient": "top",
-        "title": null
-      }
+      "legend": null
     }
   },
   "layer": [
     {
+      "description": "LAYER 1 - GREY 'LOCKDOWNS' SHADING BAND from 2019-20 to 2022-23. Change \"a\"/\"b\" to move its ends.",
+      "data": {
+        "values": [
+          {
+            "a": "2019-20",
+            "b": "2022-23"
+          }
+        ]
+      },
       "mark": {
-        "type": "line",
-        "strokeWidth": 2.5
+        "type": "rect",
+        "color": "#efe8db",
+        "opacity": 0.8
+      },
+      "encoding": {
+        "x": {
+          "field": "a",
+          "type": "ordinal",
+          "bandPosition": 0.5
+        },
+        "x2": {
+          "field": "b",
+          "bandPosition": 0.5
+        },
+        "y": null,
+        "color": null
       }
     },
     {
+      "description": "LAYER 2 - THE WORD 'Lockdowns' at the top of the band.",
+      "data": {
+        "values": [
+          {
+            "a": "2020-21",
+            "t": "Lockdowns"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "y": 8,
+        "dx": 23,
+        "color": "#8a8378",
+        "fontSize": 12,
+        "fontStyle": "italic"
+      },
+      "encoding": {
+        "x": {
+          "field": "a",
+          "type": "ordinal"
+        },
+        "y": null,
+        "text": {
+          "field": "t"
+        },
+        "color": null
+      }
+    },
+    {
+      "description": "LAYER 3 - THE TWO LINES.",
+      "mark": {
+        "type": "line",
+        "strokeWidth": 3
+      }
+    },
+    {
+      "description": "LAYER 4 - DOTS ON EACH YEAR + the hover tooltip.",
       "mark": {
         "type": "point",
         "filled": true,
-        "size": 40
+        "size": 45
       },
       "encoding": {
         "tooltip": [
           {
-            "field": "year"
+            "field": "year",
+            "title": "Year"
           },
           {
-            "field": "measure"
+            "field": "measure",
+            "title": "Measure"
           },
           {
             "field": "value",
@@ -73,93 +144,43 @@
       }
     },
     {
-      "data": {
-        "values": [
-          {
-            "year": "2020-21",
-            "label": "COVID-19 closures"
-          }
-        ]
-      },
+      "description": "LAYER 5 - START AND END VALUES (8.1, 4.9, 6.6, 3.3) above the first and last dots.",
+      "transform": [
+        {
+          "filter": "datum.year=='2010-11' || datum.year=='2024-25'"
+        }
+      ],
       "mark": {
-        "type": "rule",
-        "strokeDash": [
-          4,
-          3
-        ],
-        "color": "#9a948a"
+        "type": "text",
+        "dy": -14,
+        "fontSize": 13,
+        "fontWeight": "bold"
       },
       "encoding": {
-        "x": {
-          "field": "year",
-          "type": "ordinal"
-        },
-        "y": null,
-        "color": null
+        "text": {
+          "field": "value",
+          "format": ".1f"
+        }
       }
     },
     {
-      "data": {
-        "values": [
-          {
-            "year": "2020-21",
-            "label": "COVID-19 closures",
-            "v": 8.6
-          }
-        ]
-      },
+      "description": "LAYER 6 - LINE NAMES ('Items borrowed per person', 'Library visits per person') written next to the lines instead of a legend.",
+      "transform": [
+        {
+          "filter": "datum.year=='2013-14'"
+        }
+      ],
       "mark": {
         "type": "text",
-        "align": "left",
-        "dx": 4,
-        "color": "#9a948a",
-        "fontStyle": "italic"
+        "dy": -16,
+        "fontSize": 13,
+        "fontWeight": "bold",
+        "align": "left"
       },
       "encoding": {
-        "x": {
-          "field": "year",
-          "type": "ordinal"
-        },
-        "y": {
-          "field": "v",
-          "type": "quantitative"
-        },
         "text": {
-          "field": "label"
-        },
-        "color": null
-      }
-    },
-    {
-      "data": {
-        "values": [
-          {
-            "year": "2015-16",
-            "label": "No report for 2016-17",
-            "v": 1.0
-          }
-        ]
-      },
-      "mark": {
-        "type": "text",
-        "align": "left",
-        "dx": 6,
-        "color": "#9a948a",
-        "fontStyle": "italic"
-      },
-      "encoding": {
-        "x": {
-          "field": "year",
-          "type": "ordinal"
-        },
-        "y": {
-          "field": "v",
-          "type": "quantitative"
-        },
-        "text": {
-          "field": "label"
-        },
-        "color": null
+          "field": "measure"
+        }
       }
     }
   ]

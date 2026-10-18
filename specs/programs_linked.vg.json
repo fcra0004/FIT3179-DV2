@@ -1,0 +1,334 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "CHART PAIR: 'Programs for everyone but teens' (heatmap, left) + 'Why they come: <group>' (bars, right). Section 5. Clicking a row of the heatmap (param 'paud') picks an age group; the bars show that group's reasons for attending.",
+  "hconcat": [
+    {
+      "description": "LEFT CHART - HEATMAP: states across the top, age groups down the side. The transform calculates attendances per 1,000 residents (per_1000), which sets the colour.",
+      "name": "heat",
+      "width": 330,
+      "height": 250,
+      "title": {
+        "text": "Programs for everyone but teens",
+        "subtitle": [
+          "Attendances per 1,000 residents, 2024–25.",
+          "The teen row is the palest in every state."
+        ]
+      },
+      "data": {
+        "url": "data/programs_by_audience_2024_25.csv",
+        "format": {
+          "parse": {
+            "participants": "number",
+            "population_millions": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "calculate": "datum.participants / (datum.population_millions*1000)",
+          "as": "per_1000"
+        }
+      ],
+      "encoding": {
+        "y": {
+          "field": "audience",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Early childhood",
+            "Children",
+            "Young adult",
+            "Adults",
+            "Seniors",
+            "All ages"
+          ],
+          "axis": {
+            "domain": false,
+            "ticks": false,
+            "labelFontSize": 13,
+            "labelExpr": "datum.label=='Early childhood' ? 'Under 5s' : datum.label=='Young adult' ? 'Teens' : datum.label"
+          }
+        },
+        "x": {
+          "field": "abbr",
+          "type": "nominal",
+          "title": null,
+          "axis": {
+            "labelAngle": 0,
+            "orient": "top",
+            "domain": false,
+            "ticks": false,
+            "labelFontSize": 12
+          }
+        }
+      },
+      "layer": [
+        {
+          "description": "HEATMAP LAYER 1 - THE COLOURED SQUARES + THE CLICK. 'paud' records the clicked age group (starts on Young adult = Teens). Colour: pale to dark plum, square-root scale so small values still differ.",
+          "params": [
+            {
+              "name": "paud",
+              "select": {
+                "type": "point",
+                "fields": [
+                  "audience"
+                ],
+                "toggle": false
+              },
+              "value": [
+                {
+                  "audience": "Young adult"
+                }
+              ]
+            }
+          ],
+          "mark": {
+            "type": "rect",
+            "stroke": "white",
+            "strokeWidth": 2,
+            "cursor": "pointer"
+          },
+          "encoding": {
+            "color": {
+              "field": "per_1000",
+              "type": "quantitative",
+              "title": "Per 1,000",
+              "scale": {
+                "type": "sqrt",
+                "range": [
+                  "#f6e3ec",
+                  "#a33b6a",
+                  "#5c1435"
+                ]
+              },
+              "legend": null
+            },
+            "tooltip": [
+              {
+                "field": "state",
+                "title": "State"
+              },
+              {
+                "field": "audience",
+                "title": "Audience"
+              },
+              {
+                "field": "participants",
+                "title": "Attendances",
+                "format": ","
+              },
+              {
+                "field": "per_1000",
+                "title": "Per 1,000 residents",
+                "format": ".0f"
+              }
+            ]
+          }
+        },
+        {
+          "description": "HEATMAP LAYER 2 - THE NUMBER IN EACH SQUARE (white on dark squares, dark on light ones).",
+          "mark": {
+            "type": "text",
+            "fontSize": 12
+          },
+          "encoding": {
+            "text": {
+              "field": "per_1000",
+              "format": ".0f"
+            },
+            "color": {
+              "condition": {
+                "test": "datum.per_1000 > 70",
+                "value": "white"
+              },
+              "value": "#2d2a26"
+            }
+          }
+        },
+        {
+          "description": "HEATMAP LAYER 3 - THE DARK OUTLINE around the selected row. It only keeps the clicked group (filter on 'paud') and draws one unfilled rectangle across the full row.",
+          "transform": [
+            {
+              "filter": {
+                "param": "paud",
+                "empty": false
+              }
+            },
+            {
+              "aggregate": [
+                {
+                  "op": "count",
+                  "as": "n"
+                }
+              ],
+              "groupby": [
+                "audience"
+              ]
+            }
+          ],
+          "mark": {
+            "type": "rect",
+            "fill": null,
+            "stroke": "#2d2a26",
+            "strokeWidth": 3,
+            "cornerRadius": 2
+          },
+          "encoding": {
+            "x": null
+          }
+        }
+      ]
+    },
+    {
+      "description": "RIGHT CHART - 'Why they come' BARS: share of the selected group's attendances by program purpose. Transforms: keep the clicked group, add up attendances per purpose, then divide by the group total to get each share.",
+      "name": "outcomes",
+      "width": 210,
+      "height": 250,
+      "title": {
+        "text": {
+          "expr": "'Why they come: ' + (paud && paud.audience ? (paud.audience[0]=='Early childhood' ? 'Under 5s' : paud.audience[0]=='Young adult' ? 'Teens' : paud.audience[0]) : 'everyone')"
+        },
+        "subtitle": "Share of attendances by program purpose",
+        "fontSize": 15
+      },
+      "data": {
+        "url": "data/programs_purpose_by_audience_2024_25.csv",
+        "format": {
+          "parse": {
+            "participants": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": {
+            "param": "paud"
+          }
+        },
+        {
+          "aggregate": [
+            {
+              "op": "sum",
+              "field": "participants",
+              "as": "p"
+            }
+          ],
+          "groupby": [
+            "outcome"
+          ]
+        },
+        {
+          "joinaggregate": [
+            {
+              "op": "sum",
+              "field": "p",
+              "as": "tot"
+            }
+          ]
+        },
+        {
+          "calculate": "datum.p/datum.tot",
+          "as": "share"
+        }
+      ],
+      "encoding": {
+        "y": {
+          "field": "outcome",
+          "type": "nominal",
+          "title": null,
+          "sort": {
+            "field": "share",
+            "order": "descending"
+          },
+          "axis": null,
+          "scale": {
+            "paddingInner": 0.55,
+            "paddingOuter": 0.3
+          }
+        },
+        "x": {
+          "field": "share",
+          "type": "quantitative",
+          "title": null,
+          "axis": null,
+          "scale": {
+            "domain": [
+              0,
+              1.05
+            ]
+          }
+        }
+      },
+      "layer": [
+        {
+          "description": "BARS LAYER 1 - THE BARS (length = share).",
+          "mark": {
+            "type": "bar",
+            "color": "#a33b6a",
+            "cornerRadiusEnd": 3
+          },
+          "encoding": {
+            "tooltip": [
+              {
+                "field": "outcome",
+                "title": "Purpose"
+              },
+              {
+                "field": "p",
+                "title": "Attendances",
+                "format": ","
+              },
+              {
+                "field": "share",
+                "title": "Share",
+                "format": ".0%"
+              }
+            ]
+          }
+        },
+        {
+          "description": "BARS LAYER 2 - THE % LABEL at the end of each bar.",
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "dx": 5,
+            "fontSize": 13,
+            "fontWeight": "bold",
+            "color": "#a33b6a"
+          },
+          "encoding": {
+            "text": {
+              "field": "share",
+              "format": ".0%"
+            }
+          }
+        },
+        {
+          "description": "BARS LAYER 3 - THE PURPOSE NAME above each bar (used instead of an axis).",
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "bottom",
+            "dy": -9,
+            "fontSize": 13,
+            "color": "#2d2a26"
+          },
+          "encoding": {
+            "text": {
+              "field": "outcome"
+            },
+            "x": {
+              "value": 0
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "spacing": 24,
+  "resolve": {
+    "scale": {
+      "color": "independent"
+    }
+  }
+}
