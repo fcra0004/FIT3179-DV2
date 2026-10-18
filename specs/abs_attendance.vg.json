@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "CHART: 'Fewer than 1 in 5 young adults visit a library' (Section 2, top card). Bar chart of the share of each age group who visited a library in 2021-22 (ABS). The data is typed into this file under \"values\". The transform makes a true/false column 'young' for the 18-24 and 25-34 bars so they can be coloured amber.",
+  "description": "CHART: 'Fewer than 1 in 5 young adults visit a library' (Section 2, top card). Bar chart of the share of each age group who visited a library in 2021-22 (ABS). The data is typed into this file under \"values\". The transform makes a true/false column 'young' for the 18-24 and 25-34 bars so they can be coloured amber. CHANNELS: x position = age (ordinal); y position = pct (quantitative).",
   "title": {
     "text": "Fewer than 1 in 5 young adults visit a library",
     "subtitle": [
@@ -81,7 +81,7 @@
   },
   "layer": [
     {
-      "description": "LAYER 1 - THE BARS. x = age group, y = % who visited (bar length). colour: amber when young = true, beige otherwise.",
+      "description": "LAYER 1 - THE BARS. x = age group, y = % who visited (bar length). colour: amber when young = true, beige otherwise. CHANNELS: colour = young (nominal).",
       "mark": {
         "type": "bar",
         "width": {
@@ -119,7 +119,7 @@
       }
     },
     {
-      "description": "LAYER 2 - NUMBER ON TOP OF EACH BAR (e.g. '18'). dy:-8 lifts the label above the bar.",
+      "description": "LAYER 2 - NUMBER ON TOP OF EACH BAR (e.g. '18'). dy:-8 lifts the label above the bar. CHANNELS: text = pct; colour changes when datum.young.",
       "mark": {
         "type": "text",
         "dy": -8,
@@ -141,7 +141,7 @@
       }
     },
     {
-      "description": "LAYER 3 - ANNOTATION 'Under 35s: fewer than 1 in 5' placed above the 18-24 bar.",
+      "description": "LAYER 3 - ANNOTATION 'Under 35s: fewer than 1 in 5' placed above the 18-24 bar. CHANNELS: x position = age (ordinal); y position = pct (quantitative); text = t.",
       "data": {
         "values": [
           {

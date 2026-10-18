@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "CHART: 'Borrowing slid for a decade, then recovered' (Section 3, top card). Two lines: items borrowed per person (navy) and library visits per person (amber), 2010-11 to 2024-25. The shared encoding below (x = year, y = value, colour = measure) is used by every layer unless a layer sets its own.",
+  "description": "CHART: 'Borrowing slid for a decade, then recovered' (Section 3, top card). Two lines: items borrowed per person (navy) and library visits per person (amber), 2010-11 to 2024-25. The shared encoding below (x = year, y = value, colour = measure) is used by every layer unless a layer sets its own. CHANNELS: x position = year (ordinal); y position = value (quantitative); colour = measure (nominal).",
   "title": {
     "text": "Borrowing slid for a decade, then recovered — visits have not",
     "subtitle": [
@@ -54,7 +54,7 @@
   },
   "layer": [
     {
-      "description": "LAYER 1 - GREY 'LOCKDOWNS' SHADING BAND from 2019-20 to 2022-23. Change \"a\"/\"b\" to move its ends.",
+      "description": "LAYER 1 - GREY 'LOCKDOWNS' SHADING BAND from 2019-20 to 2022-23. Change \"a\"/\"b\" to move its ends. CHANNELS: x position = a (ordinal); x end = b.",
       "data": {
         "values": [
           {
@@ -83,7 +83,7 @@
       }
     },
     {
-      "description": "LAYER 2 - THE WORD 'Lockdowns' at the top of the band.",
+      "description": "LAYER 2 - THE WORD 'Lockdowns' at the top of the band. CHANNELS: x position = a (ordinal); text = t.",
       "data": {
         "values": [
           {
@@ -144,7 +144,7 @@
       }
     },
     {
-      "description": "LAYER 5 - START AND END VALUES (8.1, 4.9, 6.6, 3.3) above the first and last dots.",
+      "description": "LAYER 5 - START AND END VALUES (8.1, 4.9, 6.6, 3.3) above the first and last dots. CHANNELS: text = value.",
       "transform": [
         {
           "filter": "datum.year=='2010-11' || datum.year=='2024-25'"
@@ -164,7 +164,7 @@
       }
     },
     {
-      "description": "LAYER 6 - LINE NAMES ('Items borrowed per person', 'Library visits per person') written next to the lines instead of a legend.",
+      "description": "LAYER 6 - LINE NAMES ('Items borrowed per person', 'Library visits per person') written next to the lines instead of a legend. CHANNELS: text = measure.",
       "transform": [
         {
           "filter": "datum.year=='2013-14'"

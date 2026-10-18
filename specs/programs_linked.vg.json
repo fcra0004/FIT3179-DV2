@@ -3,7 +3,7 @@
   "description": "CHART PAIR: 'Programs for everyone but teens' (heatmap, left) + 'Why they come: <group>' (bars, right). Section 5. Clicking a row of the heatmap (param 'paud') picks an age group; the bars show that group's reasons for attending.",
   "hconcat": [
     {
-      "description": "LEFT CHART - HEATMAP: states across the top, age groups down the side. The transform calculates attendances per 1,000 residents (per_1000), which sets the colour.",
+      "description": "LEFT CHART - HEATMAP: states across the top, age groups down the side. The transform calculates attendances per 1,000 residents (per_1000), which sets the colour. CHANNELS: y position = audience (nominal); x position = abbr (nominal).",
       "name": "heat",
       "width": 330,
       "height": 250,
@@ -64,7 +64,7 @@
       },
       "layer": [
         {
-          "description": "HEATMAP LAYER 1 - THE COLOURED SQUARES + THE CLICK. 'paud' records the clicked age group (starts on Young adult = Teens). Colour: pale to dark plum, square-root scale so small values still differ.",
+          "description": "HEATMAP LAYER 1 - THE COLOURED SQUARES + THE CLICK. 'paud' records the clicked age group (starts on Young adult = Teens). Colour: pale to dark plum, square-root scale so small values still differ. CHANNELS: colour = per_1000 (quantitative).",
           "params": [
             {
               "name": "paud",
@@ -126,7 +126,7 @@
           }
         },
         {
-          "description": "HEATMAP LAYER 2 - THE NUMBER IN EACH SQUARE (white on dark squares, dark on light ones).",
+          "description": "HEATMAP LAYER 2 - THE NUMBER IN EACH SQUARE (white on dark squares, dark on light ones). CHANNELS: text = per_1000; colour changes when datum.per_1000 > 70.",
           "mark": {
             "type": "text",
             "fontSize": 12
@@ -180,7 +180,7 @@
       ]
     },
     {
-      "description": "RIGHT CHART - 'Why they come' BARS: share of the selected group's attendances by program purpose. Transforms: keep the clicked group, add up attendances per purpose, then divide by the group total to get each share.",
+      "description": "RIGHT CHART - 'Why they come' BARS: share of the selected group's attendances by program purpose. Transforms: keep the clicked group, add up attendances per purpose, then divide by the group total to get each share. CHANNELS: y position = outcome (nominal); x position = share (quantitative).",
       "name": "outcomes",
       "width": 210,
       "height": 250,
@@ -287,7 +287,7 @@
           }
         },
         {
-          "description": "BARS LAYER 2 - THE % LABEL at the end of each bar.",
+          "description": "BARS LAYER 2 - THE % LABEL at the end of each bar. CHANNELS: text = share.",
           "mark": {
             "type": "text",
             "align": "left",
@@ -304,7 +304,7 @@
           }
         },
         {
-          "description": "BARS LAYER 3 - THE PURPOSE NAME above each bar (used instead of an axis).",
+          "description": "BARS LAYER 3 - THE PURPOSE NAME above each bar (used instead of an axis). CHANNELS: text = outcome; x position fixed at 0.",
           "mark": {
             "type": "text",
             "align": "left",

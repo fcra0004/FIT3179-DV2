@@ -43,8 +43,10 @@
 
 
 /* ---------- 2. Base text and page width ---------- */
+/* make every box's width include its padding and border (easier sizing) */
 * { box-sizing: border-box; }
 
+/* whole page: no default margin, beige background, dark text, body font at 19px with roomy line spacing */
 body {
   margin: 0;
   background: var(--paper);
@@ -57,7 +59,9 @@ body {
 /* .wrap keeps content at most 1240px wide and centred, so it fits small laptops */
 .wrap { max-width: 1240px; margin: 0 auto; padding: 0 28px; }
 
+/* all headings use Fraunces, tight line spacing, no default margins */
 h1, h2, h3, h4 { font-family: var(--serif); line-height: 1.08; margin: 0; }
+/* links: same colour as the text around them, with a soft underline */
 a { color: inherit; text-decoration-color: rgba(0,0,0,0.3); text-underline-offset: 2px; }
 
 
@@ -82,6 +86,7 @@ h1 em { font-style: italic; font-weight: 700; color: #7fd1c7; }                 
 
 
 /* ---------- 4. SECTIONS: story column on the left, charts on the right ---------- */
+/* each section: space above and below, thin line underneath */
 .chapter { padding: 44px 0 36px; border-bottom: 1px solid var(--rule); }
 .chapter-grid {
   display: grid;
@@ -90,6 +95,7 @@ h1 em { font-style: italic; font-weight: 700; color: #7fd1c7; }                 
   align-items: start;
 }
 .story { position: sticky; top: 20px; }   /* story text stays in view while you scroll past its charts */
+/* space under each paragraph and call-out in the story column */
 .story > p, .story > aside { margin: 0 0 14px; }
 
 h2 { font-size: 40px; font-weight: 800; letter-spacing: -0.01em; margin: 0 0 14px; }   /* section titles, e.g. "1 – There's one near you" */
@@ -98,13 +104,16 @@ h2 { font-size: 40px; font-weight: 800; letter-spacing: -0.01em; margin: 0 0 14p
 
 /* ---------- 5. BIG NUMBERS (.pull call-outs in the story column) ---------- */
 /* Each call-out takes the colour of what it measures, e.g. <aside class="pull digital"> is teal */
+/* call-out box: coloured bar on the left, small grey text for the explanation */
 .pull {
   border-left: 5px solid currentColor;
   padding: 4px 0 4px 14px;
   font-size: 16px;
   color: var(--muted);
 }
+/* the big number itself: large extra-bold Fraunces on its own line */
 .pull .big { display: block; font-family: var(--serif); font-size: 44px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+/* colour of each call-out type: border bar + big number (matches the chart it refers to) */
 .pull.borrow { border-color: var(--borrow); } .pull.borrow .big { color: var(--borrow); }
 .pull.digital { border-color: var(--digital); } .pull.digital .big { color: var(--digital); }
 .pull.visits { border-color: var(--visits); } .pull.visits .big { color: #b9770e; }
@@ -115,6 +124,7 @@ h2 { font-size: 40px; font-weight: 800; letter-spacing: -0.01em; margin: 0 0 14p
 
 /* ---------- 6. CHART CARDS (white boxes around charts) ---------- */
 .visuals { display: grid; gap: 20px; min-width: 0; }   /* the right-hand column: cards stacked with 20px gaps */
+/* white chart card: thin border, rounded corners, padding inside */
 .card {
   margin: 0;
   min-width: 0;
@@ -127,11 +137,14 @@ h2 { font-size: 40px; font-weight: 800; letter-spacing: -0.01em; margin: 0 0 14p
 
 /* Drop-downs and sliders that Vega creates (embed.js moves them into the cards) */
 .vega-bindings { font-family: var(--sans); font-size: 15px; font-weight: 600; margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: center; }
+/* drop-down and slider text uses the body font */
 .vega-bindings select, .vega-bindings input { font-family: var(--sans); font-size: 15px; accent-color: var(--digital); }
+/* default slider width (the explorer slider is set wider in section 9) */
 .vega-bindings input[type="range"] { width: 160px; vertical-align: middle; }
 
 
 /* ---------- 7. "HOW TO USE" HINTS inside chart cards ---------- */
+/* hint box: icon + bold text on a pale background with a terracotta bar on the left */
 .hint {
   display: flex;
   align-items: center;
@@ -150,23 +163,30 @@ h2 { font-size: 40px; font-weight: 800; letter-spacing: -0.01em; margin: 0 0 14p
 
 
 /* ---------- 8. SECTION 1 MAP: title row, "Jump to" drop-down, zoom buttons ---------- */
+/* map title on the left, controls on the right, in one row */
 .map-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
 .map-title { margin: 0; font-family: var(--serif); font-size: 20px; font-weight: 800; }   /* "Every public library branch in Australia" */
+/* "Jump to" drop-down and zoom buttons side by side */
 .map-controls { display: flex; align-items: center; gap: 14px; }
 .jump-slot .vega-bindings { margin: 0; }   /* the "Jump to" drop-down */
+/* the +, − and Reset buttons in a row */
 .zoom-buttons { display: flex; gap: 6px; }
+/* each zoom button: white, bordered, rounded */
 .zoom-buttons button {
   font: 600 15px var(--sans);
   min-width: 34px; height: 32px;
   border: 1px solid var(--rule); border-radius: 6px;
   background: #fff; color: var(--ink); cursor: pointer;
 }
+/* slightly darker when the mouse is over it */
 .zoom-buttons button:hover { background: #f1e9db; }
 #library_cluster_map { cursor: grab; }   /* hand cursor shows the map can be dragged */
 
 
 /* ---------- 9. SECTION 4 "FIND YOUR STATE": heading, year, slider bar ---------- */
+/* space above the explorer */
 .explorer { margin-top: 32px; }
+/* explorer heading and intro: limited width so lines stay readable */
 .explorer-head { margin-bottom: 14px; max-width: 760px; }
 .explorer-head h3 { font-size: 28px; font-weight: 800; margin-bottom: 6px; }
 .explorer-head p { margin: 0; max-width: 70ch; }
@@ -183,25 +203,34 @@ h2 { font-size: 40px; font-weight: 800; letter-spacing: -0.01em; margin: 0 0 14p
   border-bottom: 1px solid var(--rule);
 }
 .year-display { font-family: var(--serif); font-size: 44px; font-weight: 800; line-height: 1; color: var(--ink); min-width: 170px; }   /* big "2024–25" */
+/* box holding the slider and its year labels */
 .slider-block { width: 476px; }
 .slider-slot .vega-bindings { margin: 0; }
+/* the "Year" label and slider sit side by side */
 .slider-slot .vega-bind label { display: flex; align-items: center; gap: 12px; font: 700 16px var(--sans); }
+/* the slider itself: 400px wide, terracotta colour */
 .slider-slot input[type="range"] { width: 400px; accent-color: var(--physical); height: 22px; }
 .slider-slot input[type="range"] + span { display: none; }   /* hide Vega's raw slider number (0–10) */
 .slider-ticks { display: flex; justify-content: space-between; width: 422px; margin-left: 47px; font-size: 11px; color: var(--muted); }   /* year labels under the slider */
+/* the two hints stacked on the right of the control bar */
 .control-hints { display: grid; gap: 6px; }
 .control-hints .hint { margin: 0; }
 
 
 /* ---------- 10. CLOSING LINE ---------- */
+/* closing section: space around it, limited width */
 .closing { padding: 40px 0 44px; max-width: 860px; }
+/* closing sentence in large Fraunces */
 .closing-text { font-family: var(--serif); font-size: 30px; line-height: 1.3; margin: 0; }
 .closing-text a { color: var(--physical); font-weight: 800; }   /* "Find yours." link */
 
 
 /* ---------- 11. FOOTER: author, sources, notes in three columns ---------- */
+/* footer band: darker beige, smaller grey text */
 footer { background: #e9e0cf; padding: 32px 0 40px; font-size: 15px; color: var(--muted); }
+/* three footer columns: About (3 parts), Data (5 parts), Notes (4 parts) */
 .footer-grid { display: grid; grid-template-columns: 3fr 5fr 4fr; gap: 32px; }
+/* footer headings, paragraphs and source list spacing */
 footer h4 { font-size: 15px; color: var(--ink); margin: 0 0 6px; }
 footer p { margin: 0 0 14px; }
 footer ul { margin: 0; padding-left: 18px; }
@@ -209,6 +238,7 @@ footer li { margin-bottom: 4px; }
 
 
 /* ---------- 12. SMALLER SCREENS: stack the story above the charts ---------- */
+/* below 1240px wide: one column instead of two, and the story stops sticking */
 @media (max-width: 1239px) {
   .chapter-grid, .explorer-head, .footer-grid { grid-template-columns: 1fr; }
   .story { position: static; }

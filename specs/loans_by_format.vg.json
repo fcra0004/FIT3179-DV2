@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "CHART: 'Physical holds steady, digital keeps growing' (Section 4, top card). Stacked area chart of items borrowed per year in millions: physical (terracotta) under digital (teal), so the top edge is total borrowing.",
+  "description": "CHART: 'Physical holds steady, digital keeps growing' (Section 4, top card). Stacked area chart of items borrowed per year in millions: physical (terracotta) under digital (teal), so the top edge is total borrowing. CHANNELS: x position = year (ordinal).",
   "title": {
     "text": "Physical holds steady, digital keeps growing",
     "subtitle": "Items borrowed per year, millions — all growth since 2018–19 is digital"
@@ -25,7 +25,7 @@
   },
   "layer": [
     {
-      "description": "LAYER 1 - THE STACKED AREAS.",
+      "description": "LAYER 1 - THE STACKED AREAS. CHANNELS: y position = loans_millions (quantitative); colour = format (nominal); stack order = format.",
       "mark": {
         "type": "area",
         "opacity": 0.92
@@ -68,7 +68,7 @@
       }
     },
     {
-      "description": "LAYER 2 - 'PHYSICAL' AND 'DIGITAL' LABELS written inside the areas.",
+      "description": "LAYER 2 - 'PHYSICAL' AND 'DIGITAL' LABELS written inside the areas. CHANNELS: x position = year (ordinal); y position = y (quantitative); text = t.",
       "data": {
         "values": [
           {
@@ -105,7 +105,7 @@
       }
     },
     {
-      "description": "LAYER 3 - END LABELS '2024-25: 61m digital' and '2024-25: 119m physical'.",
+      "description": "LAYER 3 - END LABELS '2024-25: 61m digital' and '2024-25: 119m physical'. CHANNELS: x position = year (ordinal); y position = y (quantitative); text = t.",
       "data": {
         "values": [
           {
@@ -143,7 +143,7 @@
       }
     },
     {
-      "description": "LAYER 4 - HOVER LINE + TOOLTIP. The 'hov' param picks the nearest year; the transforms reshape the data to one row per year (pivot) and calculate the total and digital share for the tooltip.",
+      "description": "LAYER 4 - HOVER LINE + TOOLTIP. The 'hov' param picks the nearest year; the transforms reshape the data to one row per year (pivot) and calculate the total and digital share for the tooltip. CHANNELS: opacity changes when selected in hov.",
       "transform": [
         {
           "pivot": "format",

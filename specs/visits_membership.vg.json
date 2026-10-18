@@ -3,7 +3,7 @@
   "description": "CHART PAIR: 'Fewer walk in, more log on' (visits line chart, left) + 'Card holders' (waffle, right). Section 2, second card. Hovering along the visits chart selects a year (param 'yr'); the waffle shows that year.",
   "hconcat": [
     {
-      "description": "LEFT CHART - VISITS PER YEAR: in person (amber) and library website (violet), millions.",
+      "description": "LEFT CHART - VISITS PER YEAR: in person (amber) and library website (violet), millions. CHANNELS: x position = year (ordinal); y position = visits_millions (quantitative); colour = type (nominal).",
       "name": "visits",
       "width": 265,
       "height": 260,
@@ -56,7 +56,7 @@
       },
       "layer": [
         {
-          "description": "VISITS LAYER 1 - GREY 'LOCKDOWNS' SHADING BAND, 2019-20 to 2022-23.",
+          "description": "VISITS LAYER 1 - GREY 'LOCKDOWNS' SHADING BAND, 2019-20 to 2022-23. CHANNELS: x position = a (ordinal); x end = b.",
           "data": {
             "values": [
               {
@@ -104,7 +104,7 @@
           }
         },
         {
-          "description": "VISITS LAYER 4 - DOTS + THE YEAR SELECTION. The 'yr' param picks the nearest year as the pointer moves (pointerover). The selected year's dots are solid, others faded.",
+          "description": "VISITS LAYER 4 - DOTS + THE YEAR SELECTION. The 'yr' param picks the nearest year as the pointer moves (pointerover). The selected year's dots are solid, others faded. CHANNELS: opacity changes when selected in yr.",
           "params": [
             {
               "name": "yr",
@@ -177,7 +177,7 @@
           }
         },
         {
-          "description": "VISITS LAYER 6 - LINE NAMES ('In person', 'Library website') at the left end.",
+          "description": "VISITS LAYER 6 - LINE NAMES ('In person', 'Library website') at the left end. CHANNELS: text = type.",
           "transform": [
             {
               "filter": "datum.year=='2017-18'"
@@ -197,7 +197,7 @@
           }
         },
         {
-          "description": "VISITS LAYER 7 - THE WORD 'Lockdowns' at the top of the band.",
+          "description": "VISITS LAYER 7 - THE WORD 'Lockdowns' at the top of the band. CHANNELS: x position = a (ordinal); text = t.",
           "data": {
             "values": [
               {
@@ -276,7 +276,7 @@
       ],
       "layer": [
         {
-          "description": "WAFFLE LAYER 1 - THE 100 SQUARES. Green = has a library card, beige = doesn't.",
+          "description": "WAFFLE LAYER 1 - THE 100 SQUARES. Green = has a library card, beige = doesn't. CHANNELS: x position = col (ordinal); y position = row (ordinal); colour = member (nominal).",
           "mark": {
             "type": "square",
             "size": 340
@@ -321,7 +321,7 @@
           }
         },
         {
-          "description": "WAFFLE LAYER 2 - THE LABEL under the grid, e.g. '29% in 2024-25'.",
+          "description": "WAFFLE LAYER 2 - THE LABEL under the grid, e.g. '29% in 2024-25'. CHANNELS: text = lab.",
           "transform": [
             {
               "filter": "datum.cell==0"

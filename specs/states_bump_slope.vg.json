@@ -20,7 +20,7 @@
   ],
   "hconcat": [
     {
-      "description": "LEFT CHART - BUMP CHART: each state's rank by items borrowed per person, 2010-11 to 2015-16. The 'window' transform calculates the rank (1 = most) within each year.",
+      "description": "LEFT CHART - BUMP CHART: each state's rank by items borrowed per person, 2010-11 to 2015-16. The 'window' transform calculates the rank (1 = most) within each year. CHANNELS: x position = year (ordinal); y position = rank (ordinal); colour = state (nominal); opacity changes when selected in hover.",
       "name": "bump",
       "width": 330,
       "height": 280,
@@ -148,7 +148,7 @@
           }
         },
         {
-          "description": "BUMP LAYER 3 - STATE NAMES at the right end (2015-16).",
+          "description": "BUMP LAYER 3 - STATE NAMES at the right end (2015-16). CHANNELS: text = state.",
           "transform": [
             {
               "filter": "datum.year=='2015-16'"
@@ -170,7 +170,7 @@
       ]
     },
     {
-      "description": "RIGHT CHART - SLOPE CHART: items borrowed per person in 2014-15 vs 2024-25 for each state.",
+      "description": "RIGHT CHART - SLOPE CHART: items borrowed per person in 2014-15 vs 2024-25 for each state. CHANNELS: x position = year (ordinal); colour = state (nominal); opacity changes when selected in hover.",
       "name": "slope",
       "width": 160,
       "height": 280,
@@ -241,7 +241,7 @@
       },
       "layer": [
         {
-          "description": "SLOPE LAYER 1 - THE SLOPE LINES (one per state). Named 'slopeLines' so the hover param can listen to it.",
+          "description": "SLOPE LAYER 1 - THE SLOPE LINES (one per state). Named 'slopeLines' so the hover param can listen to it. CHANNELS: y position = loans_per_person (quantitative); one line per = state.",
           "name": "slopeLines",
           "mark": {
             "type": "line",
@@ -271,7 +271,7 @@
           }
         },
         {
-          "description": "SLOPE LAYER 2 - DOTS at each end + tooltip.",
+          "description": "SLOPE LAYER 2 - DOTS at each end + tooltip. CHANNELS: y position = loans_per_person (quantitative).",
           "name": "slopeDots",
           "mark": {
             "type": "circle",
@@ -299,7 +299,7 @@
           }
         },
         {
-          "description": "SLOPE LAYER 3 - LABELS at the right end, e.g. 'SA 9.0'. label_y in the CSV nudges labels apart so they don't overlap.",
+          "description": "SLOPE LAYER 3 - LABELS at the right end, e.g. 'SA 9.0'. label_y in the CSV nudges labels apart so they don't overlap. CHANNELS: y position = label_y (quantitative); text = lab.",
           "transform": [
             {
               "filter": "datum.year=='2024-25'"

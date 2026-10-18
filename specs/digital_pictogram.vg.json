@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "CHART: 'From 1 in 7 to 1 in 3' (Section 4, second card). Pictogram: 20 icons per year, each = 5% of loans. Transforms: make 20 copies of each year's row (sequence + flatten, numbered i = 0-19), then isdig = true for the first share/5 icons.",
+  "description": "CHART: 'From 1 in 7 to 1 in 3' (Section 4, second card). Pictogram: 20 icons per year, each = 5% of loans. Transforms: make 20 copies of each year's row (sequence + flatten, numbered i = 0-19), then isdig = true for the first share/5 icons. CHANNELS: y position = year (ordinal).",
   "title": {
     "text": "From 1 in 7 to 1 in 3",
     "subtitle": [
@@ -49,7 +49,7 @@
   },
   "layer": [
     {
-      "description": "LAYER 1 - THE ICONS. 'shape' uses a custom SVG path: phone when isdig is true, book otherwise. Colour: teal for phones, pale terracotta for books.",
+      "description": "LAYER 1 - THE ICONS. 'shape' uses a custom SVG path: phone when isdig is true, book otherwise. Colour: teal for phones, pale terracotta for books. CHANNELS: x position = i (ordinal); shape changes when datum.isdig; colour changes when datum.isdig.",
       "mark": {
         "type": "point",
         "filled": true,
@@ -97,7 +97,7 @@
       }
     },
     {
-      "description": "LAYER 2 - THE % LABEL at the end of each row (e.g. '34%').",
+      "description": "LAYER 2 - THE % LABEL at the end of each row (e.g. '34%'). CHANNELS: x position = i (ordinal); text = lab.",
       "transform": [
         {
           "filter": "datum.i==19"

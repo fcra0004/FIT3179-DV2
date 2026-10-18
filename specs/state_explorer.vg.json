@@ -39,7 +39,7 @@
   ],
   "hconcat": [
     {
-      "description": "MAP 1 - CHOROPLETH 'Digital share of loans'. Transforms: keep only the slider's year (datum.idx == yi), then 'lookup' joins each state's row to its shape in aus_states.topojson. Colour: light to dark teal = low to high digital share (0-45%). Clicked state gets a dark outline.",
+      "description": "MAP 1 - CHOROPLETH 'Digital share of loans'. Transforms: keep only the slider's year (datum.idx == yi), then 'lookup' joins each state's row to its shape in aus_states.topojson. Colour: light to dark teal = low to high digital share (0-45%). Clicked state gets a dark outline. CHANNELS: shape = geo (geojson); colour = digital_share (quantitative); outline changes when selected in pick; outline width changes when selected in pick.",
       "name": "choro",
       "width": 290,
       "height": 290,
@@ -164,7 +164,7 @@
           }
         },
         {
-          "description": "SYMBOL MAP LAYER 2 - THE CIRCLES. Placed at each state's lon/lat, circle AREA = visits that year (millions). The clicked state is darker; others fade. Named 'symDots' so the 'pick' click works on it.",
+          "description": "SYMBOL MAP LAYER 2 - THE CIRCLES. Placed at each state's lon/lat, circle AREA = visits that year (millions). The clicked state is darker; others fade. Named 'symDots' so the 'pick' click works on it. CHANNELS: longitude = lon (quantitative); latitude = lat (quantitative); size = onsite_visits (quantitative); colour changes when selected in pick; opacity changes when selected in pick.",
           "name": "symDots",
           "data": {
             "url": "data/state_year.csv"
@@ -251,7 +251,7 @@
       ]
     },
     {
-      "description": "CHART 3 - 'Borrowing: <state>' STACKED BARS. Shows the clicked state only (filter on 'pick'). 'fold' turns the physical and digital columns into rows so they can stack. The slider's year is solid, other years faded (opacity test on yrLabel).",
+      "description": "CHART 3 - 'Borrowing: <state>' STACKED BARS. Shows the clicked state only (filter on 'pick'). 'fold' turns the physical and digital columns into rows so they can stack. The slider's year is solid, other years faded (opacity test on yrLabel). CHANNELS: x position = year (ordinal); y position = sum of millions (quantitative); colour = format (nominal); stack order = format; opacity changes when datum.year == yrLabel.",
       "name": "detail",
       "width": 230,
       "height": 250,
