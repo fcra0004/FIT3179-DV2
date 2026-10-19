@@ -180,7 +180,7 @@ h2 { font-size: 40px; font-weight: 800; letter-spacing: -0.01em; margin: 0 0 14p
 }
 /* slightly darker when the mouse is over it */
 .zoom-buttons button:hover { background: #f1e9db; }
-#library_cluster_map { cursor: grab; }   /* hand cursor shows the map can be dragged */
+#s1_dotmap_clustered_library_locations { cursor: grab; }   /* hand cursor shows the map can be dragged */
 
 
 /* ---------- 9. SECTION 4 "FIND YOUR STATE": heading, year, slider bar ---------- */

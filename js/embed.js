@@ -35,15 +35,15 @@ var options = { actions: false, config: theme };
 // ---------- 2. CHART LIST ----------
 // One line per chart: the id of its box in index.html = the name of its file in specs/.
 var charts = [
-  "library_cluster_map",  // Section 1: zoomable map of every library (Vega)
-  "abs_attendance",       // Section 2: who visits, by age (bars)
-  "visits_membership",    // Section 2: visits line chart + card-holder waffle
-  "per_person_trend",     // Section 3: borrowing and visits per person (lines)
-  "states_bump_slope",    // Section 3: state rankings (bump) + a decade later (slope)
-  "loans_by_format",      // Section 4: physical vs digital loans (stacked area)
-  "digital_pictogram",    // Section 4: phones vs books pictogram
-  "state_explorer",       // Section 4: "Find your state" two maps + bars, with year slider
-  "programs_linked"       // Section 5: programs heatmap + "Why they come" bars
+  "s1_dotmap_clustered_library_locations",        // Section 1: zoomable map of every library (Vega)
+  "s2_bar_library_visits_by_age",                 // Section 2: who visits, by age (bars)
+  "s2_line_waffle_visits_and_card_holders",       // Section 2: visits line chart + card-holder waffle
+  "s3_line_borrowing_visits_per_person",          // Section 3: borrowing and visits per person (lines)
+  "s3_bump_slope_state_borrowing_ranks",          // Section 3: state rankings (bump) + a decade later (slope)
+  "s4_stacked_area_physical_vs_digital_loans",    // Section 4: physical vs digital loans (stacked area)
+  "s4_pictogram_digital_share_of_loans",          // Section 4: phones vs books pictogram
+  "s4_choropleth_symbolmap_bars_state_explorer",  // Section 4: "Find your state" two maps + bars, with year slider
+  "s5_heatmap_bars_programs_by_age"               // Section 5: programs heatmap + "Why they come" bars
 ];
 
 // ---------- 3. DRAW ----------
@@ -56,13 +56,13 @@ charts.forEach(function (id) {
     .then(function (result) {
       views[id] = result.view;
       moveControls(id);
-      if (id === "state_explorer") showExplorerYear(result.view);
+      if (id === "s4_choropleth_symbolmap_bars_state_explorer") showExplorerYear(result.view);
     })
     .catch(console.error);
 });
 
 // ---------- 4. BIG YEAR ----------
-// Show the slider's year (signal "yrLabel" in state_explorer.vg.json) in large type above the maps
+// Show the slider's year (signal "yrLabel" in s4_choropleth_symbolmap_bars_state_explorer.vg.json) in large type above the maps
 function showExplorerYear(view) {
   var label = document.getElementById("explorer-year");
   function update(name, value) { label.textContent = value.replace("-", "–"); }
@@ -74,7 +74,7 @@ function showExplorerYear(view) {
 // Move each chart's drop-down or slider into the control bar inside its card,
 // so the control sits next to its instructions instead of below the chart.
 function moveControls(id) {
-  var targets = { state_explorer: ".slider-slot", library_cluster_map: ".jump-slot" };
+  var targets = { s4_choropleth_symbolmap_bars_state_explorer: ".slider-slot", s1_dotmap_clustered_library_locations: ".jump-slot" };
   if (!targets[id]) return;
   var bindings = document.querySelector("#" + id + " .vega-bindings");
   var slot = document.getElementById(id).closest(".card").querySelector(targets[id]);
@@ -83,10 +83,10 @@ function moveControls(id) {
 
 // ---------- 6. ZOOM BUTTONS for the Section 1 map ----------
 // The + / − / Reset buttons in index.html change the map's "view" signal
-// (z = zoom level, tx/ty = map centre on screen), defined in library_cluster_map.vg.json.
+// (z = zoom level, tx/ty = map centre on screen), defined in s1_dotmap_clustered_library_locations.vg.json.
 document.querySelectorAll(".zoom-buttons button").forEach(function (btn) {
   btn.addEventListener("click", function () {
-    var view = views.library_cluster_map;
+    var view = views.s1_dotmap_clustered_library_locations;
     if (!view) return;
     var v = view.signal("view");
     var w = view.width(), h = view.height();

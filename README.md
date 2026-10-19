@@ -16,12 +16,12 @@ Data: ALIA/NSLA Australian Public Libraries Statistical Reports (2014–15, 2015
 | On the page | Text and layout (`index.html`) | Chart code (`specs/`) |
 |---|---|---|
 | Header | `HEADER` comment | none (background image is in `style.css` section 3) |
-| 1 – There's one near you | `SECTION 1` | `library_cluster_map.vg.json` (Vega) |
-| 2 – Least likely to walk in | `SECTION 2` | `abs_attendance.vg.json`, `visits_membership.vg.json` |
-| 3 – It's not just you | `SECTION 3` | `per_person_trend.vg.json`, `states_bump_slope.vg.json` |
-| 4 – The library is in your pocket | `SECTION 4` | `loans_by_format.vg.json`, `digital_pictogram.vg.json` |
-| Find your state (two maps + slider) | `"FIND YOUR STATE" EXPLORER` | `state_explorer.vg.json` |
-| 5 – A free place to study, work and meet | `SECTION 5` | `programs_linked.vg.json` |
+| 1 – There's one near you | `SECTION 1` | `s1_dotmap_clustered_library_locations.vg.json` (Vega) |
+| 2 – Least likely to walk in | `SECTION 2` | `s2_bar_library_visits_by_age.vg.json`, `s2_line_waffle_visits_and_card_holders.vg.json` |
+| 3 – It's not just you | `SECTION 3` | `s3_line_borrowing_visits_per_person.vg.json`, `s3_bump_slope_state_borrowing_ranks.vg.json` |
+| 4 – The library is in your pocket | `SECTION 4` | `s4_stacked_area_physical_vs_digital_loans.vg.json`, `s4_pictogram_digital_share_of_loans.vg.json` |
+| Find your state (two maps + slider) | `"FIND YOUR STATE" EXPLORER` | `s4_choropleth_symbolmap_bars_state_explorer.vg.json` |
+| 5 – A free place to study, work and meet | `SECTION 5` | `s5_heatmap_bars_programs_by_age.vg.json` |
 | Closing line and footer | `CLOSING LINE`, `FOOTER` | none |
 
 Inside each spec, every chart, layer, signal and mark starts with a `"description"` that says which part of the chart it draws (for example `"LAYER 1 - THE BARS"`). JSON doesn't allow comments, so these descriptions do that job; they don't change how the charts look.
