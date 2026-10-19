@@ -1,0 +1,337 @@
+// COMMENTED COPY of specs/state_explorer.vg.json, for reading only. The page loads specs/state_explorer.vg.json.
+// JSON files can't contain comments, so the comments live in this copy instead.
+
+{  // the whole chart
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",  // which version of Vega-Lite / Vega this file is written for
+  "description": "CHART GROUP: 'Find your state' explorer (Section 4, wide card). Three charts side by side, all driven by the PARAMS below: 'yi' = the year slider (0-10), 'yrLabel' = turns the slider number into a year like '2024-25' (also shown in big type above the maps by js/embed.js), 'pick' = the state clicked on either map (starts on Victoria).",  // plain-English note about this block (does not change the chart)
+  "params": [  // PARAMS: interactive controls and selections
+    {  // param 1
+      "name": "yi",  // name 'yi' that other parts of the spec use to refer to this
+      "value": 10,  // use this value: 10
+      "bind": {  // connects this param to an input control on the page
+        "input": "range",  // type of control
+        "min": 0,  // lowest value
+        "max": 10,  // highest value
+        "step": 1,  // amount per slider step
+        "name": "Year"  // label shown next to the control: Year
+      }
+    },
+    {  // param 2
+      "name": "yrLabel",  // name 'yrLabel' that other parts of the spec use to refer to this
+      "expr": "['2014-15','2015-16','2016-17','2017-18','2018-19','2019-20','2020-21','2021-22','2022-23','2023-24','2024-25'][yi]"  // value calculated from this formula
+    },
+    {  // param 3
+      "name": "pick",  // name 'pick' that other parts of the spec use to refer to this
+      "select": {  // records what the user clicks or hovers
+        "type": "point",  // point selection: pick single items
+        "fields": ["state"],  // what gets remembered when you select something
+        "toggle": false  // false = a click replaces the selection instead of adding to it
+      },
+      "value": [  // starting value
+        {  // selected when the page first loads
+          "state": "Victoria"  // 'state' = "Victoria"
+        }
+      ],
+      "views": ["choro", "symDots"]  // which named chart layers listen for this selection
+    }
+  ],
+  "hconcat": [  // charts placed side by side
+    {  // --- CHART 1 (from the left) ---
+      "description": "MAP 1 - CHOROPLETH 'Digital share of loans'. Transforms: keep only the slider's year (datum.idx == yi), then 'lookup' joins each state's row to its shape in aus_states.topojson. Colour: light to dark teal = low to high digital share (0-45%). Clicked state gets a dark outline. CHANNELS: shape = geo (geojson); colour = digital_share (quantitative); outline changes when selected in pick; outline width changes when selected in pick.",  // plain-English note about this block (does not change the chart)
+      "name": "choro",  // name 'choro' that other parts of the spec use to refer to this
+      "width": 290,  // width in pixels
+      "height": 290,  // height in pixels
+      "projection": {  // how the round earth is flattened onto the screen
+        "type": "mercator"  // Mercator projection
+      },
+      "title": {  // chart title
+        "text": "Digital share of loans",  // the text
+        "subtitle": "Darker = more borrowed on apps"  // smaller line under the title
+      },
+      "data": {  // DATA: where this chart's rows come from
+        "url": "data/state_year.csv"  // load the file data/state_year.csv
+      },
+      "transform": [  // TRANSFORMS: calculations done on the rows before drawing (run top to bottom)
+        {  // transform step 1
+          "filter": "datum.idx == yi"  // keep only rows where this is true
+        },
+        {  // transform step 2
+          "lookup": "state",  // join each row to a matching row in another file
+          "from": {  // the other file to join to
+            "data": {  // DATA: where this chart's rows come from
+              "url": "data/aus_states.topojson",  // load the file data/aus_states.topojson
+              "format": {  // how to read the file
+                "type": "topojson",  // file type: topojson
+                "feature": "states"  // which set of shapes inside the map file to use
+              }
+            },
+            "key": "properties.STATE_NAME"  // column in the other file to match on
+          },
+          "as": "geo"  // name of the new column: geo
+        }
+      ],
+      "mark": {  // MARK: the shape drawn for each row
+        "type": "geoshape",  // shape / type: geoshape
+        "cursor": "pointer"  // mouse cursor over this shape (pointer = hand, shows it's clickable)
+      },
+      "encoding": {  // ENCODING: which data column controls which visual channel
+        "shape": {  // the map shape of each state
+          "field": "geo",  // uses the 'geo' column
+          "type": "geojson"  // data type: map shapes
+        },
+        "color": {  // colour
+          "field": "digital_share",  // uses the 'digital_share' column
+          "type": "quantitative",  // data type: numbers
+          "title": "Digital %",  // title shown: Digital %
+          "scale": {  // how data values are turned into positions, colours or sizes
+            "domain": [0, 45],  // range of data values shown
+            "range": ["#eef6f4", "#13827f", "#0b4f4d"]  // the visual values used (colours / sizes)
+          },
+          "legend": {  // legend settings
+            "orient": "bottom",  // which side it sits on
+            "direction": "horizontal",  // horizontal or vertical legend
+            "gradientLength": 180,  // length of the colour bar (px)
+            "titleOrient": "left"  // where the legend title sits
+          }
+        },
+        "stroke": {  // outline colour
+          "condition": {  // IF the rule below is true, use this value...
+            "param": "pick",  // ...the 'pick' selection
+            "empty": false,  // what to do when nothing is selected
+            "value": "#2d2a26"  // ...then use "#2d2a26"
+          },
+          "value": "white"  // OTHERWISE use "white"
+        },
+        "strokeWidth": {  // outline thickness
+          "condition": {  // IF the rule below is true, use this value...
+            "param": "pick",  // ...the 'pick' selection
+            "empty": false,  // what to do when nothing is selected
+            "value": 2.5  // ...then use 2.5
+          },
+          "value": 0.8  // OTHERWISE use 0.8
+        },
+        "tooltip": [  // what appears in the hover box
+          {  // one row in the hover box
+            "field": "state",  // uses the 'state' column
+            "title": "State"  // title shown: State
+          },
+          {  // one row in the hover box
+            "field": "year",  // uses the 'year' column
+            "title": "Year"  // title shown: Year
+          },
+          {  // one row in the hover box
+            "field": "digital_share",  // uses the 'digital_share' column
+            "title": "Digital share (%)"  // title shown: Digital share (%)
+          }
+        ]
+      }
+    },
+    {  // --- CHART 2 (from the left) ---
+      "description": "MAP 2 - PROPORTIONAL SYMBOL MAP 'In-person visits'.",  // plain-English note about this block (does not change the chart)
+      "name": "symbols",  // name 'symbols' that other parts of the spec use to refer to this
+      "width": 290,  // width in pixels
+      "height": 290,  // height in pixels
+      "projection": {  // how the round earth is flattened onto the screen
+        "type": "mercator"  // Mercator projection
+      },
+      "title": {  // chart title
+        "text": "In-person visits",  // the text
+        "subtitle": "Circle area = visits that year"  // smaller line under the title
+      },
+      "layer": [  // LAYERS: shapes drawn on top of each other, first item at the bottom
+        {  // --- LAYER 1 ---
+          "description": "SYMBOL MAP LAYER 1 - THE BEIGE STATE SHAPES underneath.",  // plain-English note about this block (does not change the chart)
+          "data": {  // DATA: where this chart's rows come from
+            "url": "data/aus_states.topojson",  // load the file data/aus_states.topojson
+            "format": {  // how to read the file
+              "type": "topojson",  // file type: topojson
+              "feature": "states"  // which set of shapes inside the map file to use
+            }
+          },
+          "mark": {  // MARK: the shape drawn for each row
+            "type": "geoshape",  // shape / type: geoshape
+            "fill": "#e9e2d4",  // colour #e9e2d4
+            "stroke": "white"  // colour white
+          }
+        },
+        {  // --- LAYER 2 ---
+          "description": "SYMBOL MAP LAYER 2 - THE CIRCLES. Placed at each state's lon/lat, circle AREA = visits that year (millions). The clicked state is darker; others fade. Named 'symDots' so the 'pick' click works on it. CHANNELS: longitude = lon (quantitative); latitude = lat (quantitative); size = onsite_visits (quantitative); colour changes when selected in pick; opacity changes when selected in pick.",  // plain-English note about this block (does not change the chart)
+          "name": "symDots",  // name 'symDots' that other parts of the spec use to refer to this
+          "data": {  // DATA: where this chart's rows come from
+            "url": "data/state_year.csv"  // load the file data/state_year.csv
+          },
+          "transform": [  // TRANSFORMS: calculations done on the rows before drawing (run top to bottom)
+            {  // transform step 1
+              "filter": "datum.idx == yi"  // keep only rows where this is true
+            }
+          ],
+          "mark": {  // MARK: the shape drawn for each row
+            "type": "circle",  // shape / type: circle
+            "stroke": "white",  // colour white
+            "strokeWidth": 1,  // line / outline thickness 1px
+            "cursor": "pointer"  // mouse cursor over this shape (pointer = hand, shows it's clickable)
+          },
+          "encoding": {  // ENCODING: which data column controls which visual channel
+            "longitude": {  // east-west position on the map
+              "field": "lon",  // uses the 'lon' column
+              "type": "quantitative"  // data type: numbers
+            },
+            "latitude": {  // north-south position on the map
+              "field": "lat",  // uses the 'lat' column
+              "type": "quantitative"  // data type: numbers
+            },
+            "size": {  // size (area)
+              "field": "onsite_visits",  // uses the 'onsite_visits' column
+              "type": "quantitative",  // data type: numbers
+              "title": "Visits (millions)",  // title shown: Visits (millions)
+              "scale": {  // how data values are turned into positions, colours or sizes
+                "domain": [0, 36],  // range of data values shown
+                "range": [0, 2200]  // the visual values used (colours / sizes)
+              },
+              "legend": {  // legend settings
+                "orient": "bottom",  // which side it sits on
+                "direction": "horizontal",  // horizontal or vertical legend
+                "values": [1, 10, 25],  // rows typed straight into this file
+                "titleOrient": "left",  // where the legend title sits
+                "symbolFillColor": "#d4901c",  // fill colour of the legend circles
+                "symbolStrokeColor": "white"  // outline colour of the legend circles
+              }
+            },
+            "color": {  // colour
+              "condition": {  // IF the rule below is true, use this value...
+                "param": "pick",  // ...the 'pick' selection
+                "empty": false,  // what to do when nothing is selected
+                "value": "#a86a08"  // ...then use "#a86a08"
+              },
+              "value": "#d4901c"  // OTHERWISE use "#d4901c"
+            },
+            "opacity": {  // transparency
+              "condition": {  // IF the rule below is true, use this value...
+                "param": "pick",  // ...the 'pick' selection
+                "empty": true,  // what to do when nothing is selected
+                "value": 0.95  // ...then use 0.95
+              },
+              "value": 0.45  // OTHERWISE use 0.45
+            },
+            "tooltip": [  // what appears in the hover box
+              {  // one row in the hover box
+                "field": "state",  // uses the 'state' column
+                "title": "State"  // title shown: State
+              },
+              {  // one row in the hover box
+                "field": "year",  // uses the 'year' column
+                "title": "Year"  // title shown: Year
+              },
+              {  // one row in the hover box
+                "field": "onsite_visits",  // uses the 'onsite_visits' column
+                "title": "Visits (millions)"  // title shown: Visits (millions)
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {  // --- CHART 3 (from the left) ---
+      "description": "CHART 3 - 'Borrowing: <state>' STACKED BARS. Shows the clicked state only (filter on 'pick'). 'fold' turns the physical and digital columns into rows so they can stack. The slider's year is solid, other years faded (opacity test on yrLabel). CHANNELS: x position = year (ordinal); y position = sum of millions (quantitative); colour = format (nominal); stack order = format; opacity changes when datum.year == yrLabel.",  // plain-English note about this block (does not change the chart)
+      "name": "detail",  // name 'detail' that other parts of the spec use to refer to this
+      "width": 230,  // width in pixels
+      "height": 250,  // height in pixels
+      "title": {  // chart title
+        "text": {  // the text
+          "expr": "'Borrowing: ' + (pick && pick.state ? pick.state[0] : 'all states')"  // value calculated from this formula
+        },
+        "subtitle": "Millions of items, by year",  // smaller line under the title
+        "fontSize": 15  // text size (px): 15
+      },
+      "data": {  // DATA: where this chart's rows come from
+        "url": "data/state_year.csv"  // load the file data/state_year.csv
+      },
+      "transform": [  // TRANSFORMS: calculations done on the rows before drawing (run top to bottom)
+        {  // transform step 1
+          "filter": {  // keep only rows picked in the 'pick' selection
+            "param": "pick"  // ...the 'pick' selection
+          }
+        },
+        {  // transform step 2
+          "fold": ["physical", "digital"],  // turn these columns into rows so they can be stacked
+          "as": ["format", "millions"]  // name of the new column: ['format', 'millions']
+        },
+        {  // transform step 3
+          "calculate": "datum.format=='physical' ? 'Physical' : 'Digital'",  // new column calculated with this formula
+          "as": "format"  // name of the new column: format
+        }
+      ],
+      "mark": {  // MARK: the shape drawn for each row
+        "type": "bar",  // shape / type: bar
+        "width": {  // bar width as a share of each slot
+          "band": 0.7  // 70% of the slot
+        }
+      },
+      "encoding": {  // ENCODING: which data column controls which visual channel
+        "x": {  // x position (left to right)
+          "field": "year",  // uses the 'year' column
+          "type": "ordinal",  // data type: ordered categories (e.g. years, age groups)
+          "title": null,  // no title
+          "axis": {  // axis settings
+            "labelAngle": -45,  // tilt the labels (degrees): -45
+            "labelExpr": "slice(datum.label,2,4)+'–'+slice(datum.label,5,7)"  // rewrite each label, e.g. 2014-15 becomes 14–15
+          }
+        },
+        "y": {  // y position (up and down)
+          "aggregate": "sum",  // add up or count rows
+          "field": "millions",  // uses the 'millions' column
+          "type": "quantitative",  // data type: numbers
+          "title": null  // no title
+        },
+        "color": {  // colour
+          "field": "format",  // uses the 'format' column
+          "type": "nominal",  // data type: unordered categories (e.g. states)
+          "scale": {  // how data values are turned into positions, colours or sizes
+            "domain": ["Physical", "Digital"],  // range of data values shown
+            "range": ["#c0532b", "#13827f"]  // the visual values used (colours / sizes)
+          },
+          "legend": {  // legend settings
+            "orient": "bottom",  // which side it sits on
+            "title": null  // no title
+          }
+        },
+        "order": {  // stacking order
+          "field": "format",  // uses the 'format' column
+          "sort": "descending"  // order of the items
+        },
+        "opacity": {  // transparency
+          "condition": {  // IF the rule below is true, use this value...
+            "test": "datum.year == yrLabel",  // IF this formula is true
+            "value": 1  // ...then use 1
+          },
+          "value": 0.35  // OTHERWISE use 0.35
+        },
+        "tooltip": [  // what appears in the hover box
+          {  // one row in the hover box
+            "field": "year",  // uses the 'year' column
+            "title": "Year"  // title shown: Year
+          },
+          {  // one row in the hover box
+            "field": "format",  // uses the 'format' column
+            "title": "Format"  // title shown: Format
+          },
+          {  // one row in the hover box
+            "aggregate": "sum",  // add up or count rows
+            "field": "millions",  // uses the 'millions' column
+            "title": "Millions"  // title shown: Millions
+          }
+        ]
+      }
+    }
+  ],
+  "spacing": 28,  // gap between the side-by-side charts (px): 28
+  "resolve": {  // let each chart keep its own scales/legends instead of sharing
+    "scale": {  // how data values are turned into positions, colours or sizes
+      "color": "independent",  // colour independent
+      "size": "independent"  // 'size' = "independent"
+    },
+    "legend": {  // legend settings
+      "color": "independent"  // colour independent
+    }
+  }
+}

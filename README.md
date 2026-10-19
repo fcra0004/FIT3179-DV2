@@ -25,3 +25,7 @@ Data: ALIA/NSLA Australian Public Libraries Statistical Reports (2014–15, 2015
 | Closing line and footer | `CLOSING LINE`, `FOOTER` | none |
 
 Inside each spec, every chart, layer, signal and mark starts with a `"description"` that says which part of the chart it draws (for example `"LAYER 1 - THE BARS"`). JSON doesn't allow comments, so these descriptions do that job; they don't change how the charts look.
+
+### Commented copies of the chart files
+
+`specs/commented/` holds a copy of every spec with a plain-English comment on every line (`*.vg.jsonc`). These are for reading only: JSON files can't contain comments, so the page loads the clean files in `specs/`. If you change a spec in `specs/`, its commented copy won't update by itself.

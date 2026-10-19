@@ -1,0 +1,128 @@
+// COMMENTED COPY of specs/digital_pictogram.vg.json, for reading only. The page loads specs/digital_pictogram.vg.json.
+// JSON files can't contain comments, so the comments live in this copy instead.
+
+{  // the whole chart
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",  // which version of Vega-Lite / Vega this file is written for
+  "description": "CHART: 'From 1 in 7 to 1 in 3' (Section 4, second card). Pictogram: 20 icons per year, each = 5% of loans. Transforms: make 20 copies of each year's row (sequence + flatten, numbered i = 0-19), then isdig = true for the first share/5 icons. CHANNELS: y position = year (ordinal).",  // plain-English note about this block (does not change the chart)
+  "title": {  // chart title
+    "text": "From 1 in 7 to 1 in 3",  // the text
+    "subtitle": ["Each icon is 5% of everything borrowed that year: phone = digital, book = physical"]  // smaller line under the title
+  },
+  "width": 560,  // width in pixels
+  "height": 270,  // height in pixels
+  "data": {  // DATA: where this chart's rows come from
+    "url": "data/digital_share_national.csv",  // load the file data/digital_share_national.csv
+    "format": {  // how to read the file
+      "parse": {  // treat these columns as numbers, not text
+        "share": "number",  // read the 'share' column as a number
+        "digital": "number",  // read the 'digital' column as a number
+        "physical": "number"  // read the 'physical' column as a number
+      }
+    }
+  },
+  "transform": [  // TRANSFORMS: calculations done on the rows before drawing (run top to bottom)
+    {  // transform step 1
+      "calculate": "sequence(0,20)",  // new column calculated with this formula
+      "as": "i"  // name of the new column: i
+    },
+    {  // transform step 2
+      "flatten": ["i"]  // turn each list into separate rows (one row per item)
+    },
+    {  // transform step 3
+      "calculate": "datum.i < round(datum.share/5)",  // new column calculated with this formula
+      "as": "isdig"  // name of the new column: isdig
+    }
+  ],
+  "encoding": {  // ENCODING: which data column controls which visual channel
+    "y": {  // y position (up and down)
+      "field": "year",  // uses the 'year' column
+      "type": "ordinal",  // data type: ordered categories (e.g. years, age groups)
+      "title": null,  // no title
+      "axis": {  // axis settings
+        "domain": false,  // range of data values shown
+        "ticks": false,  // show tick marks
+        "labelFontSize": 13,  // label text size
+        "labelPadding": 10  // gap between labels and the chart
+      }
+    }
+  },
+  "layer": [  // LAYERS: shapes drawn on top of each other, first item at the bottom
+    {  // --- LAYER 1 ---
+      "description": "LAYER 1 - THE ICONS. 'shape' uses a custom SVG path: phone when isdig is true, book otherwise. Colour: teal for phones, pale terracotta for books. CHANNELS: x position = i (ordinal); shape changes when datum.isdig; colour changes when datum.isdig.",  // plain-English note about this block (does not change the chart)
+      "mark": {  // MARK: the shape drawn for each row
+        "type": "point",  // point selection: pick single items
+        "filled": true,  // solid instead of hollow
+        "size": 330,  // size 330
+        "opacity": 1  // transparency (1 = 100% visible)
+      },
+      "encoding": {  // ENCODING: which data column controls which visual channel
+        "x": {  // x position (left to right)
+          "field": "i",  // uses the 'i' column
+          "type": "ordinal",  // data type: ordered categories (e.g. years, age groups)
+          "axis": null  // no axis (labels are drawn on the chart instead)
+        },
+        "shape": {  // icon shape
+          "condition": {  // IF the rule below is true, use this value...
+            "test": "datum.isdig",  // IF this formula is true
+            "value": "M-0.5,-1 L0.5,-1 Q0.65,-1 0.65,-0.85 L0.65,0.85 Q0.65,1 0.5,1 L-0.5,1 Q-0.65,1 -0.65,0.85 L-0.65,-0.85 Q-0.65,-1 -0.5,-1 Z"  // ...then use "M-0.5,-1 L0.5,-1 Q0.65,-1 0.65,-0.85 L0
+          },
+          "value": "M0,-0.55 C-0.3,-0.85 -0.7,-0.85 -1,-0.75 L-1,0.85 C-0.7,0.75 -0.3,0.75 0,1 C0.3,0.75 0.7,0.75 1,0.85 L1,-0.75 C0.7,-0.85 0.3,-0.85 0,-0.55 Z"  // OTHERWISE use "M0,-0.55 C-0.3,-0.85 -0.7,-0.85 -1,-0.7
+        },
+        "color": {  // colour
+          "condition": {  // IF the rule below is true, use this value...
+            "test": "datum.isdig",  // IF this formula is true
+            "value": "#13827f"  // ...then use "#13827f"
+          },
+          "value": "#e6b8a4"  // OTHERWISE use "#e6b8a4"
+        },
+        "tooltip": [  // what appears in the hover box
+          {  // one row in the hover box
+            "field": "year",  // uses the 'year' column
+            "title": "Year"  // title shown: Year
+          },
+          {  // one row in the hover box
+            "field": "share",  // uses the 'share' column
+            "title": "Digital share of loans (%)"  // title shown: Digital share of loans (%)
+          },
+          {  // one row in the hover box
+            "field": "digital",  // uses the 'digital' column
+            "title": "Digital loans (millions)"  // title shown: Digital loans (millions)
+          },
+          {  // one row in the hover box
+            "field": "physical",  // uses the 'physical' column
+            "title": "Physical loans (millions)"  // title shown: Physical loans (millions)
+          }
+        ]
+      }
+    },
+    {  // --- LAYER 2 ---
+      "description": "LAYER 2 - THE % LABEL at the end of each row (e.g. '34%'). CHANNELS: x position = i (ordinal); text = lab.",  // plain-English note about this block (does not change the chart)
+      "transform": [  // TRANSFORMS: calculations done on the rows before drawing (run top to bottom)
+        {  // transform step 1
+          "filter": "datum.i==19"  // keep only rows where this is true
+        },
+        {  // transform step 2
+          "calculate": "format(datum.share,'.0f')+'%'",  // new column calculated with this formula
+          "as": "lab"  // name of the new column: lab
+        }
+      ],
+      "mark": {  // MARK: the shape drawn for each row
+        "type": "text",  // shape / type: text
+        "align": "left",  // text alignment
+        "dx": 16,  // nudge sideways (px): 16
+        "fontSize": 14,  // text size (px): 14
+        "fontWeight": "bold",  // text boldness
+        "color": "#13827f"  // colour #13827f
+      },
+      "encoding": {  // ENCODING: which data column controls which visual channel
+        "x": {  // x position (left to right)
+          "field": "i",  // uses the 'i' column
+          "type": "ordinal"  // data type: ordered categories (e.g. years, age groups)
+        },
+        "text": {  // the text shown
+          "field": "lab"  // uses the 'lab' column
+        }
+      }
+    }
+  ]
+}

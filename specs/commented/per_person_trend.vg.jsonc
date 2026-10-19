@@ -1,0 +1,173 @@
+// COMMENTED COPY of specs/per_person_trend.vg.json, for reading only. The page loads specs/per_person_trend.vg.json.
+// JSON files can't contain comments, so the comments live in this copy instead.
+
+{  // the whole chart
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",  // which version of Vega-Lite / Vega this file is written for
+  "description": "CHART: 'Borrowing slid for a decade, then recovered' (Section 3, top card). Two lines: items borrowed per person (navy) and library visits per person (amber), 2010-11 to 2024-25. The shared encoding below (x = year, y = value, colour = measure) is used by every layer unless a layer sets its own. CHANNELS: x position = year (ordinal); y position = value (quantitative); colour = measure (nominal).",  // plain-English note about this block (does not change the chart)
+  "title": {  // chart title
+    "text": "Borrowing slid for a decade, then recovered — visits have not",  // the text
+    "subtitle": ["Items borrowed and library visits per Australian, per year"]  // smaller line under the title
+  },
+  "width": 650,  // width in pixels
+  "height": 300,  // height in pixels
+  "data": {  // DATA: where this chart's rows come from
+    "url": "data/national_per_person.csv"  // load the file data/national_per_person.csv
+  },
+  "encoding": {  // ENCODING: which data column controls which visual channel
+    "x": {  // x position (left to right)
+      "field": "year",  // uses the 'year' column
+      "type": "ordinal",  // data type: ordered categories (e.g. years, age groups)
+      "title": null,  // no title
+      "axis": {  // axis settings
+        "labelAngle": -40,  // tilt the labels (degrees): -40
+        "labelPadding": 4  // gap between labels and the chart
+      }
+    },
+    "y": {  // y position (up and down)
+      "field": "value",  // uses the 'value' column
+      "type": "quantitative",  // data type: numbers
+      "title": null,  // no title
+      "scale": {  // how data values are turned into positions, colours or sizes
+        "domain": [0, 9]  // range of data values shown
+      },
+      "axis": {  // axis settings
+        "tickCount": 5  // roughly how many ticks / gridlines: 5
+      }
+    },
+    "color": {  // colour
+      "field": "measure",  // uses the 'measure' column
+      "type": "nominal",  // data type: unordered categories (e.g. states)
+      "scale": {  // how data values are turned into positions, colours or sizes
+        "domain": ["Items borrowed per person", "Library visits per person"],  // range of data values shown
+        "range": ["#24426b", "#d4901c"]  // the visual values used (colours / sizes)
+      },
+      "legend": null  // no legend (things are labelled directly)
+    }
+  },
+  "layer": [  // LAYERS: shapes drawn on top of each other, first item at the bottom
+    {  // --- LAYER 1 ---
+      "description": "LAYER 1 - GREY 'LOCKDOWNS' SHADING BAND from 2019-20 to 2022-23. Change \"a\"/\"b\" to move its ends. CHANNELS: x position = a (ordinal); x end = b.",  // plain-English note about this block (does not change the chart)
+      "data": {  // DATA: where this chart's rows come from
+        "values": [  // rows typed straight into this file
+          {"a": "2019-20", "b": "2022-23"}  // data row 1
+        ]
+      },
+      "mark": {  // MARK: the shape drawn for each row
+        "type": "rect",  // shape / type: rect
+        "color": "#efe8db",  // colour #efe8db
+        "opacity": 0.8  // transparency (0.8 = 80% visible)
+      },
+      "encoding": {  // ENCODING: which data column controls which visual channel
+        "x": {  // x position (left to right)
+          "field": "a",  // uses the 'a' column
+          "type": "ordinal",  // data type: ordered categories (e.g. years, age groups)
+          "bandPosition": 0.5  // where in the year's slot to start/end (0.5 = centre)
+        },
+        "x2": {  // where the shape ends on x
+          "field": "b",  // uses the 'b' column
+          "bandPosition": 0.5  // where in the year's slot to start/end (0.5 = centre)
+        },
+        "y": null,  // y position (up and down): switched off for this layer
+        "color": null  // colour: switched off for this layer
+      }
+    },
+    {  // --- LAYER 2 ---
+      "description": "LAYER 2 - THE WORD 'Lockdowns' at the top of the band. CHANNELS: x position = a (ordinal); text = t.",  // plain-English note about this block (does not change the chart)
+      "data": {  // DATA: where this chart's rows come from
+        "values": [  // rows typed straight into this file
+          {"a": "2020-21", "t": "Lockdowns"}  // data row 1
+        ]
+      },
+      "mark": {  // MARK: the shape drawn for each row
+        "type": "text",  // shape / type: text
+        "y": 8,  // fixed y position: 8px
+        "dx": 23,  // nudge sideways (px): 23
+        "color": "#8a8378",  // colour #8a8378
+        "fontSize": 12,  // text size (px): 12
+        "fontStyle": "italic"  // italic or normal
+      },
+      "encoding": {  // ENCODING: which data column controls which visual channel
+        "x": {  // x position (left to right)
+          "field": "a",  // uses the 'a' column
+          "type": "ordinal"  // data type: ordered categories (e.g. years, age groups)
+        },
+        "y": null,  // y position (up and down): switched off for this layer
+        "text": {  // the text shown
+          "field": "t"  // uses the 't' column
+        },
+        "color": null  // colour: switched off for this layer
+      }
+    },
+    {  // --- LAYER 3 ---
+      "description": "LAYER 3 - THE TWO LINES.",  // plain-English note about this block (does not change the chart)
+      "mark": {  // MARK: the shape drawn for each row
+        "type": "line",  // shape / type: line
+        "strokeWidth": 3  // line / outline thickness 3px
+      }
+    },
+    {  // --- LAYER 4 ---
+      "description": "LAYER 4 - DOTS ON EACH YEAR + the hover tooltip.",  // plain-English note about this block (does not change the chart)
+      "mark": {  // MARK: the shape drawn for each row
+        "type": "point",  // point selection: pick single items
+        "filled": true,  // solid instead of hollow
+        "size": 45  // size 45
+      },
+      "encoding": {  // ENCODING: which data column controls which visual channel
+        "tooltip": [  // what appears in the hover box
+          {  // one row in the hover box
+            "field": "year",  // uses the 'year' column
+            "title": "Year"  // title shown: Year
+          },
+          {  // one row in the hover box
+            "field": "measure",  // uses the 'measure' column
+            "title": "Measure"  // title shown: Measure
+          },
+          {  // one row in the hover box
+            "field": "value",  // uses the 'value' column
+            "title": "Per person"  // title shown: Per person
+          }
+        ]
+      }
+    },
+    {  // --- LAYER 5 ---
+      "description": "LAYER 5 - START AND END VALUES (8.1, 4.9, 6.6, 3.3) above the first and last dots. CHANNELS: text = value.",  // plain-English note about this block (does not change the chart)
+      "transform": [  // TRANSFORMS: calculations done on the rows before drawing (run top to bottom)
+        {  // transform step 1
+          "filter": "datum.year=='2010-11' || datum.year=='2024-25'"  // keep only rows where this is true
+        }
+      ],
+      "mark": {  // MARK: the shape drawn for each row
+        "type": "text",  // shape / type: text
+        "dy": -14,  // nudge up (negative) or down (px): -14
+        "fontSize": 13,  // text size (px): 13
+        "fontWeight": "bold"  // text boldness
+      },
+      "encoding": {  // ENCODING: which data column controls which visual channel
+        "text": {  // the text shown
+          "field": "value",  // uses the 'value' column
+          "format": ".1f"  // number format: .1f
+        }
+      }
+    },
+    {  // --- LAYER 6 ---
+      "description": "LAYER 6 - LINE NAMES ('Items borrowed per person', 'Library visits per person') written next to the lines instead of a legend. CHANNELS: text = measure.",  // plain-English note about this block (does not change the chart)
+      "transform": [  // TRANSFORMS: calculations done on the rows before drawing (run top to bottom)
+        {  // transform step 1
+          "filter": "datum.year=='2013-14'"  // keep only rows where this is true
+        }
+      ],
+      "mark": {  // MARK: the shape drawn for each row
+        "type": "text",  // shape / type: text
+        "dy": -16,  // nudge up (negative) or down (px): -16
+        "fontSize": 13,  // text size (px): 13
+        "fontWeight": "bold",  // text boldness
+        "align": "left"  // text alignment
+      },
+      "encoding": {  // ENCODING: which data column controls which visual channel
+        "text": {  // the text shown
+          "field": "measure"  // uses the 'measure' column
+        }
+      }
+    }
+  ]
+}
