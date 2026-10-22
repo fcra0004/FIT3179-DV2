@@ -11,7 +11,7 @@
     "x": {
       "field": "year",
       "type": "ordinal",
-      "title": null,
+      "title": "Financial year",
       "scale": {
         "type": "point",
         "domain": [
