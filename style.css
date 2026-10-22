@@ -203,7 +203,7 @@ h2 { font-size: 40px; font-weight: 800; letter-spacing: -0.01em; margin: 0 0 14p
 /* explorer heading and intro: limited width so lines stay readable */
 .explorer-head { margin-bottom: 14px; max-width: 760px; }
 .explorer-head h3 { font-size: 28px; font-weight: 800; margin-bottom: 6px; }
-.explorer-head p { margin: 0; max-width: 70ch; }
+.explorer-head p { margin: 0; max-width: 80ch; }
 
 /* The bar above the maps: big year | slider with year labels | two hints */
 .control-bar {
