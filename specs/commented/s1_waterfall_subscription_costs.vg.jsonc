@@ -4,7 +4,7 @@
 {  // the whole chart
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",  // which version of Vega-Lite / Vega this file is written for
   "description": "CHART: 'Yearly cost of apps a library card covers for free (A$)' - its title is written in index.html so the checkboxes can sit under it (Section 1). Waterfall chart: each red bar adds one app's yearly cost on top of the last, the dark bar is the total, and the library card is $0. PARAMS: four checkboxes (kindle, audible, news, mubi) - unticking one sets its cost to 0. TRANSFORMS: 'ticked' checks the box for each app, 'yearly' = monthly price x 12 (or 0 if unticked), the window sum gives each bar's top ('end'), and 'start' = end - yearly gives its bottom. 'next' names the following bar so the dashed connector line knows where to go. CHANNELS: x position = service (nominal).",  // plain-English note about this block (does not change the chart)
-  "width": 685,  // width in pixels
+  "width": 675,  // width in pixels
   "height": 300,  // height in pixels
   "params": [  // PARAMS: interactive controls and selections
     {  // param 1
@@ -379,10 +379,10 @@
       }
     },
     {  // --- LAYER 9 ---
-      "description": "LAYER 9 - 'covers all four' above the $0. CHANNELS: y position = v (quantitative); text = t.",  // plain-English note about this block (does not change the chart)
+      "description": "LAYER 9 - 'covers all four services' above the $0. CHANNELS: y position = v (quantitative); text = t.",  // plain-English note about this block (does not change the chart)
       "data": {  // DATA: where this chart's rows come from
         "values": [  // rows typed straight into this file
-          {"service": "Library card", "v": 0, "t": "covers all four"}  // data row 1
+          {"service": "Library card", "v": 0, "t": ["covers all four", "services"]}  // data row 1
         ]
       },
       "mark": {  // MARK: the shape drawn for each row
@@ -390,7 +390,8 @@
         "fontWeight": "bold",  // text boldness
         "fontSize": 13,  // text size (px): 13
         "color": "#13827f",  // colour #13827f
-        "dy": -50  // nudge up (negative) or down (px): -50
+        "dy": -66,  // nudge up (negative) or down (px): -66
+        "lineHeight": 15  // 'lineHeight' = 15
       },
       "encoding": {  // ENCODING: which data column controls which visual channel
         "y": {  // y position (up and down)

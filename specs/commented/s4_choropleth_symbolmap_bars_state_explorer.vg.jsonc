@@ -301,18 +301,25 @@
       ]
     },
     {  // --- CHART 3 (from the left) ---
-      "description": "CHART 3 - '<state>: items borrowed (millions)' STACKED BARS. Shows the clicked state only (filter on 'pick'). 'fold' turns the physical and digital columns into rows so they can stack. The slider's year is solid, other years faded (opacity test on yrLabel). The y axis is fixed at 0-55 million so states can be compared. The y axis is fixed at 0-55 million, so bar heights can be compared between states. CHANNELS: x position = year (ordinal); y position = sum of millions (quantitative); colour = format (nominal); line/stack order = format; opacity changes when datum.year == yrLabel.",  // plain-English note about this block (does not change the chart)
+      "description": "CHART 3 - '<state>: items borrowed per person' STACKED BARS. Shows the clicked state only (filter on 'pick'). 'fold' turns the physical and digital columns into rows so they can stack; 'per_person' divides each by the state's population that year (ABS estimated resident population, in state_year.csv) so small and large states can be compared. The y axis is fixed at 0-10 items per person. The slider's year is solid, other years faded (opacity test on yrLabel). CHANNELS: x position = year (ordinal); y position = sum of per_person (quantitative); colour = format (nominal); line/stack order = format; opacity changes when datum.year == yrLabel.",  // plain-English note about this block (does not change the chart)
       "name": "detail",  // name 'detail' that other parts of the spec use to refer to this
       "width": 340,  // width in pixels
       "height": 250,  // height in pixels
       "title": {  // chart title
         "text": {  // the text
-          "expr": "(pick && pick.state ? pick.state[0] : 'All states') + ': items borrowed (millions)'"  // value calculated from this formula
+          "expr": "(pick && pick.state ? pick.state[0] : 'All states') + ': items borrowed per person'"  // value calculated from this formula
         },
         "fontSize": 16  // text size (px): 16
       },
       "data": {  // DATA: where this chart's rows come from
-        "url": "data/state_year.csv"  // load the file data/state_year.csv
+        "url": "data/state_year.csv",  // load the file data/state_year.csv
+        "format": {  // how to read the file
+          "parse": {  // treat these columns as numbers, not text
+            "population": "number",  // read the 'population' column as a number
+            "physical": "number",  // read the 'physical' column as a number
+            "digital": "number"  // read the 'digital' column as a number
+          }
+        }
       },
       "transform": [  // TRANSFORMS: calculations done on the rows before drawing (run top to bottom)
         {  // transform step 1
@@ -327,6 +334,10 @@
         {  // transform step 3
           "calculate": "datum.format=='physical' ? 'Physical' : 'Digital'",  // new column calculated with this formula
           "as": "format"  // name of the new column: format
+        },
+        {  // transform step 4
+          "calculate": "datum.millions * 1000000 / datum.population",  // new column calculated with this formula
+          "as": "per_person"  // name of the new column: per_person
         }
       ],
       "mark": {  // MARK: the shape drawn for each row
@@ -347,11 +358,11 @@
         },
         "y": {  // y position (up and down)
           "aggregate": "sum",  // add up or count rows
-          "field": "millions",  // uses the 'millions' column
+          "field": "per_person",  // uses the 'per_person' column
           "type": "quantitative",  // data type: numbers
           "title": null,  // no title
           "scale": {  // how data values are turned into positions, colours or sizes
-            "domain": [0, 55]  // range of data values shown
+            "domain": [0, 10]  // range of data values shown
           },
           "axis": {  // axis settings
             "labelFlush": true  // 'labelFlush' = true
@@ -391,8 +402,15 @@
           },
           {  // one row in the hover box
             "aggregate": "sum",  // add up or count rows
+            "field": "per_person",  // uses the 'per_person' column
+            "title": "Items per person",  // title shown: Items per person
+            "format": ".1f"  // number format: .1f
+          },
+          {  // one row in the hover box
+            "aggregate": "sum",  // add up or count rows
             "field": "millions",  // uses the 'millions' column
-            "title": "Millions"  // title shown: Millions
+            "title": "Items (millions)",  // title shown: Items (millions)
+            "format": ".1f"  // number format: .1f
           }
         ]
       }

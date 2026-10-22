@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "CHART: 'Yearly cost of apps a library card covers for free (A$)' - its title is written in index.html so the checkboxes can sit under it (Section 1). Waterfall chart: each red bar adds one app's yearly cost on top of the last, the dark bar is the total, and the library card is $0. PARAMS: four checkboxes (kindle, audible, news, mubi) - unticking one sets its cost to 0. TRANSFORMS: 'ticked' checks the box for each app, 'yearly' = monthly price x 12 (or 0 if unticked), the window sum gives each bar's top ('end'), and 'start' = end - yearly gives its bottom. 'next' names the following bar so the dashed connector line knows where to go. CHANNELS: x position = service (nominal).",
-  "width": 685,
+  "width": 675,
   "height": 300,
   "params": [
     {
@@ -399,13 +399,15 @@
       }
     },
     {
-      "description": "LAYER 9 - 'covers all four' above the $0. CHANNELS: y position = v (quantitative); text = t.",
+      "description": "LAYER 9 - 'covers all four services' above the $0. CHANNELS: y position = v (quantitative); text = t.",
       "data": {
         "values": [
           {
             "service": "Library card",
             "v": 0,
-            "t": "covers all four services"
+            "t": ["",
+              "covers all four services!"
+            ]
           }
         ]
       },
@@ -414,7 +416,8 @@
         "fontWeight": "bold",
         "fontSize": 13,
         "color": "#13827f",
-        "dy": -50
+        "dy": -66,
+        "lineHeight": 15
       },
       "encoding": {
         "y": {

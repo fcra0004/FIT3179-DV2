@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "CHART: 'Items borrowed and library visits per Australian, per year' (Section 3, top card). Two lines: items borrowed per person (navy) and library visits per person (amber), 2010-11 to 2024-25. The shared encoding below (x = year, y = value, colour = measure) is used by every layer unless a layer sets its own. CHANNELS: x position = year (ordinal); y position = value (quantitative); colour = measure (nominal).",
-  "title": "Items borrowed and library visits per Australian per year",
+  "description": "CHART: 'Items borrowed and total library visits per Australian, per year' (Section 3, top card). Two lines: items borrowed per person (navy) and library visits (in-person and digital) per person (amber), 2010-11 to 2024-25. The shared encoding below (x = year, y = value, colour = measure) is used by every layer unless a layer sets its own. CHANNELS: x position = year (ordinal); y position = value (quantitative); colour = measure (nominal).",
+  "title": "Items borrowed and total library visits per Australian per year",
   "width": 682,
   "height": 200,
   "data": {
@@ -21,7 +21,7 @@
     "y": {
       "field": "value",
       "type": "quantitative",
-      "title": "Per person",
+      "title": "Annual instances per person",
       "scale": {
         "domain": [
           0,
@@ -38,7 +38,7 @@
       "scale": {
         "domain": [
           "Items borrowed per person",
-          "Library visits per person"
+          "library visits (in-person and digital) per person"
         ],
         "range": [
           "#24426b",
@@ -84,7 +84,7 @@
         "values": [
           {
             "a": "2020-21",
-            "t": "Lockdowns"
+            "t": "COVID-19 Lockdowns"
           }
         ]
       },
@@ -148,7 +148,7 @@
       ],
       "mark": {
         "type": "text",
-        "dy": -14,
+        "dy": -15,
         "fontSize": 13,
         "fontWeight": "bold"
       },
@@ -160,10 +160,10 @@
       }
     },
     {
-      "description": "LAYER 6 - LINE NAMES ('Items borrowed per person', 'Library visits per person') written next to the lines instead of a legend. CHANNELS: text = measure.",
+      "description": "LAYER 6 - LINE NAMES ('Items borrowed per person', 'Library visits (in-person and digital) per person') written next to the lines instead of a legend. CHANNELS: text = measure.",
       "transform": [
         {
-          "filter": "datum.year=='2013-14'"
+          "filter": "datum.year=='2012-13'"
         }
       ],
       "mark": {

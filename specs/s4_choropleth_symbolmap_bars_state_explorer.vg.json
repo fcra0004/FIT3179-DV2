@@ -320,18 +320,25 @@
       ]
     },
     {
-      "description": "CHART 3 - '<state>: items borrowed (millions)' STACKED BARS. Shows the clicked state only (filter on 'pick'). 'fold' turns the physical and digital columns into rows so they can stack. The slider's year is solid, other years faded (opacity test on yrLabel). The y axis is fixed at 0-55 million so states can be compared. The y axis is fixed at 0-55 million, so bar heights can be compared between states. CHANNELS: x position = year (ordinal); y position = sum of millions (quantitative); colour = format (nominal); line/stack order = format; opacity changes when datum.year == yrLabel.",
+      "description": "CHART 3 - '<state>: items borrowed per person' STACKED BARS. Shows the clicked state only (filter on 'pick'). 'fold' turns the physical and digital columns into rows so they can stack; 'per_person' divides each by the state's population that year (ABS estimated resident population, in state_year.csv) so small and large states can be compared. The y axis is fixed at 0-10 items per person. The slider's year is solid, other years faded (opacity test on yrLabel). CHANNELS: x position = year (ordinal); y position = sum of per_person (quantitative); colour = format (nominal); line/stack order = format; opacity changes when datum.year == yrLabel.",
       "name": "detail",
       "width": 340,
       "height": 250,
       "title": {
         "text": {
-          "expr": "(pick && pick.state ? pick.state[0] : 'All states') + ': items borrowed (millions)'"
+          "expr": "(pick && pick.state ? pick.state[0] : 'All states') + ': items borrowed per person'"
         },
         "fontSize": 16
       },
       "data": {
-        "url": "data/state_year.csv"
+        "url": "data/state_year.csv",
+        "format": {
+          "parse": {
+            "population": "number",
+            "physical": "number",
+            "digital": "number"
+          }
+        }
       },
       "transform": [
         {
@@ -352,6 +359,10 @@
         {
           "calculate": "datum.format=='physical' ? 'Physical' : 'Digital'",
           "as": "format"
+        },
+        {
+          "calculate": "datum.millions * 1000000 / datum.population",
+          "as": "per_person"
         }
       ],
       "mark": {
@@ -372,13 +383,13 @@
         },
         "y": {
           "aggregate": "sum",
-          "field": "millions",
+          "field": "per_person",
           "type": "quantitative",
           "title": null,
           "scale": {
             "domain": [
               0,
-              55
+              10
             ]
           },
           "axis": {
@@ -425,8 +436,15 @@
           },
           {
             "aggregate": "sum",
+            "field": "per_person",
+            "title": "Items per person",
+            "format": ".1f"
+          },
+          {
+            "aggregate": "sum",
             "field": "millions",
-            "title": "Millions"
+            "title": "Items (millions)",
+            "format": ".1f"
           }
         ]
       }

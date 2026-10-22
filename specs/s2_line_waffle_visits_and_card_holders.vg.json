@@ -91,18 +91,6 @@
           }
         },
         {
-          "description": "VISITS LAYER 2 - LIGHT TERRACOTTA AREA under the in-person line.",
-          "transform": [
-            {
-              "filter": "datum.type=='In person'"
-            }
-          ],
-          "mark": {
-            "type": "area",
-            "opacity": 0.12
-          }
-        },
-        {
           "description": "VISITS LAYER 3 - THE TWO LINES.",
           "mark": {
             "type": "line",
@@ -228,7 +216,7 @@
             "values": [
               {
                 "a": "2020-21",
-                "t": "Lockdowns"
+                "t": "COVID-19 Lockdowns"
               }
             ]
           },
