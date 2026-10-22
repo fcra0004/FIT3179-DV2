@@ -233,7 +233,7 @@ h2 { font-size: 40px; font-weight: 800; letter-spacing: -0.01em; margin: 0 0 14p
 
 /* ---------- 10. CLOSING LINE ---------- */
 /* closing section: space around it, limited width */
-.closing { padding: 40px 0 44px; max-width: 860px; }
+.closing { padding: 40px 0 44px; max-width: 860px; margin: 0 auto; text-align: center; }
 /* closing sentence in large Fraunces */
 .closing-text { font-family: var(--serif); font-size: 30px; line-height: 1.3; margin: 0; }
 .closing-text a { color: var(--physical); font-weight: 800; }   /* "Find yours." link */
