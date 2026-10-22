@@ -1,0 +1,252 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "CHART: 'Items borrowed by state and format (2024-25)' (Section 4, second card). Marimekko (mosaic) chart for 2024-25: each column is a state, its WIDTH = that state's share of all loans in Australia, and it is split into physical (terracotta) and digital (teal) by HEIGHT. TRANSFORMS: keep 2024-25 (idx 10); add up all states ('grand'); a running total in size order gives each column's left (x0) and right (x1) edge and its rank; the three smallest states (TAS, ACT, NT, rank 6-8) are marked 'small' so they get no labels (their columns are too thin - hover shows their figures); 'fold' makes a physical and a digital row per state; y0/y1 are each block's bottom and top; 'pct' is each block's share as a percentage.",
+  "title": "Items borrowed by state and format (2024–25)",
+  "width": 630,
+  "height": 290,
+  "data": {
+    "url": "data/state_year.csv",
+    "format": {
+      "parse": {
+        "physical": "number",
+        "digital": "number",
+        "total": "number",
+        "idx": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "filter": "datum.idx == 10"
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "sum",
+          "field": "total",
+          "as": "grand"
+        }
+      ]
+    },
+    {
+      "window": [
+        {
+          "op": "sum",
+          "field": "total",
+          "as": "cum"
+        },
+        {
+          "op": "row_number",
+          "as": "rank"
+        }
+      ],
+      "sort": [
+        {
+          "field": "total",
+          "order": "descending"
+        }
+      ],
+      "frame": [
+        null,
+        0
+      ]
+    },
+    {
+      "calculate": "(datum.cum - datum.total)/datum.grand",
+      "as": "x0"
+    },
+    {
+      "calculate": "datum.cum/datum.grand",
+      "as": "x1"
+    },
+    {
+      "calculate": "datum.physical/datum.total",
+      "as": "phys_share"
+    },
+    {
+      "calculate": "datum.rank >= 6",
+      "as": "small"
+    },
+    {
+      "fold": [
+        "physical",
+        "digital"
+      ],
+      "as": [
+        "format",
+        "millions"
+      ]
+    },
+    {
+      "calculate": "datum.format=='physical' ? 0 : datum.phys_share",
+      "as": "y0"
+    },
+    {
+      "calculate": "datum.format=='physical' ? datum.phys_share : 1",
+      "as": "y1"
+    },
+    {
+      "calculate": "datum.format=='physical' ? 'Physical' : 'Digital'",
+      "as": "Format"
+    },
+    {
+      "calculate": "(datum.x0+datum.x1)/2",
+      "as": "xm"
+    },
+    {
+      "calculate": "(datum.y0+datum.y1)/2",
+      "as": "ym"
+    },
+    {
+      "calculate": "format(datum.format=='physical' ? datum.phys_share : 1-datum.phys_share, '.0%')",
+      "as": "pct"
+    }
+  ],
+  "layer": [
+    {
+      "description": "LAYER 1 - THE BLOCKS: rectangles from x0 to x1 and y0 to y1, coloured by format. Hover shows every state's figures, including the three thin columns. CHANNELS: x position = x0 (quantitative); x end = x1; y position = y0 (quantitative); y end = y1; colour = Format (nominal).",
+      "mark": {
+        "type": "rect",
+        "stroke": "white",
+        "strokeWidth": 1.5
+      },
+      "encoding": {
+        "x": {
+          "field": "x0",
+          "type": "quantitative",
+          "title": "Share of all items borrowed in Australia",
+          "scale": {
+            "domain": [
+              0,
+              1
+            ]
+          },
+          "axis": {
+            "format": "%",
+            "tickCount": 5,
+            "grid": false,
+            "titleFontWeight": 400,
+            "titleColor": "#8a8378",
+            "titleAnchor": "middle"
+          }
+        },
+        "x2": {
+          "field": "x1"
+        },
+        "y": {
+          "field": "y0",
+          "type": "quantitative",
+          "title": "Share of the state's loans",
+          "scale": {
+            "domain": [
+              0,
+              1
+            ]
+          },
+          "axis": {
+            "format": "%",
+            "tickCount": 5,
+            "grid": false,
+            "titleFontWeight": 400,
+            "titleColor": "#8a8378"
+          }
+        },
+        "y2": {
+          "field": "y1"
+        },
+        "color": {
+          "field": "Format",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Physical",
+              "Digital"
+            ],
+            "range": [
+              "#c0532b",
+              "#13827f"
+            ]
+          },
+          "legend": {
+            "orient": "top",
+            "title": null,
+            "direction": "horizontal"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "state",
+            "title": "State"
+          },
+          {
+            "field": "Format"
+          },
+          {
+            "field": "pct",
+            "title": "Share of the state's loans"
+          },
+          {
+            "field": "millions",
+            "title": "Items (millions)",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+    {
+      "description": "LAYER 2 - PERCENTAGE INSIDE EVERY BLOCK of the five big states (physical and digital). CHANNELS: x position = xm (quantitative); y position = ym (quantitative); text = pct.",
+      "transform": [
+        {
+          "filter": "!datum.small"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "color": "white",
+        "fontWeight": "bold",
+        "fontSize": 14
+      },
+      "encoding": {
+        "x": {
+          "field": "xm",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "ym",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "pct"
+        }
+      }
+    },
+    {
+      "description": "LAYER 3 - STATE NAME at the bottom of each big state's column. CHANNELS: x position = xm (quantitative); text = abbr.",
+      "transform": [
+        {
+          "filter": "!datum.small && datum.format=='physical'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "color": "white",
+        "fontWeight": "bold",
+        "fontSize": 15,
+        "baseline": "bottom",
+        "dy": -8
+      },
+      "encoding": {
+        "x": {
+          "field": "xm",
+          "type": "quantitative"
+        },
+        "y": {
+          "datum": 0
+        },
+        "text": {
+          "field": "abbr"
+        }
+      }
+    }
+  ]
+}

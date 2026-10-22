@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "CHART PAIR: 'Rankings barely moved' (bump chart, left) + 'A decade later' (slope chart, right). Section 3, second card. The 'hover' param below is shared by both charts: hovering a state's line in either chart fades every other state (see 'opacity' in each chart).",
+  "description": "CHART PAIR: 'State rank by items borrowed per person' (bump chart, left) + 'Items per person, a decade later' (slope chart, right). Section 3, second card. The 'hover' param below is shared by both charts: hovering a state's line in either chart fades every other state (see 'opacity' in each chart).",
   "params": [
     {
       "name": "hover",
@@ -25,8 +25,8 @@
       "width": 330,
       "height": 280,
       "title": {
-        "text": "Rankings barely moved",
-        "subtitle": "Rank by items borrowed per person (1 = most)"
+        "text": "State rank by items borrowed per person",
+        "fontSize": 16
       },
       "data": {
         "url": "data/state_loans_per_person_2010_2016.csv",
@@ -59,7 +59,7 @@
         "x": {
           "field": "year",
           "type": "ordinal",
-          "title": null,
+          "title": "Financial year",
           "axis": {
             "labelAngle": 0,
             "labelExpr": "slice(datum.label,2,4)+'–'+slice(datum.label,5,7)"
@@ -68,7 +68,7 @@
         "y": {
           "field": "rank",
           "type": "ordinal",
-          "title": null,
+          "title": "Rank",
           "axis": {
             "labelExpr": "'#'+datum.label"
           }
@@ -172,11 +172,11 @@
     {
       "description": "RIGHT CHART - SLOPE CHART: items borrowed per person in 2014-15 vs 2024-25 for each state. CHANNELS: x position = year (ordinal); colour = state (nominal); opacity changes when selected in hover.",
       "name": "slope",
-      "width": 160,
+      "width": 208,
       "height": 280,
       "title": {
-        "text": "A decade later",
-        "subtitle": "Items per person"
+        "text": "Items per person, a decade later",
+        "fontSize": 16
       },
       "data": {
         "url": "data/state_loans_slope.csv",
@@ -191,10 +191,9 @@
         "x": {
           "field": "year",
           "type": "ordinal",
-          "title": null,
+          "title": "Financial year",
           "axis": {
             "labelAngle": 0,
-            "orient": "top",
             "domain": false,
             "ticks": false,
             "labelExpr": "slice(datum.label,2,4)+'–'+slice(datum.label,5,7)"
@@ -251,7 +250,7 @@
             "y": {
               "field": "loans_per_person",
               "type": "quantitative",
-              "title": null,
+              "title": "Items per person",
               "scale": {
                 "domain": [
                   2,
@@ -262,7 +261,8 @@
                 "tickCount": 6,
                 "grid": true,
                 "domain": false,
-                "ticks": false
+                "ticks": false,
+                "labelFlush": true
               }
             },
             "detail": {

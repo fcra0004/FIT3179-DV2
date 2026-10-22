@@ -1,0 +1,202 @@
+// COMMENTED COPY of specs/s4_stacked_area_physical_vs_digital_loans.vg.json, for reading only. The page loads specs/s4_stacked_area_physical_vs_digital_loans.vg.json.
+// JSON files can't contain comments, so the comments live in this copy instead.
+
+{  // the whole chart
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",  // which version of Vega-Lite / Vega this file is written for
+  "description": "CHART: 'National items borrowed per year (millions)' (Section 4, top card). Stacked area chart of items borrowed per year in millions: physical (terracotta) under digital (teal), so the top edge is total borrowing. CHANNELS: x position = year (ordinal).",  // plain-English note about this block (does not change the chart)
+  "title": "National items borrowed per year (millions)",  // title shown: National items borrowed per year (millions)
+  "width": 620,  // width in pixels
+  "height": 300,  // height in pixels
+  "data": {  // DATA: where this chart's rows come from
+    "url": "data/loans_by_format.csv"  // load the file data/loans_by_format.csv
+  },
+  "encoding": {  // ENCODING: which data column controls which visual channel
+    "x": {  // x position (left to right)
+      "field": "year",  // uses the 'year' column
+      "type": "ordinal",  // data type: ordered categories (e.g. years, age groups)
+      "title": null,  // no title
+      "scale": {  // how data values are turned into positions, colours or sizes
+        "type": "point",  // point selection: pick single items
+        "domain": ["2018-19", "2019-20", "2020-21", "2021-22", "2022-23", "2023-24", "2024-25"],  // range of data values shown
+        "padding": 0  // space at the ends
+      },
+      "axis": {  // axis settings
+        "labelAngle": 0  // tilt the labels (degrees): 0
+      }
+    }
+  },
+  "layer": [  // LAYERS: shapes drawn on top of each other, first item at the bottom
+    {  // --- LAYER 1 ---
+      "description": "LAYER 1 - THE STACKED AREAS. CHANNELS: y position = loans_millions (quantitative); colour = format (nominal); line/stack order = format.",  // plain-English note about this block (does not change the chart)
+      "mark": {  // MARK: the shape drawn for each row
+        "type": "area",  // shape / type: area
+        "opacity": 0.92  // transparency (0.92 = 92% visible)
+      },
+      "encoding": {  // ENCODING: which data column controls which visual channel
+        "y": {  // y position (up and down)
+          "field": "loans_millions",  // uses the 'loans_millions' column
+          "type": "quantitative",  // data type: numbers
+          "stack": true,  // stack shapes on top of each other
+          "title": "Items borrowed (millions)",  // title shown: Items borrowed (millions)
+          "scale": {  // how data values are turned into positions, colours or sizes
+            "domain": [0, 190]  // range of data values shown
+          },
+          "axis": {  // axis settings
+            "tickCount": 5  // roughly how many ticks / gridlines: 5
+          }
+        },
+        "color": {  // colour
+          "field": "format",  // uses the 'format' column
+          "type": "nominal",  // data type: unordered categories (e.g. states)
+          "scale": {  // how data values are turned into positions, colours or sizes
+            "domain": ["Physical items", "Digital"],  // range of data values shown
+            "range": ["#c0532b", "#13827f"]  // the visual values used (colours / sizes)
+          },
+          "legend": {  // legend settings
+            "orient": "top",  // which side it sits on
+            "title": null,  // no title
+            "direction": "horizontal",  // horizontal or vertical legend
+            "labelFontSize": 13,  // label text size
+            "labelExpr": "datum.label == 'Physical items' ? 'Physical' : datum.label"  // rewrite each label, e.g. 2014-15 becomes 14–15
+          }
+        },
+        "order": {  // stacking order
+          "field": "format",  // uses the 'format' column
+          "sort": "descending"  // order of the items
+        }
+      }
+    },
+    {  // --- LAYER 2 ---
+      "description": "LAYER 2 - 'PHYSICAL' AND 'DIGITAL' LABELS written inside the areas. CHANNELS: x position = year (ordinal); y position = y (quantitative); text = t.",  // plain-English note about this block (does not change the chart)
+      "data": {  // DATA: where this chart's rows come from
+        "values": [  // rows typed straight into this file
+          {"year": "2021-22", "y": 50, "t": "PHYSICAL"},  // data row 1
+          {"year": "2021-22", "y": 124, "t": "DIGITAL"}  // data row 2
+        ]
+      },
+      "mark": {  // MARK: the shape drawn for each row
+        "type": "text",  // shape / type: text
+        "fontSize": 14,  // text size (px): 14
+        "fontWeight": "bold",  // text boldness
+        "color": "white",  // colour white
+        "letterSpacing": 1  // space between letters
+      },
+      "encoding": {  // ENCODING: which data column controls which visual channel
+        "x": {  // x position (left to right)
+          "field": "year",  // uses the 'year' column
+          "type": "ordinal",  // data type: ordered categories (e.g. years, age groups)
+          "scale": {  // how data values are turned into positions, colours or sizes
+            "type": "point",  // point selection: pick single items
+            "domain": ["2018-19", "2019-20", "2020-21", "2021-22", "2022-23", "2023-24", "2024-25"],  // range of data values shown
+            "padding": 0  // space at the ends
+          }
+        },
+        "y": {  // y position (up and down)
+          "field": "y",  // uses the 'y' column
+          "type": "quantitative"  // data type: numbers
+        },
+        "text": {  // the text shown
+          "field": "t"  // uses the 't' column
+        }
+      }
+    },
+    {  // --- LAYER 3 ---
+      "description": "LAYER 3 - END LABELS '2024-25: 61m digital' and '2024-25: 119m physical'. CHANNELS: x position = year (ordinal); y position = y (quantitative); text = t.",  // plain-English note about this block (does not change the chart)
+      "data": {  // DATA: where this chart's rows come from
+        "values": [  // rows typed straight into this file
+          {"year": "2024-25", "y": 150, "t": "2024–25: 61m digital"},  // data row 1
+          {"year": "2024-25", "y": 60, "t": "2024–25: 119m physical"}  // data row 2
+        ]
+      },
+      "mark": {  // MARK: the shape drawn for each row
+        "type": "text",  // shape / type: text
+        "align": "right",  // text alignment
+        "dx": -8,  // nudge sideways (px): -8
+        "fontSize": 12,  // text size (px): 12
+        "fontWeight": "bold",  // text boldness
+        "color": "white"  // colour white
+      },
+      "encoding": {  // ENCODING: which data column controls which visual channel
+        "x": {  // x position (left to right)
+          "field": "year",  // uses the 'year' column
+          "type": "ordinal",  // data type: ordered categories (e.g. years, age groups)
+          "scale": {  // how data values are turned into positions, colours or sizes
+            "type": "point",  // point selection: pick single items
+            "domain": ["2018-19", "2019-20", "2020-21", "2021-22", "2022-23", "2023-24", "2024-25"],  // range of data values shown
+            "padding": 0  // space at the ends
+          }
+        },
+        "y": {  // y position (up and down)
+          "field": "y",  // uses the 'y' column
+          "type": "quantitative"  // data type: numbers
+        },
+        "text": {  // the text shown
+          "field": "t"  // uses the 't' column
+        }
+      }
+    },
+    {  // --- LAYER 4 ---
+      "description": "LAYER 4 - HOVER LINE + TOOLTIP. The 'hov' param picks the nearest year; the transforms reshape the data to one row per year (pivot) and calculate the total and digital share for the tooltip. CHANNELS: opacity changes when selected in hov.",  // plain-English note about this block (does not change the chart)
+      "transform": [  // TRANSFORMS: calculations done on the rows before drawing (run top to bottom)
+        {  // transform step 1
+          "pivot": "format",  // turn rows into columns (one row per year)
+          "value": "loans_millions",  // use this value: "loans_millions"
+          "groupby": ["year"]  // do it separately for each value of these columns
+        },
+        {  // transform step 2
+          "calculate": "datum['Physical items']+datum.Digital",  // new column calculated with this formula
+          "as": "Total"  // name of the new column: Total
+        },
+        {  // transform step 3
+          "calculate": "round(100*datum.Digital/datum.Total)",  // new column calculated with this formula
+          "as": "share"  // name of the new column: share
+        }
+      ],
+      "params": [  // PARAMS: interactive controls and selections
+        {  // param 1
+          "name": "hov",  // name 'hov' that other parts of the spec use to refer to this
+          "select": {  // records what the user clicks or hovers
+            "type": "point",  // point selection: pick single items
+            "fields": ["year"],  // what gets remembered when you select something
+            "on": "pointerover",  // the mouse/touch event that triggers it
+            "nearest": true,  // snap to the nearest point (no need to hit it exactly)
+            "clear": "pointerout"  // event that clears the selection
+          }
+        }
+      ],
+      "mark": {  // MARK: the shape drawn for each row
+        "type": "rule",  // shape / type: rule
+        "color": "#2d2a26",  // colour #2d2a26
+        "strokeWidth": 1  // line / outline thickness 1px
+      },
+      "encoding": {  // ENCODING: which data column controls which visual channel
+        "opacity": {  // transparency
+          "condition": {  // IF the rule below is true, use this value...
+            "param": "hov",  // ...the 'hov' selection
+            "empty": false,  // what to do when nothing is selected
+            "value": 0.6  // ...then use 0.6
+          },
+          "value": 0  // OTHERWISE use 0
+        },
+        "tooltip": [  // what appears in the hover box
+          {  // one row in the hover box
+            "field": "year",  // uses the 'year' column
+            "title": "Year"  // title shown: Year
+          },
+          {  // one row in the hover box
+            "field": "Physical items",  // uses the 'Physical items' column
+            "title": "Physical (millions)"  // title shown: Physical (millions)
+          },
+          {  // one row in the hover box
+            "field": "Digital",  // uses the 'Digital' column
+            "title": "Digital (millions)"  // title shown: Digital (millions)
+          },
+          {  // one row in the hover box
+            "field": "share",  // uses the 'share' column
+            "title": "Digital share (%)"  // title shown: Digital share (%)
+          }
+        ]
+      }
+    }
+  ]
+}

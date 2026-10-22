@@ -1,0 +1,215 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "CHART: 'A decade of drift, then the doors closed' (Section 3, top card). Connected scatterplot: each dot is one year, placed by items borrowed per person (x) and visits per person (y); a line joins the years in order. TRANSFORMS: 'pivot' turns the two measures into two columns per year, then they are renamed 'borrowed' and 'visits'; 'lockdown' marks 2019-20 to 2021-22. CHANNELS: x position = borrowed (quantitative); y position = visits (quantitative).",
+  "title": {
+    "text": "A decade of drift, then the doors closed",
+    "subtitle": [
+      "Each dot is one year: items borrowed (across) and library visits (up)",
+      "per Australian, 2010–11 to 2024–25"
+    ]
+  },
+  "width": 650,
+  "height": 320,
+  "data": {
+    "url": "data/national_per_person.csv",
+    "format": {
+      "parse": {
+        "value": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "pivot": "measure",
+      "value": "value",
+      "groupby": [
+        "year"
+      ]
+    },
+    {
+      "calculate": "datum['Items borrowed per person']",
+      "as": "borrowed"
+    },
+    {
+      "calculate": "datum['Library visits per person']",
+      "as": "visits"
+    },
+    {
+      "calculate": "indexof(['2019-20','2020-21','2021-22'], datum.year) >= 0",
+      "as": "lockdown"
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "borrowed",
+      "type": "quantitative",
+      "title": "Items borrowed per person",
+      "scale": {
+        "domain": [
+          5,
+          8.5
+        ]
+      },
+      "axis": {
+        "tickCount": 8,
+        "titleFontWeight": 400,
+        "titleColor": "#8a8378"
+      }
+    },
+    "y": {
+      "field": "visits",
+      "type": "quantitative",
+      "title": "Visits per person",
+      "scale": {
+        "domain": [
+          2,
+          5.2
+        ]
+      },
+      "axis": {
+        "tickCount": 5,
+        "titleFontWeight": 400,
+        "titleColor": "#8a8378"
+      }
+    }
+  },
+  "layer": [
+    {
+      "description": "LAYER 1 - GREY 'LOCKDOWNS' SHADED AREA around the lockdown years. CHANNELS: x position = x (quantitative); x end = x2; y position = y (quantitative); y end = y2.",
+      "data": {
+        "values": [
+          {
+            "x": 5.0,
+            "x2": 6.0,
+            "y": 2,
+            "y2": 3.6
+          }
+        ]
+      },
+      "mark": {
+        "type": "rect",
+        "color": "#efe8db",
+        "opacity": 0.8
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative"
+        },
+        "x2": {
+          "field": "x2"
+        },
+        "y": {
+          "field": "y",
+          "type": "quantitative"
+        },
+        "y2": {
+          "field": "y2"
+        }
+      }
+    },
+    {
+      "description": "LAYER 2 - THE WORD 'Lockdowns'. CHANNELS: x position = x (quantitative); y position = y (quantitative); text = t.",
+      "data": {
+        "values": [
+          {
+            "x": 5.05,
+            "y": 2.12,
+            "t": "Lockdowns"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "fontSize": 12,
+        "fontStyle": "italic",
+        "color": "#8a8378"
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "y",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    },
+    {
+      "description": "LAYER 3 - THE LINE joining the years in order ('order' = year), showing the path over time. CHANNELS: line/stack order = year.",
+      "mark": {
+        "type": "line",
+        "color": "#24426b",
+        "strokeWidth": 2.5,
+        "opacity": 0.8
+      },
+      "encoding": {
+        "order": {
+          "field": "year"
+        }
+      }
+    },
+    {
+      "description": "LAYER 4 - ONE DOT PER YEAR + tooltip. Lockdown years are amber, others navy. CHANNELS: colour changes when datum.lockdown.",
+      "mark": {
+        "type": "circle",
+        "size": 70,
+        "opacity": 1
+      },
+      "encoding": {
+        "color": {
+          "condition": {
+            "test": "datum.lockdown",
+            "value": "#d4901c"
+          },
+          "value": "#24426b"
+        },
+        "tooltip": [
+          {
+            "field": "year",
+            "title": "Year"
+          },
+          {
+            "field": "borrowed",
+            "title": "Items borrowed per person"
+          },
+          {
+            "field": "visits",
+            "title": "Visits per person"
+          }
+        ]
+      }
+    },
+    {
+      "description": "LAYER 5 - YEAR LABELS on five key years, including the 2024-25 note. CHANNELS: text = lab.",
+      "transform": [
+        {
+          "filter": "indexof(['2010-11','2015-16','2019-20','2020-21','2024-25'], datum.year) >= 0"
+        },
+        {
+          "calculate": "datum.year=='2024-25' ? '2024–25: borrowing back up, visits not' : datum.year=='2010-11' ? '2010–11' : datum.year=='2015-16' ? '2015–16' : datum.year=='2019-20' ? '2019–20' : '2020–21'",
+          "as": "lab"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 9,
+        "dy": -8,
+        "fontSize": 12,
+        "fontWeight": "bold",
+        "color": "#2d2a26"
+      },
+      "encoding": {
+        "text": {
+          "field": "lab"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,464 @@
+// COMMENTED COPY of specs/s6_dotmap_clustered_library_locations.vg.json, for reading only. The page loads specs/s6_dotmap_clustered_library_locations.vg.json.
+// JSON files can't contain comments, so the comments live in this copy instead.
+
+{  // the whole chart
+  "$schema": "https://vega.github.io/schema/vega/v5.json",  // which version of Vega-Lite / Vega this file is written for
+  "description": "CHART: 'Every public library branch in Australia' (Section 6, the last chart). Written in Vega (not Vega-Lite) because the zoom and pan need signals that drive the map projection. How the dots are made (data 'libs'): load every library, project each to screen x/y, spread out libraries at exactly the same spot, snap each to a grid of 'cell' pixels, and count the libraries in each grid square (aggregate). The grid is redone whenever you zoom, so groups split as you zoom in.",  // plain-English note about this block (does not change the chart)
+  "width": 725,  // width in pixels
+  "height": 520,  // height in pixels
+  "padding": 0,  // space around the chart (px)
+  "autosize": "none",  // how the chart fits its box
+  "signals": [  // SIGNALS: values that change as you interact (zoom, pan, menu)
+    {  // signal 1
+      "description": "Map size at zoom 1: how big Australia is drawn before zooming.",  // plain-English note about this block (does not change the chart)
+      "name": "baseScale",  // name 'baseScale' that other parts of the spec use to refer to this
+      "update": "min(width*1.15, height*1.32)"  // new value, calculated with this formula
+    },
+    {  // signal 2
+      "description": "Cluster grid size in pixels. Libraries closer than this on screen are grouped. Set to 0 (no grouping) once zoomed in past x30.",  // plain-English note about this block (does not change the chart)
+      "name": "cell",  // name 'cell' that other parts of the spec use to refer to this
+      "update": "view.z >= 30 ? 0 : 30"  // new value, calculated with this formula
+    },
+    {  // signal 3
+      "description": "The 'Jump to' drop-down above the map (cities).",  // plain-English note about this block (does not change the chart)
+      "name": "jump",  // name 'jump' that other parts of the spec use to refer to this
+      "value": "All of Australia",  // use this value: "All of Australia"
+      "bind": {  // connects this param to an input control on the page
+        "input": "select",  // type of control
+        "name": "Jump to: ",  // label shown next to the control: Jump to: 
+        "options": [  // choices in the drop-down
+          "All of Australia",  // a choice in the drop-down
+          "Sydney",  // a choice in the drop-down
+          "Melbourne",  // a choice in the drop-down
+          "Brisbane",  // a choice in the drop-down
+          "Perth",  // a choice in the drop-down
+          "Adelaide",  // a choice in the drop-down
+          "Hobart",  // a choice in the drop-down
+          "Darwin",  // a choice in the drop-down
+          "Canberra"  // a choice in the drop-down
+        ]
+      }
+    },
+    {  // signal 4
+      "description": "Longitude, latitude and zoom for the city picked in 'Jump to'.",  // plain-English note about this block (does not change the chart)
+      "name": "focus",  // name 'focus' that other parts of the spec use to refer to this
+      "value": [134, -28.5, 1],  // starting value
+      "on": [  // the mouse/touch event that triggers it
+        {  // WHEN A CITY IS PICKED in 'Jump to': work out its position and zoom
+          "events": {  // the mouse/touch event that triggers it
+            "signal": "jump"  // value taken from this formula / signal
+          },
+          "update": "jump=='Sydney' ? [151.0,-33.85,14] : jump=='Melbourne' ? [145.0,-37.83,14] : jump=='Brisbane' ? [153.0,-27.5,12] : jump=='Perth' ? [115.88,-31.95,12] : jump=='Adelaide' ? [138.6,-34.92,14] : jump=='Hobart' ? [147.3,-42.88,16] : jump=='Darwin' ? [130.9,-12.45,16] : jump=='Canberra' ? [149.1,-35.28,20] : [134,-28.5,1]"  // new value, calculated with this formula
+        }
+      ]
+    },
+    {  // signal 5
+      "description": "Current zoom and pan: z = zoom level, tx/ty = where the map's centre sits on screen. Changed by scrolling, dragging, double-clicking, 'Jump to' and the +/- buttons (js/embed.js).",  // plain-English note about this block (does not change the chart)
+      "name": "view",  // name 'view' that other parts of the spec use to refer to this
+      "init": "{z:1, tx: width/2, ty: height/2}",  // starting value
+      "on": [  // the mouse/touch event that triggers it
+        {  // WHEN THE CITY CHANGES: move and zoom the map to it
+          "events": {  // the mouse/touch event that triggers it
+            "signal": "focus"  // value taken from this formula / signal
+          },
+          "update": "{z: focus[2], tx: width/2 - baseScale*focus[2]*(focus[0]-134)*PI/180, ty: height/2 + baseScale*focus[2]*(log(tan(PI/4 + (focus[1])*PI/360)) - log(tan(PI/4 + (-28.5)*PI/360)))}"  // new value, calculated with this formula
+        },
+        {  // WHEN YOU SCROLL: zoom in or out around the pointer
+          "events": {  // the mouse/touch event that triggers it
+            "type": "wheel",  // the mouse scroll wheel / trackpad scroll
+            "consume": true  // stop the page scrolling while zooming the map
+          },
+          "update": "{z: clamp(view.z*pow(1.0012,-event.deltaY*pow(16,event.deltaMode)),1,300), tx: x() - (x()-view.tx)*clamp(view.z*pow(1.0012,-event.deltaY*pow(16,event.deltaMode)),1,300)/view.z, ty: y() - (y()-view.ty)*clamp(view.z*pow(1.0012,-event.deltaY*pow(16,event.deltaMode)),1,300)/view.z}"  // new value, calculated with this formula
+        },
+        {  // WHEN YOU DRAG: move the map with the pointer
+          "events": "[mousedown, window:mouseup] > window:mousemove",  // the mouse/touch event that triggers it
+          "update": "{z: view.z, tx: down[2] + x() - down[0], ty: down[3] + y() - down[1]}"  // new value, calculated with this formula
+        },
+        {  // WHEN YOU DOUBLE-CLICK: reset to all of Australia
+          "events": "dblclick",  // the mouse/touch event that triggers it
+          "update": "{z:1, tx: width/2, ty: height/2}"  // new value, calculated with this formula
+        }
+      ]
+    },
+    {  // signal 6
+      "description": "Remembers where a drag started so the map can follow the pointer.",  // plain-English note about this block (does not change the chart)
+      "name": "down",  // name 'down' that other parts of the spec use to refer to this
+      "value": [0, 0, 0, 0],  // starting value
+      "on": [  // the mouse/touch event that triggers it
+        {  // WHEN YOU PRESS THE MOUSE: remember where the drag started
+          "events": "mousedown",  // the mouse/touch event that triggers it
+          "update": "[x(), y(), view.tx, view.ty]"  // new value, calculated with this formula
+        }
+      ]
+    }
+  ],
+  "projections": [  // PROJECTION: how the earth is flattened
+    {  // the map projection (Mercator, centred on Australia)
+      "name": "proj",  // name 'proj' that other parts of the spec use to refer to this
+      "type": "mercator",  // Mercator projection
+      "center": [134, -28.5],  // map centre [longitude, latitude]
+      "scale": {  // how data values are turned into positions, colours or sizes
+        "signal": "baseScale*view.z"  // value taken from this formula / signal
+      },
+      "translate": [  // where the centre sits on screen
+        {  // x of the map centre on screen
+          "signal": "view.tx"  // value taken from this formula / signal
+        },
+        {  // y of the map centre on screen
+          "signal": "view.ty"  // value taken from this formula / signal
+        }
+      ]
+    }
+  ],
+  "data": [  // DATA: where this chart's rows come from
+    {  // --- DATASET 'states' ---
+      "name": "states",  // name 'states' that other parts of the spec use to refer to this
+      "url": "data/aus_states_hi.topojson",  // load the file data/aus_states_hi.topojson
+      "format": {  // how to read the file
+        "type": "topojson",  // file type: topojson
+        "feature": "states"  // which set of shapes inside the map file to use
+      }
+    },
+    {  // --- DATASET 'libs' ---
+      "name": "libs",  // name 'libs' that other parts of the spec use to refer to this
+      "url": "data/australian_public_libraries.csv",  // load the file data/australian_public_libraries.csv
+      "format": {  // how to read the file
+        "type": "csv",  // file type: csv
+        "parse": {  // treat these columns as numbers, not text
+          "latitude": "number",  // read the 'latitude' column as a number
+          "longitude": "number"  // read the 'longitude' column as a number
+        }
+      },
+      "transform": [  // TRANSFORMS: calculations done on the rows before drawing (run top to bottom)
+        {  // transform step 1
+          "type": "filter",  // shape / type: filter
+          "expr": "datum.level == 'branch' && datum.longitude > 112"  // value calculated from this formula
+        },
+        {  // transform step 2
+          "type": "window",  // shape / type: window
+          "ops": ["row_number"],  // operations to run (e.g. count, mean)
+          "as": ["rid"]  // name of the new column: ['rid']
+        },
+        {  // transform step 3
+          "type": "window",  // shape / type: window
+          "groupby": ["longitude", "latitude"],  // do it separately for each value of these columns
+          "ops": ["row_number", "count"],  // operations to run (e.g. count, mean)
+          "as": ["dup", "dupn"],  // name of the new column: ['dup', 'dupn']
+          "frame": [null, null]  // use every row in the group
+        },
+        {  // transform step 4
+          "type": "geopoint",  // shape / type: geopoint
+          "projection": "proj",  // how the round earth is flattened onto the screen
+          "fields": ["longitude", "latitude"],  // what gets remembered when you select something
+          "as": ["px0", "py0"]  // name of the new column: ['px0', 'py0']
+        },
+        {  // transform step 5
+          "type": "formula",  // shape / type: formula
+          "expr": "cell == 0 && datum.dupn > 1 ? datum.px0 + 11*cos(2*PI*datum.dup/datum.dupn) : datum.px0",  // value calculated from this formula
+          "as": "px"  // name of the new column: px
+        },
+        {  // transform step 6
+          "type": "formula",  // shape / type: formula
+          "expr": "cell == 0 && datum.dupn > 1 ? datum.py0 + 11*sin(2*PI*datum.dup/datum.dupn) : datum.py0",  // value calculated from this formula
+          "as": "py"  // name of the new column: py
+        },
+        {  // transform step 7
+          "type": "filter",  // shape / type: filter
+          "expr": "datum.px > -40 && datum.px < width + 40 && datum.py > -40 && datum.py < height + 40"  // value calculated from this formula
+        },
+        {  // transform step 8
+          "type": "formula",  // shape / type: formula
+          "expr": "cell > 0 ? floor(datum.px / cell) : datum.rid",  // value calculated from this formula
+          "as": "gx"  // name of the new column: gx
+        },
+        {  // transform step 9
+          "type": "formula",  // shape / type: formula
+          "expr": "cell > 0 ? floor(datum.py / cell) : 0",  // value calculated from this formula
+          "as": "gy"  // name of the new column: gy
+        },
+        {  // transform step 10
+          "type": "aggregate",  // shape / type: aggregate
+          "groupby": ["gx", "gy"],  // do it separately for each value of these columns
+          "fields": ["px", "py", "name", "suburb", "state", "name"],  // what gets remembered when you select something
+          "ops": ["mean", "mean", "count", "min", "min", "min"],  // operations to run (e.g. count, mean)
+          "as": ["cx", "cy", "n", "suburb", "state", "name"]  // name of the new column: ['cx', 'cy', 'n', 'suburb', 'state', 'name']
+        }
+      ]
+    }
+  ],
+  "scales": [  // SCALES: turn data values into sizes/positions
+    {  // scale 'size'
+      "name": "size",  // name 'size' that other parts of the spec use to refer to this
+      "type": "sqrt",  // sqrt scale (square root, so small values still show differences)
+      "domain": [1, 250],  // range of data values shown
+      "range": [40, 2300],  // the visual values used (colours / sizes)
+      "zero": false  // start the scale at 0
+    }
+  ],
+  "marks": [  // MARKS: everything drawn on the map, bottom to top
+    {  // --- MARK 1 ---
+      "description": "MARK 1 - STATE SHAPES (beige land with white borders).",  // plain-English note about this block (does not change the chart)
+      "type": "shape",  // shape / type: shape
+      "from": {  // the other file to join to
+        "data": "states"  // DATA: where this chart's rows come from
+      },
+      "encode": {  // visual settings for this mark
+        "update": {  // settings recalculated whenever something changes
+          "fill": {  // fill colour
+            "value": "#e9e2d4"  // use this value: "#e9e2d4"
+          },
+          "stroke": {  // outline colour
+            "value": "white"  // use this value: "white"
+          },
+          "strokeWidth": {  // outline thickness
+            "value": 1  // use this value: 1
+          }
+        }
+      },
+      "transform": [  // TRANSFORMS: calculations done on the rows before drawing (run top to bottom)
+        {  // transform step 1
+          "type": "geoshape",  // shape / type: geoshape
+          "projection": "proj"  // how the round earth is flattened onto the screen
+        }
+      ]
+    },
+    {  // --- MARK 2 ---
+      "description": "MARK 2 - THE DOTS. Orange = one library, dark circle = a group (size = how many). Named 'clusters'.",  // plain-English note about this block (does not change the chart)
+      "type": "symbol",  // shape / type: symbol
+      "name": "clusters",  // name 'clusters' that other parts of the spec use to refer to this
+      "from": {  // the other file to join to
+        "data": "libs"  // DATA: where this chart's rows come from
+      },
+      "encode": {  // visual settings for this mark
+        "update": {  // settings recalculated whenever something changes
+          "x": {  // x position (left to right)
+            "field": "cx"  // uses the 'cx' column
+          },
+          "y": {  // y position (up and down)
+            "field": "cy"  // uses the 'cy' column
+          },
+          "size": {  // size (area)
+            "scale": "size",  // how data values are turned into positions, colours or sizes
+            "field": "n"  // uses the 'n' column
+          },
+          "fill": [  // fill colour
+            {  // rule 1 (rules are checked in order; the first that matches is used)
+              "test": "datum.n > 1",  // IF this formula is true
+              "value": "#2d2a26"  // use this value: "#2d2a26"
+            },
+            {  // rule 2 (rules are checked in order; the first that matches is used)
+              "value": "#c0532b"  // use this value: "#c0532b"
+            }
+          ],
+          "fillOpacity": {  // fill transparency
+            "value": 0.88  // use this value: 0.88
+          },
+          "stroke": {  // outline colour
+            "value": "white"  // use this value: "white"
+          },
+          "strokeWidth": {  // outline thickness
+            "value": 1.2  // use this value: 1.2
+          },
+          "cursor": {  // mouse cursor over this shape (pointer = hand, shows it's clickable)
+            "value": "pointer"  // use this value: "pointer"
+          },
+          "tooltip": {  // what appears in the hover box
+            "signal": "datum.n > 1 ? {'Libraries here': datum.n, 'Tip': 'Scroll to zoom in, or choose a city from the drop-down'} : {'Library': datum.name, 'Suburb': datum.suburb, 'State': datum.state}"  // value taken from this formula / signal
+          }
+        }
+      }
+    },
+    {  // --- MARK 3 ---
+      "description": "MARK 3 - THE NUMBER ON EACH GROUP CIRCLE.",  // plain-English note about this block (does not change the chart)
+      "type": "text",  // shape / type: text
+      "from": {  // the other file to join to
+        "data": "clusters"  // DATA: where this chart's rows come from
+      },
+      "interactive": false,  // false = this shape ignores the mouse
+      "encode": {  // visual settings for this mark
+        "update": {  // settings recalculated whenever something changes
+          "x": {  // x position (left to right)
+            "field": "x"  // uses the 'x' column
+          },
+          "y": {  // y position (up and down)
+            "field": "y"  // uses the 'y' column
+          },
+          "text": {  // the text
+            "signal": "datum.datum.n > 1 ? datum.datum.n : ''"  // value taken from this formula / signal
+          },
+          "fill": {  // fill colour
+            "value": "white"  // use this value: "white"
+          },
+          "align": {  // text alignment
+            "value": "center"  // use this value: "center"
+          },
+          "baseline": {  // vertical text alignment
+            "value": "middle"  // use this value: "middle"
+          },
+          "fontSize": {  // text size
+            "signal": "datum.datum.n > 99 ? 12 : 11"  // value taken from this formula / signal
+          },
+          "fontWeight": {  // text boldness
+            "value": "bold"  // use this value: "bold"
+          }
+        }
+      }
+    },
+    {  // --- MARK 4 ---
+      "description": "LEGEND - orange dot for 'One library'.",  // plain-English note about this block (does not change the chart)
+      "type": "symbol",  // shape / type: symbol
+      "interactive": false,  // false = this shape ignores the mouse
+      "encode": {  // visual settings for this mark
+        "update": {  // settings recalculated whenever something changes
+          "x": {  // x position (left to right)
+            "value": 14  // use this value: 14
+          },
+          "y": {  // y position (up and down)
+            "signal": "height-16"  // value taken from this formula / signal
+          },
+          "size": {  // size (area)
+            "value": 70  // use this value: 70
+          },
+          "fill": {  // fill colour
+            "value": "#c0532b"  // use this value: "#c0532b"
+          },
+          "stroke": {  // outline colour
+            "value": "white"  // use this value: "white"
+          }
+        }
+      }
+    },
+    {  // --- MARK 5 ---
+      "description": "LEGEND - text 'One library'.",  // plain-English note about this block (does not change the chart)
+      "type": "text",  // shape / type: text
+      "interactive": false,  // false = this shape ignores the mouse
+      "encode": {  // visual settings for this mark
+        "update": {  // settings recalculated whenever something changes
+          "x": {  // x position (left to right)
+            "value": 24  // use this value: 24
+          },
+          "y": {  // y position (up and down)
+            "signal": "height-12"  // value taken from this formula / signal
+          },
+          "text": {  // the text
+            "value": "One library"  // use this value: "One library"
+          },
+          "fill": {  // fill colour
+            "value": "#2d2a26"  // use this value: "#2d2a26"
+          },
+          "fontSize": {  // text size
+            "value": 13  // use this value: 13
+          }
+        }
+      }
+    },
+    {  // --- MARK 6 ---
+      "description": "LEGEND - dark circle for a group.",  // plain-English note about this block (does not change the chart)
+      "type": "symbol",  // shape / type: symbol
+      "interactive": false,  // false = this shape ignores the mouse
+      "encode": {  // visual settings for this mark
+        "update": {  // settings recalculated whenever something changes
+          "x": {  // x position (left to right)
+            "value": 120  // use this value: 120
+          },
+          "y": {  // y position (up and down)
+            "signal": "height-16"  // value taken from this formula / signal
+          },
+          "size": {  // size (area)
+            "value": 260  // use this value: 260
+          },
+          "fill": {  // fill colour
+            "value": "#2d2a26"  // use this value: "#2d2a26"
+          },
+          "stroke": {  // outline colour
+            "value": "white"  // use this value: "white"
+          }
+        }
+      }
+    },
+    {  // --- MARK 7 ---
+      "description": "LEGEND - the '5' inside the legend's group circle.",  // plain-English note about this block (does not change the chart)
+      "type": "text",  // shape / type: text
+      "interactive": false,  // false = this shape ignores the mouse
+      "encode": {  // visual settings for this mark
+        "update": {  // settings recalculated whenever something changes
+          "x": {  // x position (left to right)
+            "value": 120  // use this value: 120
+          },
+          "y": {  // y position (up and down)
+            "signal": "height-16"  // value taken from this formula / signal
+          },
+          "text": {  // the text
+            "value": "5"  // use this value: "5"
+          },
+          "fill": {  // fill colour
+            "value": "white"  // use this value: "white"
+          },
+          "fontSize": {  // text size
+            "value": 10  // use this value: 10
+          },
+          "fontWeight": {  // text boldness
+            "value": "bold"  // use this value: "bold"
+          },
+          "align": {  // text alignment
+            "value": "center"  // use this value: "center"
+          },
+          "baseline": {  // vertical text alignment
+            "value": "middle"  // use this value: "middle"
+          }
+        }
+      }
+    },
+    {  // --- MARK 8 ---
+      "description": "LEGEND - text 'Group of nearby libraries (number = how many)'.",  // plain-English note about this block (does not change the chart)
+      "type": "text",  // shape / type: text
+      "interactive": false,  // false = this shape ignores the mouse
+      "encode": {  // visual settings for this mark
+        "update": {  // settings recalculated whenever something changes
+          "x": {  // x position (left to right)
+            "value": 134  // use this value: 134
+          },
+          "y": {  // y position (up and down)
+            "signal": "height-12"  // value taken from this formula / signal
+          },
+          "text": {  // the text
+            "value": "Group of nearby libraries (number = how many)"  // use this value: "Group of nearby libraries (number = how
+          },
+          "fill": {  // fill colour
+            "value": "#2d2a26"  // use this value: "#2d2a26"
+          },
+          "fontSize": {  // text size
+            "value": 13  // use this value: 13
+          }
+        }
+      }
+    },
+    {  // --- MARK 9 ---
+      "description": "ZOOM READOUT - 'Zoom x1.0' at the bottom right.",  // plain-English note about this block (does not change the chart)
+      "type": "text",  // shape / type: text
+      "interactive": false,  // false = this shape ignores the mouse
+      "encode": {  // visual settings for this mark
+        "update": {  // settings recalculated whenever something changes
+          "x": {  // x position (left to right)
+            "signal": "width-10"  // value taken from this formula / signal
+          },
+          "y": {  // y position (up and down)
+            "signal": "height-12"  // value taken from this formula / signal
+          },
+          "align": {  // text alignment
+            "value": "right"  // use this value: "right"
+          },
+          "text": {  // the text
+            "signal": "'Zoom ×' + format(view.z,'.1f')"  // value taken from this formula / signal
+          },
+          "fill": {  // fill colour
+            "value": "#8a8378"  // use this value: "#8a8378"
+          },
+          "fontSize": {  // text size
+            "value": 12  // use this value: 12
+          }
+        }
+      }
+    }
+  ]
+}

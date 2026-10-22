@@ -1,0 +1,367 @@
+// COMMENTED COPY of specs/s2_line_waffle_visits_and_card_holders.vg.json, for reading only. The page loads specs/s2_line_waffle_visits_and_card_holders.vg.json.
+// JSON files can't contain comments, so the comments live in this copy instead.
+
+{  // the whole chart
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",  // which version of Vega-Lite / Vega this file is written for
+  "description": "CHART PAIR: 'In-person vs digital visits (millions)' (visits line chart, left) + 'Library card holders (%)' (waffle, right). Section 2, second card. Hovering along the visits chart selects a year (param 'yr'); the waffle shows that year.",  // plain-English note about this block (does not change the chart)
+  "hconcat": [  // charts placed side by side
+    {  // --- CHART 1 (from the left) ---
+      "description": "LEFT CHART - VISITS PER YEAR: in person (terracotta) and digital, i.e. library website (teal), millions - the same physical/digital colours as Section 4. The transform renames 'Library website' to 'Digital (website)'. CHANNELS: x position = year (ordinal); y position = visits_millions (quantitative); colour = type (nominal).",  // plain-English note about this block (does not change the chart)
+      "name": "visits",  // name 'visits' that other parts of the spec use to refer to this
+      "width": 335,  // width in pixels
+      "height": 260,  // height in pixels
+      "title": {  // chart title
+        "text": "In-person vs digital visits (millions)",  // the text
+        "fontSize": 16  // text size (px): 16
+      },
+      "data": {  // DATA: where this chart's rows come from
+        "url": "data/visits.csv"  // load the file data/visits.csv
+      },
+      "transform": [  // TRANSFORMS: calculations done on the rows before drawing (run top to bottom)
+        {  // transform step 1
+          "calculate": "datum.type=='In person' ? 'In person' : 'Digital (website)'",  // new column calculated with this formula
+          "as": "type"  // name of the new column: type
+        }
+      ],
+      "encoding": {  // ENCODING: which data column controls which visual channel
+        "x": {  // x position (left to right)
+          "field": "year",  // uses the 'year' column
+          "type": "ordinal",  // data type: ordered categories (e.g. years, age groups)
+          "title": "Financial year",  // title shown: Financial year
+          "axis": {  // axis settings
+            "labelAngle": 0,  // tilt the labels (degrees): 0
+            "labelExpr": "slice(datum.label,2,4)+'–'+slice(datum.label,5,7)"  // rewrite each label, e.g. 2014-15 becomes 14–15
+          }
+        },
+        "y": {  // y position (up and down)
+          "field": "visits_millions",  // uses the 'visits_millions' column
+          "type": "quantitative",  // data type: numbers
+          "title": "Visits (millions)",  // title shown: Visits (millions)
+          "scale": {  // how data values are turned into positions, colours or sizes
+            "domain": [0, 125]  // range of data values shown
+          },
+          "axis": {  // axis settings
+            "tickCount": 5  // roughly how many ticks / gridlines: 5
+          }
+        },
+        "color": {  // colour
+          "field": "type",  // uses the 'type' column
+          "type": "nominal",  // data type: unordered categories (e.g. states)
+          "scale": {  // how data values are turned into positions, colours or sizes
+            "domain": ["In person", "Digital (website)"],  // range of data values shown
+            "range": ["#c0532b", "#13827f"]  // the visual values used (colours / sizes)
+          },
+          "legend": null  // no legend (things are labelled directly)
+        }
+      },
+      "layer": [  // LAYERS: shapes drawn on top of each other, first item at the bottom
+        {  // --- LAYER 1 ---
+          "description": "VISITS LAYER 1 - GREY 'LOCKDOWNS' SHADING BAND, 2019-20 to 2022-23. CHANNELS: x position = a (ordinal); x end = b.",  // plain-English note about this block (does not change the chart)
+          "data": {  // DATA: where this chart's rows come from
+            "values": [  // rows typed straight into this file
+              {"a": "2019-20", "b": "2022-23"}  // data row 1
+            ]
+          },
+          "mark": {  // MARK: the shape drawn for each row
+            "type": "rect",  // shape / type: rect
+            "color": "#efe8db",  // colour #efe8db
+            "opacity": 0.8  // transparency (0.8 = 80% visible)
+          },
+          "encoding": {  // ENCODING: which data column controls which visual channel
+            "x": {  // x position (left to right)
+              "field": "a",  // uses the 'a' column
+              "type": "ordinal",  // data type: ordered categories (e.g. years, age groups)
+              "bandPosition": 0.5  // where in the year's slot to start/end (0.5 = centre)
+            },
+            "x2": {  // where the shape ends on x
+              "field": "b",  // uses the 'b' column
+              "bandPosition": 0.5  // where in the year's slot to start/end (0.5 = centre)
+            },
+            "y": null,  // y position (up and down): switched off for this layer
+            "color": null  // colour: switched off for this layer
+          }
+        },
+        {  // --- LAYER 2 ---
+          "description": "VISITS LAYER 2 - LIGHT TERRACOTTA AREA under the in-person line.",  // plain-English note about this block (does not change the chart)
+          "transform": [  // TRANSFORMS: calculations done on the rows before drawing (run top to bottom)
+            {  // transform step 1
+              "filter": "datum.type=='In person'"  // keep only rows where this is true
+            }
+          ],
+          "mark": {  // MARK: the shape drawn for each row
+            "type": "area",  // shape / type: area
+            "opacity": 0.12  // transparency (0.12 = 12% visible)
+          }
+        },
+        {  // --- LAYER 3 ---
+          "description": "VISITS LAYER 3 - THE TWO LINES.",  // plain-English note about this block (does not change the chart)
+          "mark": {  // MARK: the shape drawn for each row
+            "type": "line",  // shape / type: line
+            "strokeWidth": 3  // line / outline thickness 3px
+          }
+        },
+        {  // --- LAYER 4 ---
+          "description": "VISITS LAYER 4 - DOTS + THE YEAR SELECTION. The 'yr' param picks the nearest year as the pointer moves (pointerover). The selected year's dots are solid, others faded. CHANNELS: opacity changes when selected in yr.",  // plain-English note about this block (does not change the chart)
+          "params": [  // PARAMS: interactive controls and selections
+            {  // param 1
+              "name": "yr",  // name 'yr' that other parts of the spec use to refer to this
+              "select": {  // records what the user clicks or hovers
+                "type": "point",  // point selection: pick single items
+                "fields": ["year"],  // what gets remembered when you select something
+                "on": "pointerover",  // the mouse/touch event that triggers it
+                "nearest": true,  // snap to the nearest point (no need to hit it exactly)
+                "clear": false  // event that clears the selection
+              },
+              "value": [  // starting value
+                {  // selected when the page first loads
+                  "year": "2024-25"  // 'year' = "2024-25"
+                }
+              ]
+            }
+          ],
+          "mark": {  // MARK: the shape drawn for each row
+            "type": "circle",  // shape / type: circle
+            "size": 60  // size 60
+          },
+          "encoding": {  // ENCODING: which data column controls which visual channel
+            "opacity": {  // transparency
+              "condition": {  // IF the rule below is true, use this value...
+                "param": "yr",  // ...the 'yr' selection
+                "empty": false,  // what to do when nothing is selected
+                "value": 1  // ...then use 1
+              },
+              "value": 0.35  // OTHERWISE use 0.35
+            },
+            "tooltip": [  // what appears in the hover box
+              {  // one row in the hover box
+                "field": "year",  // uses the 'year' column
+                "title": "Year"  // title shown: Year
+              },
+              {  // one row in the hover box
+                "field": "type",  // uses the 'type' column
+                "title": "Visit type"  // title shown: Visit type
+              },
+              {  // one row in the hover box
+                "field": "visits_millions",  // uses the 'visits_millions' column
+                "title": "Millions"  // title shown: Millions
+              }
+            ]
+          }
+        },
+        {  // --- LAYER 5 ---
+          "description": "VISITS LAYER 5 - DOTTED VERTICAL LINE at the selected year.",  // plain-English note about this block (does not change the chart)
+          "transform": [  // TRANSFORMS: calculations done on the rows before drawing (run top to bottom)
+            {  // transform step 1
+              "filter": {  // keep only rows picked in the 'yr' selection
+                "param": "yr",  // ...the 'yr' selection
+                "empty": false  // what to do when nothing is selected
+              }
+            }
+          ],
+          "mark": {  // MARK: the shape drawn for each row
+            "type": "rule",  // shape / type: rule
+            "color": "#2d2a26",  // colour #2d2a26
+            "strokeDash": [2, 2]  // dashed line pattern [dash, gap]
+          },
+          "encoding": {  // ENCODING: which data column controls which visual channel
+            "y": null,  // y position (up and down): switched off for this layer
+            "color": null  // colour: switched off for this layer
+          }
+        },
+        {  // --- LAYER 6 ---
+          "description": "VISITS LAYER 6 - 'In person' LINE NAME, above its line at the left end. CHANNELS: text = type.",  // plain-English note about this block (does not change the chart)
+          "transform": [  // TRANSFORMS: calculations done on the rows before drawing (run top to bottom)
+            {  // transform step 1
+              "filter": "datum.year=='2017-18' && datum.type=='In person'"  // keep only rows where this is true
+            }
+          ],
+          "mark": {  // MARK: the shape drawn for each row
+            "type": "text",  // shape / type: text
+            "align": "left",  // text alignment
+            "dy": -14,  // nudge up (negative) or down (px): -14
+            "fontWeight": "bold",  // text boldness
+            "fontSize": 12  // text size (px): 12
+          },
+          "encoding": {  // ENCODING: which data column controls which visual channel
+            "text": {  // the text shown
+              "field": "type"  // uses the 'type' column
+            }
+          }
+        },
+        {  // --- LAYER 7 ---
+          "description": "VISITS LAYER 7 - 'Digital (website)' LINE NAME, below its line so the line doesn't cross it. CHANNELS: text = type.",  // plain-English note about this block (does not change the chart)
+          "transform": [  // TRANSFORMS: calculations done on the rows before drawing (run top to bottom)
+            {  // transform step 1
+              "filter": "datum.year=='2017-18' && datum.type!='In person'"  // keep only rows where this is true
+            }
+          ],
+          "mark": {  // MARK: the shape drawn for each row
+            "type": "text",  // shape / type: text
+            "align": "left",  // text alignment
+            "dy": 18,  // nudge up (negative) or down (px): 18
+            "fontWeight": "bold",  // text boldness
+            "fontSize": 12  // text size (px): 12
+          },
+          "encoding": {  // ENCODING: which data column controls which visual channel
+            "text": {  // the text shown
+              "field": "type"  // uses the 'type' column
+            }
+          }
+        },
+        {  // --- LAYER 8 ---
+          "description": "VISITS LAYER 8 - THE WORD 'Lockdowns' at the top of the band. CHANNELS: x position = a (ordinal); text = t.",  // plain-English note about this block (does not change the chart)
+          "data": {  // DATA: where this chart's rows come from
+            "values": [  // rows typed straight into this file
+              {"a": "2020-21", "t": "Lockdowns"}  // data row 1
+            ]
+          },
+          "mark": {  // MARK: the shape drawn for each row
+            "type": "text",  // shape / type: text
+            "y": 6,  // fixed y position: 6px
+            "dx": 16,  // nudge sideways (px): 16
+            "color": "#8a8378",  // colour #8a8378
+            "fontStyle": "italic",  // italic or normal
+            "fontSize": 12  // text size (px): 12
+          },
+          "encoding": {  // ENCODING: which data column controls which visual channel
+            "x": {  // x position (left to right)
+              "field": "a",  // uses the 'a' column
+              "type": "ordinal"  // data type: ordered categories (e.g. years, age groups)
+            },
+            "y": null,  // y position (up and down): switched off for this layer
+            "text": {  // the text shown
+              "field": "t"  // uses the 't' column
+            },
+            "color": null  // colour: switched off for this layer
+          }
+        }
+      ]
+    },
+    {  // --- CHART 2 (from the left) ---
+      "description": "RIGHT CHART - WAFFLE OF CARD HOLDERS: 100 squares, 1 square = 1% of Australians. Transforms: keep only the year chosen on the left chart, make 100 copies of that row (sequence + flatten), work out each square's column (cell % 10) and row (cell / 10), and mark the first N squares as members.",  // plain-English note about this block (does not change the chart)
+      "name": "waffle",  // name 'waffle' that other parts of the spec use to refer to this
+      "width": 260,  // width in pixels
+      "height": 260,  // height in pixels
+      "title": {  // chart title
+        "text": "Library card holders (%)",  // the text
+        "fontSize": 16,  // text size (px): 16
+        "anchor": "start"  // title alignment
+      },
+      "data": {  // DATA: where this chart's rows come from
+        "url": "data/membership.csv",  // load the file data/membership.csv
+        "format": {  // how to read the file
+          "parse": {  // treat these columns as numbers, not text
+            "members_pct": "number"  // read the 'members_pct' column as a number
+          }
+        }
+      },
+      "transform": [  // TRANSFORMS: calculations done on the rows before drawing (run top to bottom)
+        {  // transform step 1
+          "filter": {  // keep only rows picked in the 'yr' selection
+            "param": "yr",  // ...the 'yr' selection
+            "empty": false  // what to do when nothing is selected
+          }
+        },
+        {  // transform step 2
+          "calculate": "sequence(0,100)",  // new column calculated with this formula
+          "as": "cell"  // name of the new column: cell
+        },
+        {  // transform step 3
+          "flatten": ["cell"]  // turn each list into separate rows (one row per item)
+        },
+        {  // transform step 4
+          "calculate": "datum.cell % 10",  // new column calculated with this formula
+          "as": "col"  // name of the new column: col
+        },
+        {  // transform step 5
+          "calculate": "floor(datum.cell/10)",  // new column calculated with this formula
+          "as": "row"  // name of the new column: row
+        },
+        {  // transform step 6
+          "calculate": "datum.cell < round(datum.members_pct)",  // new column calculated with this formula
+          "as": "member"  // name of the new column: member
+        }
+      ],
+      "layer": [  // LAYERS: shapes drawn on top of each other, first item at the bottom
+        {  // --- LAYER 1 ---
+          "description": "WAFFLE LAYER 1 - THE 100 SQUARES. Green = has a library card, beige = doesn't. CHANNELS: x position = col (ordinal); y position = row (ordinal); colour = member (nominal).",  // plain-English note about this block (does not change the chart)
+          "mark": {  // MARK: the shape drawn for each row
+            "type": "rect"  // shape / type: rect
+          },
+          "encoding": {  // ENCODING: which data column controls which visual channel
+            "x": {  // x position (left to right)
+              "field": "col",  // uses the 'col' column
+              "type": "ordinal",  // data type: ordered categories (e.g. years, age groups)
+              "axis": null,  // no axis (labels are drawn on the chart instead)
+              "scale": {  // how data values are turned into positions, colours or sizes
+                "paddingInner": 0.28,  // gap between bars or rows
+                "paddingOuter": 0  // space before the first and after the last item
+              }
+            },
+            "y": {  // y position (up and down)
+              "field": "row",  // uses the 'row' column
+              "type": "ordinal",  // data type: ordered categories (e.g. years, age groups)
+              "axis": null,  // no axis (labels are drawn on the chart instead)
+              "sort": "descending",  // order of the items
+              "scale": {  // how data values are turned into positions, colours or sizes
+                "paddingInner": 0.28,  // gap between bars or rows
+                "paddingOuter": 0  // space before the first and after the last item
+              }
+            },
+            "color": {  // colour
+              "field": "member",  // uses the 'member' column
+              "type": "nominal",  // data type: unordered categories (e.g. states)
+              "scale": {  // how data values are turned into positions, colours or sizes
+                "domain": [true, false],  // range of data values shown
+                "range": ["#3f7d4e", "#e3dccf"]  // the visual values used (colours / sizes)
+              },
+              "legend": null  // no legend (things are labelled directly)
+            },
+            "tooltip": [  // what appears in the hover box
+              {  // one row in the hover box
+                "field": "year",  // uses the 'year' column
+                "title": "Year"  // title shown: Year
+              },
+              {  // one row in the hover box
+                "field": "members_pct",  // uses the 'members_pct' column
+                "title": "Members (% of population)"  // title shown: Members (% of population)
+              }
+            ]
+          }
+        },
+        {  // --- LAYER 2 ---
+          "description": "WAFFLE LAYER 2 - THE LABEL under the grid, e.g. '29% in 2024-25'. CHANNELS: text = lab.",  // plain-English note about this block (does not change the chart)
+          "transform": [  // TRANSFORMS: calculations done on the rows before drawing (run top to bottom)
+            {  // transform step 1
+              "filter": "datum.cell==0"  // keep only rows where this is true
+            },
+            {  // transform step 2
+              "calculate": "format(datum.members_pct,'.0f')+'% in '+datum.year",  // new column calculated with this formula
+              "as": "lab"  // name of the new column: lab
+            }
+          ],
+          "mark": {  // MARK: the shape drawn for each row
+            "type": "text",  // shape / type: text
+            "y": 284,  // fixed y position: 284px
+            "x": 130,  // fixed x position: 130px
+            "align": "center",  // text alignment
+            "fontSize": 16,  // text size (px): 16
+            "fontWeight": "bold",  // text boldness
+            "color": "#3f7d4e"  // colour #3f7d4e
+          },
+          "encoding": {  // ENCODING: which data column controls which visual channel
+            "text": {  // the text shown
+              "field": "lab"  // uses the 'lab' column
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "spacing": 23,  // gap between the side-by-side charts (px): 23
+  "resolve": {  // let each chart keep its own scales/legends instead of sharing
+    "scale": {  // how data values are turned into positions, colours or sizes
+      "color": "independent"  // colour independent
+    }
+  }
+}

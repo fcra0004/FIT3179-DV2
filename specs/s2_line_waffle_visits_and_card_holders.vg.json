@@ -1,24 +1,30 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "CHART PAIR: 'Fewer walk in, more log on' (visits line chart, left) + 'Card holders' (waffle, right). Section 2, second card. Hovering along the visits chart selects a year (param 'yr'); the waffle shows that year.",
+  "description": "CHART PAIR: 'In-person vs digital visits (millions)' (visits line chart, left) + 'Library card holders (%)' (waffle, right). Section 2, second card. Hovering along the visits chart selects a year (param 'yr'); the waffle shows that year.",
   "hconcat": [
     {
-      "description": "LEFT CHART - VISITS PER YEAR: in person (amber) and library website (violet), millions. CHANNELS: x position = year (ordinal); y position = visits_millions (quantitative); colour = type (nominal).",
+      "description": "LEFT CHART - VISITS PER YEAR: in person (terracotta) and digital, i.e. library website (teal), millions - the same physical/digital colours as Section 4. The transform renames 'Library website' to 'Digital (website)'. CHANNELS: x position = year (ordinal); y position = visits_millions (quantitative); colour = type (nominal).",
       "name": "visits",
-      "width": 265,
+      "width": 335,
       "height": 260,
       "title": {
-        "text": "Fewer walk in, more log on",
-        "subtitle": "Visits per year, millions"
+        "text": "In-person vs digital visits (millions)",
+        "fontSize": 16
       },
       "data": {
         "url": "data/visits.csv"
       },
+      "transform": [
+        {
+          "calculate": "datum.type=='In person' ? 'In person' : 'Digital (website)'",
+          "as": "type"
+        }
+      ],
       "encoding": {
         "x": {
           "field": "year",
           "type": "ordinal",
-          "title": null,
+          "title": "Financial year",
           "axis": {
             "labelAngle": 0,
             "labelExpr": "slice(datum.label,2,4)+'–'+slice(datum.label,5,7)"
@@ -27,7 +33,7 @@
         "y": {
           "field": "visits_millions",
           "type": "quantitative",
-          "title": null,
+          "title": "Visits (millions)",
           "scale": {
             "domain": [
               0,
@@ -44,11 +50,11 @@
           "scale": {
             "domain": [
               "In person",
-              "Library website"
+              "Digital (website)"
             ],
             "range": [
-              "#d4901c",
-              "#7b5ea7"
+              "#c0532b",
+              "#13827f"
             ]
           },
           "legend": null
@@ -85,7 +91,7 @@
           }
         },
         {
-          "description": "VISITS LAYER 2 - LIGHT AMBER AREA under the in-person line.",
+          "description": "VISITS LAYER 2 - LIGHT TERRACOTTA AREA under the in-person line.",
           "transform": [
             {
               "filter": "datum.type=='In person'"
@@ -177,10 +183,10 @@
           }
         },
         {
-          "description": "VISITS LAYER 6 - LINE NAMES ('In person', 'Library website') at the left end. CHANNELS: text = type.",
+          "description": "VISITS LAYER 6 - 'In person' LINE NAME, above its line at the left end. CHANNELS: text = type.",
           "transform": [
             {
-              "filter": "datum.year=='2017-18'"
+              "filter": "datum.year=='2017-18' && datum.type=='In person'"
             }
           ],
           "mark": {
@@ -197,7 +203,27 @@
           }
         },
         {
-          "description": "VISITS LAYER 7 - THE WORD 'Lockdowns' at the top of the band. CHANNELS: x position = a (ordinal); text = t.",
+          "description": "VISITS LAYER 7 - 'Digital (website)' LINE NAME, below its line so the line doesn't cross it. CHANNELS: text = type.",
+          "transform": [
+            {
+              "filter": "datum.year=='2017-18' && datum.type!='In person'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "dy": 18,
+            "fontWeight": "bold",
+            "fontSize": 12
+          },
+          "encoding": {
+            "text": {
+              "field": "type"
+            }
+          }
+        },
+        {
+          "description": "VISITS LAYER 8 - THE WORD 'Lockdowns' at the top of the band. CHANNELS: x position = a (ordinal); text = t.",
           "data": {
             "values": [
               {
@@ -231,11 +257,12 @@
     {
       "description": "RIGHT CHART - WAFFLE OF CARD HOLDERS: 100 squares, 1 square = 1% of Australians. Transforms: keep only the year chosen on the left chart, make 100 copies of that row (sequence + flatten), work out each square's column (cell % 10) and row (cell / 10), and mark the first N squares as members.",
       "name": "waffle",
-      "width": 250,
-      "height": 250,
+      "width": 260,
+      "height": 260,
       "title": {
-        "text": "Card holders",
-        "subtitle": "% of population"
+        "text": "Library card holders (%)",
+        "fontSize": 16,
+        "anchor": "start"
       },
       "data": {
         "url": "data/membership.csv",
@@ -278,20 +305,27 @@
         {
           "description": "WAFFLE LAYER 1 - THE 100 SQUARES. Green = has a library card, beige = doesn't. CHANNELS: x position = col (ordinal); y position = row (ordinal); colour = member (nominal).",
           "mark": {
-            "type": "square",
-            "size": 340
+            "type": "rect"
           },
           "encoding": {
             "x": {
               "field": "col",
               "type": "ordinal",
-              "axis": null
+              "axis": null,
+              "scale": {
+                "paddingInner": 0.28,
+                "paddingOuter": 0
+              }
             },
             "y": {
               "field": "row",
               "type": "ordinal",
               "axis": null,
-              "sort": "descending"
+              "sort": "descending",
+              "scale": {
+                "paddingInner": 0.28,
+                "paddingOuter": 0
+              }
             },
             "color": {
               "field": "member",
@@ -333,9 +367,9 @@
           ],
           "mark": {
             "type": "text",
-            "y": 272,
-            "x": 0,
-            "align": "left",
+            "y": 284,
+            "x": 130,
+            "align": "center",
             "fontSize": 16,
             "fontWeight": "bold",
             "color": "#3f7d4e"
@@ -349,7 +383,7 @@
       ]
     }
   ],
-  "spacing": 56,
+  "spacing": 23,
   "resolve": {
     "scale": {
       "color": "independent"

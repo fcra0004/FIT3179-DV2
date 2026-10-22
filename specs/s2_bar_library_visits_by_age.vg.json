@@ -1,13 +1,8 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "CHART: 'Fewer than 1 in 5 young adults visit a library' (Section 2, top card). Bar chart of the share of each age group who visited a library in 2021-22 (ABS). The data is typed into this file under \"values\". The transform makes a true/false column 'young' for the 18-24 and 25-34 bars so they can be coloured amber. CHANNELS: x position = age (ordinal); y position = pct (quantitative).",
-  "title": {
-    "text": "Fewer than 1 in 5 young adults visit a library",
-    "subtitle": [
-      "Share of each age group who visited a library or archive in 2021–22 (ABS survey)"
-    ]
-  },
-  "width": 650,
+  "description": "CHART: 'Share of each age group who visited a library (2021-22)' (Section 2, top card). Bar chart of the share of each age group who visited a library in 2021-22 (ABS). The data is typed into this file under \"values\". The transform makes a true/false column 'young' for the 18-24 and 25-34 bars so they can be coloured amber. CHANNELS: x position = age (ordinal); y position = pct (quantitative).",
+  "title": "Share of each age group who visited a library (2021–22)",
+  "width": 669,
   "height": 230,
   "data": {
     "values": [
@@ -66,7 +61,7 @@
     "y": {
       "field": "pct",
       "type": "quantitative",
-      "title": null,
+      "title": "Visited a library",
       "scale": {
         "domain": [
           0,

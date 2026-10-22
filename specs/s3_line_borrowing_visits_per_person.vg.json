@@ -1,14 +1,9 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "CHART: 'Borrowing slid for a decade, then recovered' (Section 3, top card). Two lines: items borrowed per person (navy) and library visits per person (amber), 2010-11 to 2024-25. The shared encoding below (x = year, y = value, colour = measure) is used by every layer unless a layer sets its own. CHANNELS: x position = year (ordinal); y position = value (quantitative); colour = measure (nominal).",
-  "title": {
-    "text": "Borrowing slid for a decade, then recovered — visits have not",
-    "subtitle": [
-      "Items borrowed and library visits per Australian, per year"
-    ]
-  },
-  "width": 650,
-  "height": 300,
+  "description": "CHART: 'Items borrowed and library visits per Australian, per year' (Section 3, top card). Two lines: items borrowed per person (navy) and library visits per person (amber), 2010-11 to 2024-25. The shared encoding below (x = year, y = value, colour = measure) is used by every layer unless a layer sets its own. CHANNELS: x position = year (ordinal); y position = value (quantitative); colour = measure (nominal).",
+  "title": "Items borrowed and library visits per Australian per year",
+  "width": 682,
+  "height": 200,
   "data": {
     "url": "data/national_per_person.csv"
   },
@@ -16,16 +11,17 @@
     "x": {
       "field": "year",
       "type": "ordinal",
-      "title": null,
+      "title": "Financial year",
       "axis": {
-        "labelAngle": -40,
-        "labelPadding": 4
+        "labelAngle": 0,
+        "labelPadding": 4,
+        "labelExpr": "slice(datum.label,2,4)+'–'+slice(datum.label,5,7)"
       }
     },
     "y": {
       "field": "value",
       "type": "quantitative",
-      "title": null,
+      "title": "Per person",
       "scale": {
         "domain": [
           0,

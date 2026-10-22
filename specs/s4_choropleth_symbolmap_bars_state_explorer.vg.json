@@ -24,7 +24,8 @@
         "fields": [
           "state"
         ],
-        "toggle": false
+        "toggle": false,
+        "clear": false
       },
       "value": [
         {
@@ -39,16 +40,16 @@
   ],
   "hconcat": [
     {
-      "description": "MAP 1 - CHOROPLETH 'Digital share of loans'. Transforms: keep only the slider's year (datum.idx == yi), then 'lookup' joins each state's row to its shape in aus_states.topojson. Colour: light to dark teal = low to high digital share (0-45%). Clicked state gets a dark outline. CHANNELS: shape = geo (geojson); colour = digital_share (quantitative); outline changes when selected in pick; outline width changes when selected in pick.",
+      "description": "MAP 1 - CHOROPLETH 'Digital share of loans (%)'. js/embed.js resizes all three charts to equal widths that fill the card. Transforms: keep only the slider's year (datum.idx == yi), then 'lookup' joins each state's row to its shape in aus_states.topojson. Colour: light to dark teal = low to high digital share (0-45%). Clicked state gets a dark outline. CHANNELS: shape = geo (geojson); colour = digital_share (quantitative); outline changes when selected in pick; outline width changes when selected in pick.",
       "name": "choro",
-      "width": 290,
+      "width": 340,
       "height": 290,
       "projection": {
         "type": "mercator"
       },
       "title": {
-        "text": "Digital share of loans",
-        "subtitle": "Darker = more borrowed on apps"
+        "text": "Digital share of loans (%)",
+        "fontSize": 16
       },
       "data": {
         "url": "data/state_year.csv"
@@ -136,16 +137,16 @@
       }
     },
     {
-      "description": "MAP 2 - PROPORTIONAL SYMBOL MAP 'In-person visits'.",
+      "description": "MAP 2 - PROPORTIONAL SYMBOL MAP 'In-person visits (millions)'.",
       "name": "symbols",
-      "width": 290,
+      "width": 340,
       "height": 290,
       "projection": {
         "type": "mercator"
       },
       "title": {
-        "text": "In-person visits",
-        "subtitle": "Circle area = visits that year"
+        "text": "In-person visits (millions)",
+        "fontSize": 16
       },
       "layer": [
         {
@@ -164,7 +165,7 @@
           }
         },
         {
-          "description": "SYMBOL MAP LAYER 2 - THE CIRCLES. Placed at each state's lon/lat, circle AREA = visits that year (millions). The clicked state is darker; others fade. Named 'symDots' so the 'pick' click works on it. CHANNELS: longitude = lon (quantitative); latitude = lat (quantitative); size = onsite_visits (quantitative); colour changes when selected in pick; opacity changes when selected in pick.",
+          "description": "SYMBOL MAP LAYER 2 - THE CIRCLES. Placed at each state's lon/lat, circle AREA = visits that year (millions). Every circle is the same amber; the clicked state gets a dark outline instead (stroke condition on 'pick'), so no circle looks less important. Named 'symDots' so the 'pick' click works on it. CHANNELS: longitude = lon (quantitative); latitude = lat (quantitative); size = onsite_visits (quantitative); colour fixed at #d4901c; outline changes when selected in pick; outline width changes when selected in pick.",
           "name": "symDots",
           "data": {
             "url": "data/state_year.csv"
@@ -176,9 +177,8 @@
           ],
           "mark": {
             "type": "circle",
-            "stroke": "white",
-            "strokeWidth": 1,
-            "cursor": "pointer"
+            "cursor": "pointer",
+            "opacity": 0.95
           },
           "encoding": {
             "longitude": {
@@ -217,20 +217,23 @@
               }
             },
             "color": {
+              "value": "#d4901c"
+            },
+            "stroke": {
               "condition": {
                 "param": "pick",
                 "empty": false,
-                "value": "#a86a08"
+                "value": "#2d2a26"
               },
-              "value": "#d4901c"
+              "value": "white"
             },
-            "opacity": {
+            "strokeWidth": {
               "condition": {
                 "param": "pick",
-                "empty": true,
-                "value": 0.95
+                "empty": false,
+                "value": 2.5
               },
-              "value": 0.45
+              "value": 1
             },
             "tooltip": [
               {
@@ -247,20 +250,85 @@
               }
             ]
           }
+        },
+        {
+          "description": "SYMBOL MAP LAYER 3 - NUMBER INSIDE THE BIG CIRCLES (5 million visits or more), in white. CHANNELS: longitude = lon (quantitative); latitude = lat (quantitative); text = onsite_visits (quantitative).",
+          "data": {
+            "url": "data/state_year.csv"
+          },
+          "transform": [
+            {
+              "filter": "datum.idx == yi && datum.onsite_visits >= 5"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "fontSize": 12,
+            "fontWeight": "bold",
+            "color": "white"
+          },
+          "encoding": {
+            "longitude": {
+              "field": "lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "lat",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "onsite_visits",
+              "type": "quantitative",
+              "format": ".1f"
+            }
+          }
+        },
+        {
+          "description": "SYMBOL MAP LAYER 4 - NUMBER BESIDE THE SMALL CIRCLES (under 5 million), placed to the right because they don't fit inside. CHANNELS: longitude = lon (quantitative); latitude = lat (quantitative); text = onsite_visits (quantitative).",
+          "data": {
+            "url": "data/state_year.csv"
+          },
+          "transform": [
+            {
+              "filter": "datum.idx == yi && datum.onsite_visits < 5"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "fontSize": 11,
+            "fontWeight": "bold",
+            "color": "#2d2a26",
+            "align": "left",
+            "dx": 11
+          },
+          "encoding": {
+            "longitude": {
+              "field": "lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "lat",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "onsite_visits",
+              "type": "quantitative",
+              "format": ".1f"
+            }
+          }
         }
       ]
     },
     {
-      "description": "CHART 3 - 'Borrowing: <state>' STACKED BARS. Shows the clicked state only (filter on 'pick'). 'fold' turns the physical and digital columns into rows so they can stack. The slider's year is solid, other years faded (opacity test on yrLabel). CHANNELS: x position = year (ordinal); y position = sum of millions (quantitative); colour = format (nominal); stack order = format; opacity changes when datum.year == yrLabel.",
+      "description": "CHART 3 - '<state>: items borrowed (millions)' STACKED BARS. Shows the clicked state only (filter on 'pick'). 'fold' turns the physical and digital columns into rows so they can stack. The slider's year is solid, other years faded (opacity test on yrLabel). The y axis is fixed at 0-55 million so states can be compared. The y axis is fixed at 0-55 million, so bar heights can be compared between states. CHANNELS: x position = year (ordinal); y position = sum of millions (quantitative); colour = format (nominal); line/stack order = format; opacity changes when datum.year == yrLabel.",
       "name": "detail",
-      "width": 230,
+      "width": 340,
       "height": 250,
       "title": {
         "text": {
-          "expr": "'Borrowing: ' + (pick && pick.state ? pick.state[0] : 'all states')"
+          "expr": "(pick && pick.state ? pick.state[0] : 'All states') + ': items borrowed (millions)'"
         },
-        "subtitle": "Millions of items, by year",
-        "fontSize": 15
+        "fontSize": 16
       },
       "data": {
         "url": "data/state_year.csv"
@@ -306,7 +374,16 @@
           "aggregate": "sum",
           "field": "millions",
           "type": "quantitative",
-          "title": null
+          "title": null,
+          "scale": {
+            "domain": [
+              0,
+              55
+            ]
+          },
+          "axis": {
+            "labelFlush": true
+          }
         },
         "color": {
           "field": "format",
@@ -355,7 +432,7 @@
       }
     }
   ],
-  "spacing": 28,
+  "spacing": 36,
   "resolve": {
     "scale": {
       "color": "independent",

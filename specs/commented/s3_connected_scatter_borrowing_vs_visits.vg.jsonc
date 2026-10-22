@@ -1,0 +1,201 @@
+// COMMENTED COPY of specs/s3_connected_scatter_borrowing_vs_visits.vg.json, for reading only. The page loads specs/s3_connected_scatter_borrowing_vs_visits.vg.json.
+// JSON files can't contain comments, so the comments live in this copy instead.
+
+{  // the whole chart
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",  // which version of Vega-Lite / Vega this file is written for
+  "description": "CHART: 'A decade of drift, then the doors closed' (Section 3, top card). Connected scatterplot: each dot is one year, placed by items borrowed per person (x) and visits per person (y); a line joins the years in order. TRANSFORMS: 'pivot' turns the two measures into two columns per year, then they are renamed 'borrowed' and 'visits'; 'lockdown' marks 2019-20 to 2021-22. CHANNELS: x position = borrowed (quantitative); y position = visits (quantitative).",  // plain-English note about this block (does not change the chart)
+  "title": {  // chart title
+    "text": "A decade of drift, then the doors closed",  // the text
+    "subtitle": [  // smaller line under the title
+      "Each dot is one year: items borrowed (across) and library visits (up)",  // subtitle line 1
+      "per Australian, 2010–11 to 2024–25"  // subtitle line 2
+    ]
+  },
+  "width": 650,  // width in pixels
+  "height": 320,  // height in pixels
+  "data": {  // DATA: where this chart's rows come from
+    "url": "data/national_per_person.csv",  // load the file data/national_per_person.csv
+    "format": {  // how to read the file
+      "parse": {  // treat these columns as numbers, not text
+        "value": "number"  // read the 'value' column as a number
+      }
+    }
+  },
+  "transform": [  // TRANSFORMS: calculations done on the rows before drawing (run top to bottom)
+    {  // transform step 1
+      "pivot": "measure",  // turn rows into columns (one row per year)
+      "value": "value",  // use this value: "value"
+      "groupby": ["year"]  // do it separately for each value of these columns
+    },
+    {  // transform step 2
+      "calculate": "datum['Items borrowed per person']",  // new column calculated with this formula
+      "as": "borrowed"  // name of the new column: borrowed
+    },
+    {  // transform step 3
+      "calculate": "datum['Library visits per person']",  // new column calculated with this formula
+      "as": "visits"  // name of the new column: visits
+    },
+    {  // transform step 4
+      "calculate": "indexof(['2019-20','2020-21','2021-22'], datum.year) >= 0",  // new column calculated with this formula
+      "as": "lockdown"  // name of the new column: lockdown
+    }
+  ],
+  "encoding": {  // ENCODING: which data column controls which visual channel
+    "x": {  // x position (left to right)
+      "field": "borrowed",  // uses the 'borrowed' column
+      "type": "quantitative",  // data type: numbers
+      "title": "Items borrowed per person",  // title shown: Items borrowed per person
+      "scale": {  // how data values are turned into positions, colours or sizes
+        "domain": [5, 8.5]  // range of data values shown
+      },
+      "axis": {  // axis settings
+        "tickCount": 8,  // roughly how many ticks / gridlines: 8
+        "titleFontWeight": 400,  // boldness of the axis title
+        "titleColor": "#8a8378"  // colour of the axis title
+      }
+    },
+    "y": {  // y position (up and down)
+      "field": "visits",  // uses the 'visits' column
+      "type": "quantitative",  // data type: numbers
+      "title": "Visits per person",  // title shown: Visits per person
+      "scale": {  // how data values are turned into positions, colours or sizes
+        "domain": [2, 5.2]  // range of data values shown
+      },
+      "axis": {  // axis settings
+        "tickCount": 5,  // roughly how many ticks / gridlines: 5
+        "titleFontWeight": 400,  // boldness of the axis title
+        "titleColor": "#8a8378"  // colour of the axis title
+      }
+    }
+  },
+  "layer": [  // LAYERS: shapes drawn on top of each other, first item at the bottom
+    {  // --- LAYER 1 ---
+      "description": "LAYER 1 - GREY 'LOCKDOWNS' SHADED AREA around the lockdown years. CHANNELS: x position = x (quantitative); x end = x2; y position = y (quantitative); y end = y2.",  // plain-English note about this block (does not change the chart)
+      "data": {  // DATA: where this chart's rows come from
+        "values": [  // rows typed straight into this file
+          {"x": 5.0, "x2": 6.0, "y": 2, "y2": 3.6}  // data row 1
+        ]
+      },
+      "mark": {  // MARK: the shape drawn for each row
+        "type": "rect",  // shape / type: rect
+        "color": "#efe8db",  // colour #efe8db
+        "opacity": 0.8  // transparency (0.8 = 80% visible)
+      },
+      "encoding": {  // ENCODING: which data column controls which visual channel
+        "x": {  // x position (left to right)
+          "field": "x",  // uses the 'x' column
+          "type": "quantitative"  // data type: numbers
+        },
+        "x2": {  // where the shape ends on x
+          "field": "x2"  // uses the 'x2' column
+        },
+        "y": {  // y position (up and down)
+          "field": "y",  // uses the 'y' column
+          "type": "quantitative"  // data type: numbers
+        },
+        "y2": {  // where the shape ends on y
+          "field": "y2"  // uses the 'y2' column
+        }
+      }
+    },
+    {  // --- LAYER 2 ---
+      "description": "LAYER 2 - THE WORD 'Lockdowns'. CHANNELS: x position = x (quantitative); y position = y (quantitative); text = t.",  // plain-English note about this block (does not change the chart)
+      "data": {  // DATA: where this chart's rows come from
+        "values": [  // rows typed straight into this file
+          {"x": 5.05, "y": 2.12, "t": "Lockdowns"}  // data row 1
+        ]
+      },
+      "mark": {  // MARK: the shape drawn for each row
+        "type": "text",  // shape / type: text
+        "align": "left",  // text alignment
+        "fontSize": 12,  // text size (px): 12
+        "fontStyle": "italic",  // italic or normal
+        "color": "#8a8378"  // colour #8a8378
+      },
+      "encoding": {  // ENCODING: which data column controls which visual channel
+        "x": {  // x position (left to right)
+          "field": "x",  // uses the 'x' column
+          "type": "quantitative"  // data type: numbers
+        },
+        "y": {  // y position (up and down)
+          "field": "y",  // uses the 'y' column
+          "type": "quantitative"  // data type: numbers
+        },
+        "text": {  // the text shown
+          "field": "t"  // uses the 't' column
+        }
+      }
+    },
+    {  // --- LAYER 3 ---
+      "description": "LAYER 3 - THE LINE joining the years in order ('order' = year), showing the path over time. CHANNELS: line/stack order = year.",  // plain-English note about this block (does not change the chart)
+      "mark": {  // MARK: the shape drawn for each row
+        "type": "line",  // shape / type: line
+        "color": "#24426b",  // colour #24426b
+        "strokeWidth": 2.5,  // line / outline thickness 2.5px
+        "opacity": 0.8  // transparency (0.8 = 80% visible)
+      },
+      "encoding": {  // ENCODING: which data column controls which visual channel
+        "order": {  // stacking order
+          "field": "year"  // uses the 'year' column
+        }
+      }
+    },
+    {  // --- LAYER 4 ---
+      "description": "LAYER 4 - ONE DOT PER YEAR + tooltip. Lockdown years are amber, others navy. CHANNELS: colour changes when datum.lockdown.",  // plain-English note about this block (does not change the chart)
+      "mark": {  // MARK: the shape drawn for each row
+        "type": "circle",  // shape / type: circle
+        "size": 70,  // size 70
+        "opacity": 1  // transparency (1 = 100% visible)
+      },
+      "encoding": {  // ENCODING: which data column controls which visual channel
+        "color": {  // colour
+          "condition": {  // IF the rule below is true, use this value...
+            "test": "datum.lockdown",  // IF this formula is true
+            "value": "#d4901c"  // ...then use "#d4901c"
+          },
+          "value": "#24426b"  // OTHERWISE use "#24426b"
+        },
+        "tooltip": [  // what appears in the hover box
+          {  // one row in the hover box
+            "field": "year",  // uses the 'year' column
+            "title": "Year"  // title shown: Year
+          },
+          {  // one row in the hover box
+            "field": "borrowed",  // uses the 'borrowed' column
+            "title": "Items borrowed per person"  // title shown: Items borrowed per person
+          },
+          {  // one row in the hover box
+            "field": "visits",  // uses the 'visits' column
+            "title": "Visits per person"  // title shown: Visits per person
+          }
+        ]
+      }
+    },
+    {  // --- LAYER 5 ---
+      "description": "LAYER 5 - YEAR LABELS on five key years, including the 2024-25 note. CHANNELS: text = lab.",  // plain-English note about this block (does not change the chart)
+      "transform": [  // TRANSFORMS: calculations done on the rows before drawing (run top to bottom)
+        {  // transform step 1
+          "filter": "indexof(['2010-11','2015-16','2019-20','2020-21','2024-25'], datum.year) >= 0"  // keep only rows where this is true
+        },
+        {  // transform step 2
+          "calculate": "datum.year=='2024-25' ? '2024–25: borrowing back up, visits not' : datum.year=='2010-11' ? '2010–11' : datum.year=='2015-16' ? '2015–16' : datum.year=='2019-20' ? '2019–20' : '2020–21'",  // new column calculated with this formula
+          "as": "lab"  // name of the new column: lab
+        }
+      ],
+      "mark": {  // MARK: the shape drawn for each row
+        "type": "text",  // shape / type: text
+        "align": "left",  // text alignment
+        "dx": 9,  // nudge sideways (px): 9
+        "dy": -8,  // nudge up (negative) or down (px): -8
+        "fontSize": 12,  // text size (px): 12
+        "fontWeight": "bold",  // text boldness
+        "color": "#2d2a26"  // colour #2d2a26
+      },
+      "encoding": {  // ENCODING: which data column controls which visual channel
+        "text": {  // the text shown
+          "field": "lab"  // uses the 'lab' column
+        }
+      }
+    }
+  ]
+}

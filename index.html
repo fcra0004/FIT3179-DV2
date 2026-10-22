@@ -33,20 +33,21 @@
   <div class="wrap">
     <!-- h1 = page heading, h2 = section heading -->
     <!-- <br> = line break, <em> = emphasis (italics) -->
-    <h1>The subscription<br><em>you forgot you had</em></h1>
+    <h1>The Subscription<br><em>You Forgot You Had!</em></h1>
 
     <!-- subtitle -->
-    <p class="subtitle">Most Australians stop using their public library when they leave school. For 18 to 34 year olds who did: what a free library card gets you today, and why it's worth picking back up.</p>
+    <p class="subtitle">Most Australians stop using their public library when they leave school. Find out what a free library card gets you today, and why you should consider picking one back up!</p>
   </div>
 </header>
 
-<!-- ================= MAIN STORY: five sections. Each section = story text on the left + chart cards on the right ================= -->
+<!-- ================= MAIN STORY: six sections. Each section = story text on the left + chart cards on the right ================= -->
+<!-- Story arc: 1 the hook (what you pay) → 2–3 why we stopped going → 4–5 what the library offers now → 6 the payoff (find yours) -->
 <!-- <main> = the main content of the page; class "wrap" keeps it max 1240px wide and centred -->
 <main class="wrap">
 
-  <!-- ===== SECTION 1: "There's one near you" | chart: zoomable library map (specs/s1_dotmap_clustered_library_locations.vg.json) ===== -->
-  <!-- <section> = one chapter of the story; id="find" lets the "Find yours." link at the bottom jump back here -->
-  <section class="chapter" id="find">
+  <!-- ===== SECTION 1: "What are you paying for?" | chart: subscription cost waterfall (specs/s1_waterfall_subscription_costs.vg.json) ===== -->
+  <!-- <section> = one chapter of the story; the id lets links jump to it -->
+  <section class="chapter" id="cost">
     <!-- two-column layout: story on the left (4 parts), charts on the right (8 parts) -->
     <div class="chapter-grid">
 
@@ -54,38 +55,27 @@
       <!-- class "story" makes this column stick in view while you scroll past the charts -->
       <div class="story">
         <!-- section heading -->
-        <h2>1 – There's one near you</h2>
+        <h2>1 – What Are You Paying For?</h2>
         <!-- lede = the first, larger intro paragraph -->
-        <p class="lede">Did you know Australia has this many public libraries? Can you find the one closest to where you live?</p>
-        <!-- big-number call-out: <aside> = side note, "pull ink" = dark colour; <span class="big"> = the large number -->
-        <aside class="pull ink"><span class="big">1,409</span> public library branches across Australia in 2024–25, plus 90 mobile libraries</aside>
+        <p class="lede">Add up the services you pay for to read, listen and watch. A free library card already covers all of them!</p>
+        <!-- big-number call-out: "fund" = dark red (matches the cost bars) -->
+        <aside class="pull fund"><span class="big">$785</span> a year for ebooks, audiobooks, magazines and films on four popular apps, at current Australian prices.</aside>
         <!-- <p> = normal paragraph -->
-        <p>Joining is free, and one card works across every branch in your council area.</p>
+        <p>Many Australians don't use their library card, or never even got one. Keep reading to find out what they're missing out on.</p>
       </div>
 
       <!-- RIGHT COLUMN: chart cards -->
       <div class="visuals">
-        <!-- MAP CARD: <figure class="card"> = white box around the chart -->
+        <!-- chart card: <figure class="card"> = white box around the chart -->
         <figure class="card">
-          <!-- top row of the card: map title on the left, controls on the right -->
-          <div class="map-head">
-            <!-- map title -->
-            <p class="map-title">Every public library branch in Australia</p>
-            <div class="map-controls">
-              <!-- empty slot: embed.js moves the map's "Jump to" city drop-down in here -->
-              <div class="jump-slot"></div>
-              <!-- zoom buttons: data-zoom tells embed.js what each button does; aria-label = name read out by screen readers -->
-              <div class="zoom-buttons">
-                <button type="button" data-zoom="in" aria-label="Zoom in">+</button>
-                <button type="button" data-zoom="out" aria-label="Zoom out">−</button>
-                <button type="button" data-zoom="reset">Reset</button>
-              </div>
-            </div>
-          </div>
-          <!-- "how to use" hint: <svg> draws the small magnifying-glass icon (circle + handle), <span> holds the text -->
-          <p class="hint"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6" fill="none" stroke-width="2.6"/><path d="M14.5 14.5 L20 20" stroke-width="3" fill="none"/></svg><span>Scroll or use + and − to zoom, drag to move, or pick a city. Groups split into single libraries as you zoom in.</span></p>
-          <!-- empty chart box: embed.js draws specs/s1_dotmap_clustered_library_locations.vg.json in here (the id = the spec file's name) -->
-          <div class="chart" id="s1_dotmap_clustered_library_locations"></div>
+          <!-- "how to use" hint: <svg> draws the small pointer icon, <span> holds the text -->
+          <p class="hint"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3 L19 12 L13 13.4 L10.2 19.5 Z"/></svg><span>Untick the apps you don't pay for to see your own yearly total.</span></p>
+          <!-- chart title, written in HTML (not in the spec) so the checkboxes can sit underneath it -->
+          <p class="chart-title">Yearly cost of apps a library card covers for free ($AUD)</p>
+          <!-- empty slot: embed.js moves the chart's four checkboxes in here -->
+          <div class="sub-slot"></div>
+          <!-- empty chart box: embed.js draws specs/s1_waterfall_subscription_costs.vg.json in here (the id = the spec file's name) -->
+          <div class="chart" id="s1_waterfall_subscription_costs"></div>
         </figure>
       </div>
     </div>
@@ -97,12 +87,11 @@
 
       <!-- LEFT COLUMN -->
       <div class="story">
-        <h2>2 – Least likely to walk in</h2>
+        <h2>2 – Why Don't We Use It?</h2>
         <p class="lede">For most of us, the library was a school-years thing. Once we leave, 18 to 34 year olds become some of the least likely Australians to walk through a library door.</p>
         <!-- big-number call-outs: "visits" = amber (matches the young-adult bars), "member" = green (matches the waffle) -->
-        <aside class="pull visits"><span class="big">18%</span> of 18–24 year olds visited a library in 2021–22, down from 28% of 15–17 year olds</aside>
-        <aside class="pull member"><span class="big">28.8%</span> of Australians hold a library card, fewer than 3 in 10</aside>
-        <p>The rest of this page shows what everyone else is missing.</p>
+        <aside class="pull visits"><span class="big">18%</span> of 18–24 year olds visited a library in 2021–22, down from 28% of 15–17 year olds.</aside>
+        <aside class="pull member"><span class="big">28.8%</span> of Australians currently hold a library card, fewer than 3 in 10.</aside>
       </div>
 
       <!-- RIGHT COLUMN -->
@@ -113,7 +102,6 @@
         </figure>
         <!-- chart card: visits line chart + card-holder waffle (specs/s2_line_waffle_visits_and_card_holders.vg.json) -->
         <figure class="card">
-          <!-- hint with a pointer (arrow) icon -->
           <p class="hint"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3 L19 12 L13 13.4 L10.2 19.5 Z"/></svg><span>Move along the visits line to see what share of Australians held a library card that year.</span></p>
           <div class="chart" id="s2_line_waffle_visits_and_card_holders"></div>
         </figure>
@@ -127,16 +115,16 @@
 
       <!-- LEFT COLUMN -->
       <div class="story">
-        <h2>3 – It's not just you</h2>
-        <p class="lede">The whole country drifted away from the library through the 2010s, as paid subscriptions became the default way to read, watch and listen.</p>
-        <!-- big-number call-outs: "borrow" = navy (matches the borrowing line) -->
+        <h2>3 – It's Not Just You</h2>
+        <p class="lede">The whole country drifted away from the library through the 2010s, as paid subscriptions became the default way to read, watch and listen. Then the lockdowns closed the doors.</p>
+        <!-- big-number call-outs: "borrow" = navy (matches the borrowing charts) -->
         <aside class="pull borrow"><span class="big">8.1 → 5.5</span> items borrowed per Australian a year, 2010–11 to 2019–20</aside>
-        <aside class="pull borrow"><span class="big">−32%</span> fall in borrowing per person in the Northern Territory over the decade, the steepest of any state. Tasmania and the ACT were close behind.</aside>
+        <aside class="pull borrow"><span class="big">−32%</span> fall in borrowing per person in the Northern Territory over the decade, the steepest of any state</aside>
       </div>
 
       <!-- RIGHT COLUMN -->
       <div class="visuals">
-        <!-- chart card: borrowing and visits per person (specs/s3_line_borrowing_visits_per_person.vg.json) -->
+        <!-- chart card: borrowing and visits per person over time (specs/s3_line_borrowing_visits_per_person.vg.json) -->
         <figure class="card">
           <div class="chart" id="s3_line_borrowing_visits_per_person"></div>
         </figure>
@@ -149,28 +137,29 @@
     </div>
   </section>
 
-  <!-- ===== SECTION 4: "The library is in your pocket" | charts: loans area chart + phone/book pictogram + "Find your state" explorer ===== -->
+  <!-- ===== SECTION 4: "The library is in your pocket" | charts: loans area chart + state Marimekko + "Find your state" explorer ===== -->
   <section class="chapter" id="digital">
     <div class="chapter-grid">
 
       <!-- LEFT COLUMN -->
       <div class="story">
-        <h2>4 – The library is in your pocket</h2>
+        <h2>4 – The Library Is in Your Pocket</h2>
         <p class="lede">You don't even have to go in. With a free card, apps like Libby, BorrowBox and Hoopla let you borrow ebooks and audiobooks on the train, in bed, or anywhere else.</p>
         <!-- big-number call-out: "digital" = teal (matches digital loans) -->
         <aside class="pull digital"><span class="big">61 million</span> ebooks, audiobooks and streams borrowed in 2024–25, nearly three times as many as in 2018–19</aside>
-        <p>No queues and no late fees: digital loans return themselves when they're due.</p>
+        <p>In every state, at least 29% of loans are now digital. No queues and no late fees: digital loans return themselves when they're due.</p>
       </div>
 
       <!-- RIGHT COLUMN -->
       <div class="visuals">
-        <!-- chart card: physical vs digital loans (specs/s4_stacked_area_physical_vs_digital_loans.vg.json) -->
+        <!-- chart card: physical vs digital loans over time (specs/s4_stacked_area_physical_vs_digital_loans.vg.json) -->
         <figure class="card">
           <div class="chart" id="s4_stacked_area_physical_vs_digital_loans"></div>
         </figure>
-        <!-- chart card: phones vs books pictogram (specs/s4_pictogram_digital_share_of_loans.vg.json) -->
+        <!-- chart card: 2024–25 loans by state and format (specs/s4_marimekko_state_loans_by_format.vg.json) -->
         <figure class="card">
-          <div class="chart" id="s4_pictogram_digital_share_of_loans"></div>
+          <p class="hint"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3 L19 12 L13 13.4 L10.2 19.5 Z"/></svg><span>Wider columns borrow more. Hover over a block for that state's figures.</span></p>
+          <div class="chart" id="s4_marimekko_state_loans_by_format"></div>
         </figure>
       </div>
     </div>
@@ -179,7 +168,7 @@
     <div class="explorer">
       <!-- explorer heading: h3 = smaller heading inside a section -->
       <div class="explorer-head">
-        <h3>Find your state</h3>
+        <h3>Find Your State</h3>
         <p>Ebooks were barely 2% of loans in 2014–15. Slide through the years to watch digital borrowing spread, then click your state.</p>
       </div>
       <figure class="card">
@@ -196,7 +185,7 @@
           <!-- two hints: slider icon (line + knob), then pointer icon -->
           <div class="control-hints">
             <p class="hint"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12 H21" stroke-width="2.4" fill="none"/><circle cx="14" cy="12" r="4.2"/></svg><span>Drag the slider to change the year on all three charts.</span></p>
-            <p class="hint"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3 L19 12 L13 13.4 L10.2 19.5 Z"/></svg><span>Click a state on either map to see its borrowing.</span></p>
+            <p class="hint"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3 L19 12 L13 13.4 L10.2 19.5 Z"/></svg><span>Click a state on the left-most map to see its borrowing.</span></p>
           </div>
         </div>
         <!-- chart box: choropleth + symbol map + bar chart, all from specs/s4_choropleth_symbolmap_bars_state_explorer.vg.json -->
@@ -211,7 +200,7 @@
 
       <!-- LEFT COLUMN -->
       <div class="story">
-        <h2>5 – A free place to study, work and meet</h2>
+        <h2>5 – A Free Place to Study, Work and Meet</h2>
         <p class="lede">Libraries are also some of the last free places to sit, study and get online.</p>
         <!-- big-number call-out: "program" = plum (matches the heatmap) -->
         <aside class="pull program"><span class="big">938,000</span> hours of library study and meeting rooms booked in 2024–25, nearly double 2021–22</aside>
@@ -229,10 +218,52 @@
     </div>
   </section>
 
+  <!-- ===== SECTION 6: "Find yours" | chart: zoomable library map (specs/s6_dotmap_clustered_library_locations.vg.json) ===== -->
+  <!-- the payoff: after seeing what the library offers, the reader finds their nearest branch -->
+  <section class="chapter" id="find">
+    <div class="chapter-grid">
+
+      <!-- LEFT COLUMN -->
+      <div class="story">
+        <h2>6 – Find Yours</h2>
+        <p class="lede">There is almost certainly a library near you. Zoom in to find the closest one.</p>
+        <!-- big-number call-out: "ink" = dark (matches the map's group circles) -->
+        <aside class="pull ink"><span class="big">1,409</span> public library branches across Australia in 2024–25, plus 90 mobile libraries</aside>
+        <p>Joining is free, usually takes a few minutes online, and one card works across every branch in your council area.</p>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div class="visuals">
+        <!-- MAP CARD: title, "Jump to" drop-down (moved here by embed.js), zoom buttons, hint, then the map itself -->
+        <figure class="card">
+          <!-- top row of the card: map title on the left, controls on the right -->
+          <div class="map-head">
+            <!-- map title -->
+            <p class="map-title">Every public library branch in Australia</p>
+            <div class="map-controls">
+              <!-- empty slot: embed.js moves the map's "Jump to" city drop-down in here -->
+              <div class="jump-slot"></div>
+              <!-- zoom buttons: data-zoom tells embed.js what each button does; aria-label = name read out by screen readers -->
+              <div class="zoom-buttons">
+                <button type="button" data-zoom="in" aria-label="Zoom in">+</button>
+                <button type="button" data-zoom="out" aria-label="Zoom out">−</button>
+                <button type="button" data-zoom="reset">Reset</button>
+              </div>
+            </div>
+          </div>
+          <!-- "how to use" hint with a magnifying-glass icon (circle + handle) -->
+          <p class="hint"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6" fill="none" stroke-width="2.6"/><path d="M14.5 14.5 L20 20" stroke-width="3" fill="none"/></svg><span>Scroll or use + and − to zoom, drag to move, or pick a city. Groups split into single libraries as you zoom in.</span></p>
+          <!-- empty chart box: embed.js draws specs/s6_dotmap_clustered_library_locations.vg.json in here -->
+          <div class="chart" id="s6_dotmap_clustered_library_locations"></div>
+        </figure>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== CLOSING LINE: call to action ===== -->
   <section class="closing">
-    <!-- <a href="#find"> = link that jumps back to Section 1 (the map), which has id="find" -->
-    <p class="closing-text">Your library card is free, it fits in your phone, and there is almost certainly a branch near you. <a href="#find">Find yours.</a></p>
+    <!-- <a href="#cost"> = link that jumps back to Section 1 (the cost chart), which has id="cost" -->
+    <p class="closing-text">Your library card is free, it fits in your phone, and it covers <a href="#cost">$785 a year</a> of apps. Find your branch above and pick it back up.</p>
   </section>
 
 </main>
@@ -254,6 +285,7 @@
         <li>ALIA &amp; NSLA, <a href="https://read.alia.org.au/library-statistics"><em>Australian Public Libraries Statistical Report</em></a>, 2014–15, 2015–16, 2021–22 to 2024–25</li>
         <li>ABS, <a href="https://www.abs.gov.au/statistics/people/people-and-communities/cultural-and-creative-activities/latest-release"><em>Cultural and creative activities, 2021–22</em></a></li>
         <li>Library locations: <a href="https://www.nswnet.net/libraries-list">NSW public library directory</a>; <a href="https://www.localgovernment.vic.gov.au/funding-programs/public-library-funding">Directory of Public Library Services in Victoria 2026</a>; state library lists for Qld, WA, SA, Tas, NT and ACT</li>
+        <li>App prices (A$ per month): <a href="https://www.reviews.org/au/technology/kindle-unlimited/">Kindle Unlimited</a>, <a href="https://www.audible.com.au/ep/memberbenefits">Audible Premium</a>, <a href="https://www.apple.com/au/apple-news/">Apple News+</a>, <a href="https://www.whistleout.com.au/PayTV/Guides/mubi-australia-everything-you-need-to-know">MUBI</a>; checked October 2026</li>
         <li>Boundaries: <a href="https://github.com/rowanhogan/australian-states">rowanhogan/australian-states</a> · suburb coordinates: <a href="https://github.com/matthewproctor/australianpostcodes">matthewproctor/australianpostcodes</a></li>
       </ul>
     </div>

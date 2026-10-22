@@ -9,7 +9,7 @@
      5. BIG NUMBERS (.pull call-outs in the story column)
      6. CHART CARDS (white boxes around charts)
      7. "HOW TO USE" HINTS inside chart cards
-     8. SECTION 1 MAP: title row, "Jump to" drop-down, zoom buttons
+     8. SECTION 6 MAP: title row, "Jump to" drop-down, zoom buttons
      9. SECTION 4 "FIND YOUR STATE": heading, year, slider bar
     10. CLOSING LINE
     11. FOOTER
@@ -17,7 +17,7 @@
 
    Colours carry meaning and match the charts:
    borrowing = navy, physical = terracotta, digital = teal,
-   visits = amber, members = green, programs = plum
+   visits = amber, members = green, programs = plum, app costs = dark red
    ============================================================ */
 
 
@@ -36,6 +36,7 @@
   --visits: #d4901c;     /* in-person visits and young adults */
   --member: #3f7d4e;     /* library card holders */
   --program: #a33b6a;    /* programs and meeting rooms */
+  --fund: #8f2d2d;       /* money: app costs in Section 1 */
 
   --serif: "Fraunces", Georgia, serif;          /* headings and big numbers */
   --sans: "Source Sans 3", system-ui, sans-serif; /* body text */
@@ -119,6 +120,7 @@ h2 { font-size: 40px; font-weight: 800; letter-spacing: -0.01em; margin: 0 0 14p
 .pull.visits { border-color: var(--visits); } .pull.visits .big { color: #b9770e; }
 .pull.member { border-color: var(--member); } .pull.member .big { color: var(--member); }
 .pull.program { border-color: var(--program); } .pull.program .big { color: var(--program); }
+.pull.fund { border-color: var(--fund); } .pull.fund .big { color: var(--fund); }
 .pull.ink { border-color: var(--ink); } .pull.ink .big { color: var(--ink); }
 
 
@@ -131,9 +133,14 @@ h2 { font-size: 40px; font-weight: 800; letter-spacing: -0.01em; margin: 0 0 14p
   background: var(--card);
   border: 1px solid var(--rule);
   border-radius: 8px;
-  padding: 16px 18px 12px;
+  padding: 16px 18px;   /* same space above and below the chart */
 }
 .chart { width: 100%; min-width: 0; }   /* the box each chart is drawn into */
+/* centre each chart in its card, and remove the small gap browsers leave under inline canvases
+   (vega-embed adds the class "vega-embed" to the chart box itself) */
+.chart.vega-embed { display: block; padding: 0; }
+.chart canvas, .chart svg { display: block; margin: 0 auto; }
+.vega-bindings:empty { display: none; }   /* charts without controls get no empty gap underneath */
 
 /* Drop-downs and sliders that Vega creates (embed.js moves them into the cards) */
 .vega-bindings { font-family: var(--sans); font-size: 15px; font-weight: 600; margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: center; }
@@ -142,6 +149,13 @@ h2 { font-size: 40px; font-weight: 800; letter-spacing: -0.01em; margin: 0 0 14p
 /* default slider width (the explorer slider is set wider in section 9) */
 .vega-bindings input[type="range"] { width: 160px; vertical-align: middle; }
 
+
+/* Section 1: chart title written in HTML, matching the titles drawn inside the charts */
+.chart-title { margin: 0 0 8px; font-family: var(--serif); font-size: 20px; font-weight: 800; line-height: 1.2; color: var(--ink); }
+/* Section 1: the four app checkboxes in one row under the title, above the waterfall */
+.sub-slot .vega-bindings { margin: 0 0 10px; gap: 4px 22px; }
+.sub-slot .vega-bind label { display: flex; align-items: center; gap: 6px; flex-direction: row-reverse; }
+.sub-slot input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--fund); margin: 0; }
 
 /* ---------- 7. "HOW TO USE" HINTS inside chart cards ---------- */
 /* hint box: icon + bold text on a pale background with a terracotta bar on the left */
@@ -162,7 +176,7 @@ h2 { font-size: 40px; font-weight: 800; letter-spacing: -0.01em; margin: 0 0 14p
 .ico { flex: none; width: 18px; height: 18px; fill: var(--physical); stroke: var(--physical); }   /* the small pointer / slider / magnifier icons */
 
 
-/* ---------- 8. SECTION 1 MAP: title row, "Jump to" drop-down, zoom buttons ---------- */
+/* ---------- 8. SECTION 6 MAP: title row, "Jump to" drop-down, zoom buttons ---------- */
 /* map title on the left, controls on the right, in one row */
 .map-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
 .map-title { margin: 0; font-family: var(--serif); font-size: 20px; font-weight: 800; }   /* "Every public library branch in Australia" */
@@ -180,7 +194,7 @@ h2 { font-size: 40px; font-weight: 800; letter-spacing: -0.01em; margin: 0 0 14p
 }
 /* slightly darker when the mouse is over it */
 .zoom-buttons button:hover { background: #f1e9db; }
-#s1_dotmap_clustered_library_locations { cursor: grab; }   /* hand cursor shows the map can be dragged */
+#s6_dotmap_clustered_library_locations { cursor: grab; }   /* hand cursor shows the map can be dragged */
 
 
 /* ---------- 9. SECTION 4 "FIND YOUR STATE": heading, year, slider bar ---------- */

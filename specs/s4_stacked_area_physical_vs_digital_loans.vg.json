@@ -1,11 +1,8 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "CHART: 'Physical holds steady, digital keeps growing' (Section 4, top card). Stacked area chart of items borrowed per year in millions: physical (terracotta) under digital (teal), so the top edge is total borrowing. CHANNELS: x position = year (ordinal).",
-  "title": {
-    "text": "Physical holds steady, digital keeps growing",
-    "subtitle": "Items borrowed per year, millions — all growth since 2018–19 is digital"
-  },
-  "width": 650,
+  "description": "CHART: 'National items borrowed per year (millions)' (Section 4, top card). Stacked area chart of items borrowed per year in millions: physical (terracotta) under digital (teal), so the top edge is total borrowing. CHANNELS: x position = year (ordinal).",
+  "title": "National items borrowed per year (millions)",
+  "width": 620,
   "height": 300,
   "data": {
     "url": "data/loans_by_format.csv"
@@ -16,6 +13,16 @@
       "type": "ordinal",
       "title": null,
       "scale": {
+        "type": "point",
+        "domain": [
+          "2018-19",
+          "2019-20",
+          "2020-21",
+          "2021-22",
+          "2022-23",
+          "2023-24",
+          "2024-25"
+        ],
         "padding": 0
       },
       "axis": {
@@ -25,7 +32,7 @@
   },
   "layer": [
     {
-      "description": "LAYER 1 - THE STACKED AREAS. CHANNELS: y position = loans_millions (quantitative); colour = format (nominal); stack order = format.",
+      "description": "LAYER 1 - THE STACKED AREAS. CHANNELS: y position = loans_millions (quantitative); colour = format (nominal); line/stack order = format.",
       "mark": {
         "type": "area",
         "opacity": 0.92
@@ -35,7 +42,7 @@
           "field": "loans_millions",
           "type": "quantitative",
           "stack": true,
-          "title": null,
+          "title": "Items borrowed (millions)",
           "scale": {
             "domain": [
               0,
@@ -59,7 +66,13 @@
               "#13827f"
             ]
           },
-          "legend": null
+          "legend": {
+            "orient": "top",
+            "title": null,
+            "direction": "horizontal",
+            "labelFontSize": 13,
+            "labelExpr": "datum.label == 'Physical items' ? 'Physical' : datum.label"
+          }
         },
         "order": {
           "field": "format",
@@ -93,7 +106,20 @@
       "encoding": {
         "x": {
           "field": "year",
-          "type": "ordinal"
+          "type": "ordinal",
+          "scale": {
+            "type": "point",
+            "domain": [
+              "2018-19",
+              "2019-20",
+              "2020-21",
+              "2021-22",
+              "2022-23",
+              "2023-24",
+              "2024-25"
+            ],
+            "padding": 0
+          }
         },
         "y": {
           "field": "y",
@@ -131,7 +157,20 @@
       "encoding": {
         "x": {
           "field": "year",
-          "type": "ordinal"
+          "type": "ordinal",
+          "scale": {
+            "type": "point",
+            "domain": [
+              "2018-19",
+              "2019-20",
+              "2020-21",
+              "2021-22",
+              "2022-23",
+              "2023-24",
+              "2024-25"
+            ],
+            "padding": 0
+          }
         },
         "y": {
           "field": "y",

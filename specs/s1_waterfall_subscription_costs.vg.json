@@ -1,0 +1,430 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "CHART: 'Yearly cost of apps a library card covers for free (A$)' - its title is written in index.html so the checkboxes can sit under it (Section 1). Waterfall chart: each red bar adds one app's yearly cost on top of the last, the dark bar is the total, and the library card is $0. PARAMS: four checkboxes (kindle, audible, news, mubi) - unticking one sets its cost to 0. TRANSFORMS: 'ticked' checks the box for each app, 'yearly' = monthly price x 12 (or 0 if unticked), the window sum gives each bar's top ('end'), and 'start' = end - yearly gives its bottom. 'next' names the following bar so the dashed connector line knows where to go. CHANNELS: x position = service (nominal).",
+  "width": 685,
+  "height": 300,
+  "params": [
+    {
+      "name": "kindle",
+      "value": true,
+      "bind": {
+        "input": "checkbox",
+        "name": "Kindle Unlimited"
+      }
+    },
+    {
+      "name": "audible",
+      "value": true,
+      "bind": {
+        "input": "checkbox",
+        "name": "Audible Premium"
+      }
+    },
+    {
+      "name": "news",
+      "value": true,
+      "bind": {
+        "input": "checkbox",
+        "name": "Apple News+"
+      }
+    },
+    {
+      "name": "mubi",
+      "value": true,
+      "bind": {
+        "input": "checkbox",
+        "name": "MUBI"
+      }
+    }
+  ],
+  "data": {
+    "url": "data/subscription_prices.csv",
+    "format": {
+      "parse": {
+        "monthly_aud": "number",
+        "order": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "calculate": "(datum.key=='kindle' && kindle) || (datum.key=='audible' && audible) || (datum.key=='news' && news) || (datum.key=='mubi' && mubi)",
+      "as": "ticked"
+    },
+    {
+      "calculate": "datum.ticked ? round(datum.monthly_aud*12) : 0",
+      "as": "yearly"
+    },
+    {
+      "window": [
+        {
+          "op": "sum",
+          "field": "yearly",
+          "as": "end"
+        }
+      ],
+      "sort": [
+        {
+          "field": "order"
+        }
+      ],
+      "frame": [
+        null,
+        0
+      ]
+    },
+    {
+      "calculate": "datum.end - datum.yearly",
+      "as": "start"
+    },
+    {
+      "window": [
+        {
+          "op": "lead",
+          "field": "service",
+          "as": "lead"
+        }
+      ],
+      "sort": [
+        {
+          "field": "order"
+        }
+      ]
+    },
+    {
+      "calculate": "datum.order < 4 ? datum.lead : 'You pay'",
+      "as": "next"
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "service",
+      "type": "nominal",
+      "title": null,
+      "scale": {
+        "domain": [
+          "Kindle Unlimited",
+          "Audible Premium",
+          "Apple News+",
+          "MUBI",
+          "You pay",
+          "Library card"
+        ],
+        "paddingInner": 0.28
+      },
+      "axis": {
+        "labelAngle": 0,
+        "domain": false,
+        "ticks": false,
+        "labelFontSize": 13,
+        "labelFontWeight": 600,
+        "labelPadding": 8,
+        "labelExpr": "split(datum.label, ' ')",
+        "labelLineHeight": 15
+      }
+    }
+  },
+  "layer": [
+    {
+      "description": "LAYER 1 - THE FLOATING COST BARS: each runs from 'start' to 'end'. Unticked apps fade. CHANNELS: y position = start (quantitative); y end = end; opacity changes when datum.ticked.",
+      "mark": {
+        "type": "bar",
+        "color": "#8f2d2d",
+        "cornerRadius": 2
+      },
+      "encoding": {
+        "y": {
+          "field": "start",
+          "type": "quantitative",
+          "title": null,
+          "scale": {
+            "domain": [
+              0,
+              850
+            ]
+          },
+          "axis": {
+            "labelExpr": "'$'+datum.label",
+            "tickCount": 5,
+            "domain": false,
+            "ticks": false
+          }
+        },
+        "y2": {
+          "field": "end"
+        },
+        "opacity": {
+          "condition": {
+            "test": "datum.ticked",
+            "value": 1
+          },
+          "value": 0.25
+        },
+        "tooltip": [
+          {
+            "field": "service",
+            "title": "App"
+          },
+          {
+            "field": "covers",
+            "title": "For"
+          },
+          {
+            "field": "monthly_aud",
+            "title": "A$ per month",
+            "format": ".2f"
+          },
+          {
+            "field": "yearly",
+            "title": "A$ per year"
+          },
+          {
+            "field": "library_alternative",
+            "title": "Free with a library card via"
+          }
+        ]
+      }
+    },
+    {
+      "description": "LAYER 2 - DASHED CONNECTOR LINES from the top of each bar to the next bar (the waterfall steps). CHANNELS: y position = end (quantitative); x position = service (nominal); x end = next.",
+      "mark": {
+        "type": "rule",
+        "color": "#8a8378",
+        "strokeDash": [
+          3,
+          3
+        ]
+      },
+      "encoding": {
+        "y": {
+          "field": "end",
+          "type": "quantitative"
+        },
+        "x": {
+          "field": "service",
+          "type": "nominal",
+          "bandPosition": 1
+        },
+        "x2": {
+          "field": "next",
+          "bandPosition": 0
+        }
+      }
+    },
+    {
+      "description": "LAYER 3 - '+$168' STYLE LABELS above each bar ('not ticked' if unticked). CHANNELS: y position = end (quantitative); text = lab; opacity changes when datum.ticked.",
+      "transform": [
+        {
+          "calculate": "datum.ticked ? '+$' + datum.yearly : 'not ticked'",
+          "as": "lab"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "dy": -9,
+        "fontSize": 13,
+        "fontWeight": "bold",
+        "color": "#8f2d2d"
+      },
+      "encoding": {
+        "y": {
+          "field": "end",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "lab"
+        },
+        "opacity": {
+          "condition": {
+            "test": "datum.ticked",
+            "value": 1
+          },
+          "value": 0.6
+        }
+      }
+    },
+    {
+      "description": "LAYER 4 - WHAT EACH APP IS FOR (Ebooks, Audiobooks...) written inside the bar. CHANNELS: y position = end (quantitative); text = covers.",
+      "mark": {
+        "type": "text",
+        "dy": 14,
+        "fontSize": 12,
+        "color": "white",
+        "baseline": "top"
+      },
+      "transform": [
+        {
+          "filter": "datum.ticked"
+        }
+      ],
+      "encoding": {
+        "y": {
+          "field": "end",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "covers"
+        }
+      }
+    },
+    {
+      "description": "LAYER 5 - THE DARK 'YOU PAY' TOTAL BAR: adds up all ticked apps (aggregate sum) and draws a bar from 0 to the total. CHANNELS: y position = zero (quantitative); y end = total.",
+      "transform": [
+        {
+          "aggregate": [
+            {
+              "op": "sum",
+              "field": "yearly",
+              "as": "total"
+            }
+          ]
+        },
+        {
+          "calculate": "'You pay'",
+          "as": "service"
+        },
+        {
+          "calculate": "0",
+          "as": "zero"
+        }
+      ],
+      "mark": {
+        "type": "bar",
+        "color": "#2d2a26",
+        "cornerRadius": 2
+      },
+      "encoding": {
+        "y": {
+          "field": "zero",
+          "type": "quantitative"
+        },
+        "y2": {
+          "field": "total"
+        },
+        "tooltip": [
+          {
+            "field": "total",
+            "title": "Total A$ per year"
+          }
+        ]
+      }
+    },
+    {
+      "description": "LAYER 6 - THE TOTAL LABEL, e.g. '$785 a year'. CHANNELS: y position = total (quantitative); text = lab.",
+      "transform": [
+        {
+          "aggregate": [
+            {
+              "op": "sum",
+              "field": "yearly",
+              "as": "total"
+            }
+          ]
+        },
+        {
+          "calculate": "'You pay'",
+          "as": "service"
+        },
+        {
+          "calculate": "'$'+format(datum.total,',')+' a year'",
+          "as": "lab"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "dy": -9,
+        "fontSize": 15,
+        "fontWeight": "bold",
+        "color": "#2d2a26"
+      },
+      "encoding": {
+        "y": {
+          "field": "total",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "lab"
+        }
+      }
+    },
+    {
+      "description": "LAYER 7 - TEAL LINE at $0 for the library card. CHANNELS: y position = v (quantitative).",
+      "data": {
+        "values": [
+          {
+            "service": "Library card",
+            "v": 0
+          }
+        ]
+      },
+      "mark": {
+        "type": "tick",
+        "color": "#13827f",
+        "thickness": 4,
+        "bandSize": 60
+      },
+      "encoding": {
+        "y": {
+          "field": "v",
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "description": "LAYER 8 - BIG '$0' above the library card line. CHANNELS: y position = v (quantitative); text = t.",
+      "data": {
+        "values": [
+          {
+            "service": "Library card",
+            "v": 0,
+            "t": "$0"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "fontWeight": "bold",
+        "fontSize": 26,
+        "color": "#13827f",
+        "dy": -26
+      },
+      "encoding": {
+        "y": {
+          "field": "v",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    },
+    {
+      "description": "LAYER 9 - 'covers all four' above the $0. CHANNELS: y position = v (quantitative); text = t.",
+      "data": {
+        "values": [
+          {
+            "service": "Library card",
+            "v": 0,
+            "t": "covers all four services"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "fontWeight": "bold",
+        "fontSize": 13,
+        "color": "#13827f",
+        "dy": -50
+      },
+      "encoding": {
+        "y": {
+          "field": "v",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    }
+  ]
+}
