@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "CHART GROUP: 'Find your state' explorer (Section 4, wide card). Three charts side by side, all driven by the PARAMS below: 'yi' = the year slider (0-10), 'yrLabel' = turns the slider number into a year like '2024-25' (also shown in big type above the maps by js/embed.js), 'pick' = the state clicked on either map (starts on Victoria).",
+  "description": "CHART GROUP: 'Find your state' explorer (Section 4, wide card). Three charts side by side, all driven by the PARAMS below: 'yi' = the year slider (0-10), 'yrLabel' = turns the slider number into a year like '2024-25' (also shown in big type above the maps by js/embed.js), 'pick' = the state clicked on either map (starts on Victoria). Clicks only count when they land on a state ('on' filter), so clicking empty space keeps the current state.",
   "params": [
     {
       "name": "yi",
@@ -25,7 +25,8 @@
           "state"
         ],
         "toggle": false,
-        "clear": false
+        "clear": false,
+        "on": "click[event.item && event.item.datum && event.item.datum.state]"
       },
       "value": [
         {
@@ -326,7 +327,7 @@
       "height": 250,
       "title": {
         "text": {
-          "expr": "(pick && pick.state ? pick.state[0] : 'All states') + ': items borrowed per person'"
+          "expr": "(pick && pick.state ? ['ACT','NSW','NT','QLD','SA','TAS','VIC','WA'][indexof(['Australian Capital Territory','New South Wales','Northern Territory','Queensland','South Australia','Tasmania','Victoria','Western Australia'], pick.state[0])] : 'All states') + ': items borrowed per person'"
         },
         "fontSize": 16
       },
