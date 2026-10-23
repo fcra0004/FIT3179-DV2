@@ -46,7 +46,15 @@
       "width": 340,
       "height": 290,
       "projection": {
-        "type": "mercator"
+        "type": "conicEqualArea",
+        "parallels": [
+          -18,
+          -36
+        ],
+        "rotate": [
+          -132,
+          0
+        ]
       },
       "title": {
         "text": "Digital share of loans (%)",
@@ -143,7 +151,15 @@
       "width": 340,
       "height": 290,
       "projection": {
-        "type": "mercator"
+        "type": "conicEqualArea",
+        "parallels": [
+          -18,
+          -36
+        ],
+        "rotate": [
+          -132,
+          0
+        ]
       },
       "title": {
         "text": "In-person visits (millions)",
