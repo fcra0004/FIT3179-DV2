@@ -12,12 +12,12 @@
 
 // ---------- 1. THEME: shared look for every chart, so fonts, sizes and colours match the page ----------
 var theme = {
-  font: "Source Sans 3",
+  font: "'Source Sans 3'",
   background: "transparent",
   padding: 4,
   title: {
-    font: "Fraunces", fontSize: 20, fontWeight: 800, anchor: "start", color: "#2d2a26",
-    subtitleFont: "Source Sans 3", subtitleFontSize: 14, subtitleColor: "#6b6359", offset: 12
+    font: "'Fraunces'", fontSize: 20, fontWeight: 800, anchor: "start", color: "#2d2a26",
+    subtitleFont: "'Source Sans 3'", subtitleFontSize: 14, subtitleColor: "#6b6359", offset: 12
   },
   axis: {
     labelFontSize: 13, titleFontSize: 13, titleFontWeight: 400,
@@ -25,8 +25,8 @@ var theme = {
     gridColor: "#ece5d8", domainColor: "#c9c0b1", tickColor: "#c9c0b1"
   },
   legend: { labelFontSize: 13, titleFontSize: 13, labelLimit: 280 },
-  header: { labelFont: "Source Sans 3", labelFontSize: 14 },
-  text: { font: "Source Sans 3" },
+  header: { labelFont: "'Source Sans 3'", labelFontSize: 14 },
+  text: { font: "'Source Sans 3'" },
   view: { stroke: null }
 };
 

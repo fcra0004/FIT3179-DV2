@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "CHART PAIR: 'State rank by items borrowed per person' (bump chart, left) + 'Items per person, a decade later' (slope chart, right). Section 3, second card. The 'hover' param below is shared by both charts: hovering a state's line in either chart fades every other state (see 'opacity' in each chart).",
+  "description": "CHART PAIR: 'State rank by items borrowed per person (2021-25)' (bump chart, left) + 'Items per person, a decade later' (slope chart, right). Section 3, second card. The 'hover' param below is shared by both charts: hovering a state's line in either chart fades every other state (see 'opacity' in each chart).",
   "params": [
     {
       "name": "hover",
@@ -20,16 +20,16 @@
   ],
   "hconcat": [
     {
-      "description": "LEFT CHART - BUMP CHART: each state's rank by items borrowed per person, 2010-11 to 2015-16. The 'window' transform calculates the rank (1 = most) within each year. CHANNELS: x position = year (ordinal); y position = rank (ordinal); colour = state (nominal); opacity changes when selected in hover.",
+      "description": "LEFT CHART - BUMP CHART: each state's rank by items borrowed per person, 2021-22 to 2024-25 (state loans from the reports divided by ABS population). The 'window' transform calculates the rank (1 = most) within each year. CHANNELS: x position = year (ordinal); y position = rank (ordinal); colour = state (nominal); opacity changes when selected in hover.",
       "name": "bump",
       "width": 330,
       "height": 280,
       "title": {
-        "text": "State rank by items borrowed per person",
+        "text": "State rank by items borrowed per person (2021–25)",
         "fontSize": 16
       },
       "data": {
-        "url": "data/state_loans_per_person_2010_2016.csv",
+        "url": "data/state_loans_per_person_2021_2025.csv",
         "format": {
           "parse": {
             "loans_per_person": "number"
@@ -148,10 +148,10 @@
           }
         },
         {
-          "description": "BUMP LAYER 3 - STATE NAMES at the right end (2015-16). CHANNELS: text = state.",
+          "description": "BUMP LAYER 3 - STATE NAMES at the right end (2024-25). CHANNELS: text = state.",
           "transform": [
             {
-              "filter": "datum.year=='2015-16'"
+              "filter": "datum.year=='2024-25'"
             }
           ],
           "mark": {

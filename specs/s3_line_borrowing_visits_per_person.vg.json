@@ -38,7 +38,7 @@
       "scale": {
         "domain": [
           "Items borrowed per person",
-          "library visits (in-person and digital) per person"
+          "Library visits (in-person and digital) per person"
         ],
         "range": [
           "#24426b",
@@ -163,7 +163,7 @@
       "description": "LAYER 6 - LINE NAMES ('Items borrowed per person', 'Library visits (in-person and digital) per person') written next to the lines instead of a legend. CHANNELS: text = measure.",
       "transform": [
         {
-          "filter": "datum.year=='2012-13'"
+          "filter": "datum.year=='2011-12'"
         }
       ],
       "mark": {
