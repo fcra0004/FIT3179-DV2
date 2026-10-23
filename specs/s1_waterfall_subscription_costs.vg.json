@@ -405,8 +405,8 @@
           {
             "service": "Library card",
             "v": 0,
-            "t": ["",
-              "covers all four services!"
+            "t": ["covers all four",
+              "services!"
             ]
           }
         ]
